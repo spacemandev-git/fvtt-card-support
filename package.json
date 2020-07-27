@@ -1,0 +1,19 @@
+{
+  "name": "fvtt-sdf-importer",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "compile": "gulp compile"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/gulp": "^4.0.6",
+    "gulp": "^4.0.2",
+    "gulp-typescript": "^6.0.0-alpha.1"
+  },
+  "dependencies": {
+    "typescript": "^3.9.7"
+  }
+}

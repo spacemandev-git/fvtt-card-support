@@ -1,0 +1,22 @@
+{
+  "name": "fvtt-sdf-importer",
+  "title": "SDF Deck Importer",
+  "description": "Uses either Images (Filepicker) or SDF (Standard Deck Format) to create a set of Journal Entries, and then turns them into a rolltable",
+  "author": "spacemandev",
+  "version": "1.0.0",
+  "minimumCoreVersion": "0.6.0",
+  "compatibleCoreVersion": "0.6.5",
+  "url": "",
+  "manifest": "",
+  "download": "",
+  "esmodules": [],
+  "scripts": ["./scripts/importer.js"],
+  "styles": [],
+  "languages": [
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/en.json"
+    }
+  ]
+}
