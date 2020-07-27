@@ -1,0 +1,1 @@
+# Card Support for Foundry VTT
