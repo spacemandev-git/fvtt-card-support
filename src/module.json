@@ -6,12 +6,11 @@
   "version": "1.0.0",
   "minimumCoreVersion": "0.6.0",
   "compatibleCoreVersion": "0.6.5",
-  "url": "",
-  "manifest": "",
-  "download": "",
-  "esmodules": [],
-  "scripts": ["./scripts/importer.js"],
-  "styles": [],
+  "url": "https://github.com/Brownie79/fvtt-sdf-importer",
+  "manifest": "https://github.com/Brownie79/fvtt-sdf-importer/releases/download/latest/module.json",
+  "download": "https://github.com/Brownie79/fvtt-sdf-importer/releases/download/latest/module.zip",
+  "esmodules": ["./scripts/importer.js", "./lib/js-yaml.js", "./lib/jszip.js"],
+  "styles": ["styles/sdf.css"],
   "languages": [
     {
       "lang": "en",
