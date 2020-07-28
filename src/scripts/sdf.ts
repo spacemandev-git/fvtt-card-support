@@ -1,7 +1,5 @@
 /// <reference types="js-yaml" />
 
-import * as JSZip from "jszip"
-
 export const importDeck = async (deckfile: File) => {
   try{
     if(deckfile.name.split(".")[1] != "zip"){
