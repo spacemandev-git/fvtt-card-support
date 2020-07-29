@@ -45,23 +45,45 @@ Stores three lists: allcards, deck, and discard.
 Construstor builds a deck object from a folder full for Journal Entries
 
 
-### SDF
+### SDF (Standard Deck Format)
 See the sample folder for an example of this.
+
 SDF Version: 0.6
 
 #### Deck Structure
-deckfolder.zip/
-  deck.yaml
-  images/
+    deckfolder.zip/
+      deck.yaml
+      images/
 
 #### deck.yaml
+```
 - (required) name: name of the card, does not need the full path as previous versions required
 - (optional) sdfv: sdf version to be used by the interpreter. If left out, will use interpreter default
 - (optional) img: path to file inside images. If the file is images/img.jpg then the path should just be img.jpg
 - (optional) back: image path for the back of the card 
 - (optional) data: object with data values for the card 
 - (optional) qty: How many copies of the card exist in the deck
+
 Split with `---' to denote different file for each card
+```
+Example:
+```
+name: 2C
+sdfv: 0.6
+img: 2C.png
+back: blue_back.png
+data:
+  value: 2
+  suit: Clubs
+---
+name: 3C
+sdfv: 0.6
+img: 3C.png
+back: blue_back.png
+data:
+  value: 2
+  suit: Clubs
+```
 
 #### Manually Prepping a SDF File
 Create an images folder, a deck.yaml as defined above, and zip them up. You're done.
