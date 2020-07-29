@@ -1,6 +1,28 @@
-import {importDeck} from './sdf.js';
+import { Decks } from './deck.js';
 
-export const log = (...args) => console.log("Deck Importer | " + args);
+export const log = (...args: any[]) => {
+  return console.log("Deck Importer | " + args);
+};
+
+Hooks.once("ready", async () => {
+  //Creates A "Decks" folder where to unzip SDF Files
+
+  let src = "data";
+  //@ts-ignore
+  if(typeof ForgeVtt != "undefined" && ForgeVTT.usingTheForge){
+    src = "forgevtt"
+  }
+  let target = 'Decks'
+  let result = await FilePicker.browse(src, target)
+  if(result.target != target){
+    await FilePicker.createDirectory(src, target, {});
+  }
+
+  //Registers the Decks Object 
+  game.decks = new Decks()
+  game.decks.init();
+})
+
 
 Hooks.on('renderJournalDirectory', (app, html, data) => {
   const deckImportButton = $(`<button class="importButton">${game.i18n.localize("DECK.Import_Button")}</button>`);
@@ -21,7 +43,7 @@ Hooks.on('renderJournalDirectory', (app, html, data) => {
         ok: {
           label: game.i18n.localize("DECK.Import_Button"),
           callback: async (form) => {
-            importDeck($(form).find('#file')[0]['files'][0])
+            game.decks.create($(form).find('#file')[0]['files'][0])
           }
         }, 
         cancel: {
