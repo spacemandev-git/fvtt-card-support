@@ -184,12 +184,23 @@ export class Decks{
         let img = await deckZip.file(`images/${card.img}`).async('blob')
         await FilePicker.upload(src,`${target}`, new File([img], card.img), {})
         //Create a JournalEntry
-        let cardEntry = await JournalEntry.create({
-          name: card.name,
-          folder: deckfolderId,
-          img: `${target}/${card.img}` 
-        }) 
-        cardEntry.setFlag('world', 'data', JSON.stringify(card.data))
+        if(card.qty){
+          for(let i=0; i< card.qty; i++){
+            let cardEntry = await JournalEntry.create({
+              name: card.name,
+              folder: deckfolderId,
+              img: `${target}/${card.img}` 
+            }) 
+            cardEntry.setFlag('world', 'data', JSON.stringify(card.data))  
+          }
+        } else {
+          let cardEntry = await JournalEntry.create({
+            name: card.name,
+            folder: deckfolderId,
+            img: `${target}/${card.img}` 
+          }) 
+          cardEntry.setFlag('world', 'data', JSON.stringify(card.data))
+        }
       }
       //DOESN'T DO ANYTHING WITH CARD BACKS YET
 
