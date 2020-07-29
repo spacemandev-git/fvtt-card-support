@@ -63,8 +63,9 @@ export class Deck{
    */
   public async discardCard(cardId:string):Promise<boolean>{
     return new Promise( async (resolve, reject) => {
-      if(this._state.includes(cardId)){
-        this._state.splice(this._state.indexOf(cardId), 1)
+      if(this._cards.includes(cardId) && !this._state.includes(cardId)){
+        //this._state.splice(this._state.indexOf(cardId), 1)
+        this.discard.push(cardId);
         this.updateState();
         resolve(true);
       } else {
@@ -169,7 +170,7 @@ export class Decks{
       let result = await FilePicker.browse(src, target)
       if(result.target != target){
         await FilePicker.createDirectory(src, target, {});
-        await FilePicker.createDirectory(src, target+'/images', {})
+        //await FilePicker.createDirectory(src, target+'/images', {})
       }
       
       //Create a new deck object
@@ -181,12 +182,12 @@ export class Decks{
         let card = <Card>c;
         //Upload Image to Folder
         let img = await deckZip.file(`images/${card.img}`).async('blob')
-        await FilePicker.upload(src,`${target}/images`, new File([img], card.img), {})
+        await FilePicker.upload(src,`${target}`, new File([img], card.img), {})
         //Create a JournalEntry
         let cardEntry = await JournalEntry.create({
           name: card.name,
           folder: deckfolderId,
-          img: `${target}/images/${card.img}` 
+          img: `${target}/${card.img}` 
         }) 
         cardEntry.setFlag('world', 'data', JSON.stringify(card.data))
       }
