@@ -1,5 +1,12 @@
 /// <reference types="js-yaml" />
 import {Card} from './card'
+import {mod_name} from './importer';
+
+// Flags
+//cardData //on cards
+//cardMacros
+//cardBack 
+//deckState //on folders
 
 export class Deck{
   private _cards: string[] // All Cards
@@ -13,7 +20,7 @@ export class Deck{
    */
   constructor(folderID:string){
     this.folder = game.folders.get(folderID)
-    let state = this.folder.getFlag('world', 'deckstate') 
+    let state = this.folder.getFlag(mod_name, 'deckState') 
     if(state == undefined){
       let cardEntries = this.folder['content'].map(el=>el.id)
       this._cards = cardEntries;
@@ -23,19 +30,18 @@ export class Deck{
         console.log(`${folderID} state updated!`)
       })
     } else {
-      let savedState = JSON.parse(state);
-      this._state = savedState['state']
-      this._cards = savedState['cards']
-      this._discard = savedState['discard']
+      this._state = state['state']
+      this._cards = state['cards']
+      this._discard = state['discard']
     }
   }
 
   private async updateState(){
-    await this.folder.setFlag('world', 'deckstate', JSON.stringify({
+    await this.folder.setFlag(mod_name, 'deckState', {
       state: this._state,
       cards: this._cards,
       discard: this._discard
-    }))
+    })
   }
 
   /**
@@ -106,7 +112,7 @@ export class Deck{
         ui.notifications.error(game.i18n.localize('DECK.ERROR'))
         reject("Card Not Found")
       }
-      resolve(entry.getFlag("world", "data"));
+      resolve(entry.getFlag(mod_name, "cardData"));
     })
   }
 
@@ -166,11 +172,10 @@ export class Decks{
       if(typeof ForgeVtt != "undefined" && ForgeVTT.usingTheForge){
         src = "forgevtt"
       }
-      let target = `Decks/${deckfolderId}`
+      let target = `Decks/${deckfolderId}/`
       let result = await FilePicker.browse(src, target)
       if(result.target != target){
         await FilePicker.createDirectory(src, target, {});
-        //await FilePicker.createDirectory(src, target+'/images', {})
       }
       
       //Create a new deck object
@@ -182,30 +187,42 @@ export class Decks{
         let card = <Card>c;
         //Upload Image to Folder
         let img = await deckZip.file(`images/${card.img}`).async('blob')
-        await FilePicker.upload(src,`${target}`, new File([img], card.img), {})
-        //Create a JournalEntry
-        if(card.qty){
-          for(let i=0; i< card.qty; i++){
-            let cardEntry = await JournalEntry.create({
-              name: card.name,
-              folder: deckfolderId,
-              img: `${target}/${card.img}` 
-            }) 
-            cardEntry.setFlag('world', 'data', JSON.stringify(card.data))  
-          }
-        } else {
+        let card_back = await deckZip.file(`images/${card.back}`).async('blob')
+        await uploadFile(target, new File([img], card.img))
+        await uploadFile(target, new File([card_back], card.back))
+        
+        if(!card.qty){card.qty = 1}
+        for(let i=0; i< card.qty; i++){
           let cardEntry = await JournalEntry.create({
             name: card.name,
             folder: deckfolderId,
-            img: `${target}/${card.img}` 
+            img: target+card.img 
           }) 
-          cardEntry.setFlag('world', 'data', JSON.stringify(card.data))
+          cardEntry.setFlag(mod_name, 'cardData', card.data) //obj
+          cardEntry.setFlag(mod_name, 'cardBack', target+card.back) //str
+          cardEntry.setFlag(mod_name, 'cardMacros', {}) //obj 
         }
       }
-      //DOESN'T DO ANYTHING WITH CARD BACKS YET
 
       this.decks[deckfolderId] = new Deck(deckfolderId)
       resolve(deckfolderId);      
     })
   }
+}
+
+/**
+ * 
+ * @param path Should have a / infront of it
+ * @param file 
+ */
+async function uploadFile(path:string, file:File){
+  let src = "data";
+  //@ts-ignore
+  if(typeof ForgeVtt != "undefined" && ForgeVTT.usingTheForge){
+    src = "forgevtt"
+  }
+  let filesInFolder = (await FilePicker.browse(src, path)).files 
+  let targetPath = path+file.name
+  if(filesInFolder.includes(targetPath)){return;}
+  await FilePicker.upload(src, path, file, {})
 }

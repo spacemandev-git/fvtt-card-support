@@ -1,5 +1,5 @@
 {
-  "name": "fvtt-sdf-importer",
+  "name": "sdf-decks",
   "title": "SDF Deck Importer",
   "description": "Uses either Images (Filepicker) or SDF (Standard Deck Format) to create a set of Journal Entries, and then turns them into a rolltable",
   "author": "spacemandev",

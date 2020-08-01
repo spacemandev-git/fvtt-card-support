@@ -1,5 +1,5 @@
 import { Decks } from './deck.js';
-
+export const mod_name = 'sdf-decks'
 export const log = (...args: any[]) => {
   return console.log("Deck Importer | " + args);
 };
