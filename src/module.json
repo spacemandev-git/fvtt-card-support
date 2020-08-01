@@ -1,7 +1,7 @@
 {
   "name": "sdf-decks",
   "title": "SDF Deck Importer",
-  "description": "Uses either Images (Filepicker) or SDF (Standard Deck Format) to create a set of Journal Entries, and then turns them into a rolltable",
+  "description": "Adds an SDF Deck Importer and Card Hotbar (thanks Norc)",
   "author": "spacemandev",
   "version": "1.0.0",
   "minimumCoreVersion": "0.6.0",

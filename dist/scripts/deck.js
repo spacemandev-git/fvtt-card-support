@@ -7,6 +7,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+import { mod_name } from './importer.js';
+// Flags
+//cardData //on cards
+//cardMacros
+//cardBack 
+//deckState //on folders
 export class Deck {
     /**
      * Builds a Deck Object
@@ -14,7 +20,7 @@ export class Deck {
      */
     constructor(folderID) {
         this.folder = game.folders.get(folderID);
-        let state = this.folder.getFlag('world', 'deckstate');
+        let state = this.folder.getFlag(mod_name, 'deckState');
         if (state == undefined) {
             let cardEntries = this.folder['content'].map(el => el.id);
             this._cards = cardEntries;
@@ -25,19 +31,18 @@ export class Deck {
             });
         }
         else {
-            let savedState = JSON.parse(state);
-            this._state = savedState['state'];
-            this._cards = savedState['cards'];
-            this._discard = savedState['discard'];
+            this._state = state['state'];
+            this._cards = state['cards'];
+            this._discard = state['discard'];
         }
     }
     updateState() {
         return __awaiter(this, void 0, void 0, function* () {
-            yield this.folder.setFlag('world', 'deckstate', JSON.stringify({
+            yield this.folder.setFlag(mod_name, 'deckState', {
                 state: this._state,
                 cards: this._cards,
                 discard: this._discard
-            }));
+            });
         });
     }
     /**
@@ -64,8 +69,9 @@ export class Deck {
     discardCard(cardId) {
         return __awaiter(this, void 0, void 0, function* () {
             return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
-                if (this._state.includes(cardId)) {
-                    this._state.splice(this._state.indexOf(cardId), 1);
+                if (this._cards.includes(cardId) && !this._state.includes(cardId)) {
+                    //this._state.splice(this._state.indexOf(cardId), 1)
+                    this.discard.push(cardId);
                     this.updateState();
                     resolve(true);
                 }
@@ -109,7 +115,7 @@ export class Deck {
                 ui.notifications.error(game.i18n.localize('DECK.ERROR'));
                 reject("Card Not Found");
             }
-            resolve(entry.getFlag("world", "data"));
+            resolve(entry.getFlag(mod_name, "cardData"));
         });
     }
     get deck() { return this._state; }
@@ -122,11 +128,14 @@ export class Decks {
         return this.decks[deckId];
     }
     init() {
+        var _a;
         //reads deck states into memory
         this.decks = {};
-        let decksFolders = game.folders.find(el => el.name == "Decks").children.map(el => el.id);
-        for (let id of decksFolders) {
-            this.decks[id] = new Deck(id);
+        let decksFolders = (_a = game.folders.find(el => el.name == "Decks")) === null || _a === void 0 ? void 0 : _a.children.map(el => el.id);
+        if (decksFolders != null) {
+            for (let id of decksFolders) {
+                this.decks[id] = new Deck(id);
+            }
         }
     }
     /**
@@ -158,11 +167,10 @@ export class Decks {
             if (typeof ForgeVtt != "undefined" && ForgeVTT.usingTheForge) {
                 src = "forgevtt";
             }
-            let target = `Decks/${deckfolderId}`;
+            let target = `Decks/${deckfolderId}/`;
             let result = yield FilePicker.browse(src, target);
             if (result.target != target) {
                 yield FilePicker.createDirectory(src, target, {});
-                yield FilePicker.createDirectory(src, target + '/images', {});
             }
             //Create a new deck object
             console.log(deckZip);
@@ -173,18 +181,45 @@ export class Decks {
                 let card = c;
                 //Upload Image to Folder
                 let img = yield deckZip.file(`images/${card.img}`).async('blob');
-                yield FilePicker.upload(src, `${target}/images`, new File([img], card.img), {});
-                //Create a JournalEntry
-                let cardEntry = yield JournalEntry.create({
-                    name: card.name,
-                    folder: deckfolderId,
-                    img: `${target}/images/${card.img}`
-                });
-                cardEntry.setFlag('world', 'data', JSON.stringify(card.data));
+                let card_back = yield deckZip.file(`images/${card.back}`).async('blob');
+                yield uploadFile(target, new File([img], card.img));
+                yield uploadFile(target, new File([card_back], card.back));
+                if (!card.qty) {
+                    card.qty = 1;
+                }
+                for (let i = 0; i < card.qty; i++) {
+                    let cardEntry = yield JournalEntry.create({
+                        name: card.name,
+                        folder: deckfolderId,
+                        img: target + card.img
+                    });
+                    cardEntry.setFlag(mod_name, 'cardData', card.data); //obj
+                    cardEntry.setFlag(mod_name, 'cardBack', target + card.back); //str
+                    cardEntry.setFlag(mod_name, 'cardMacros', {}); //obj 
+                }
             }
-            //DOESN'T DO ANYTHING WITH CARD BACKS YET
             this.decks[deckfolderId] = new Deck(deckfolderId);
             resolve(deckfolderId);
         }));
     }
+}
+/**
+ *
+ * @param path Should have a / infront of it
+ * @param file
+ */
+function uploadFile(path, file) {
+    return __awaiter(this, void 0, void 0, function* () {
+        let src = "data";
+        //@ts-ignore
+        if (typeof ForgeVtt != "undefined" && ForgeVTT.usingTheForge) {
+            src = "forgevtt";
+        }
+        let filesInFolder = (yield FilePicker.browse(src, path)).files;
+        let targetPath = path + file.name;
+        if (filesInFolder.includes(targetPath)) {
+            return;
+        }
+        yield FilePicker.upload(src, path, file, {});
+    });
 }

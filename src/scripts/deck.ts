@@ -1,6 +1,6 @@
 /// <reference types="js-yaml" />
 import {Card} from './card'
-import {mod_name} from './importer';
+import {mod_name} from './importer.js';
 
 // Flags
 //cardData //on cards
@@ -135,9 +135,11 @@ export class Decks{
   public init(){
     //reads deck states into memory
     this.decks = {}
-    let decksFolders = game.folders.find(el=>el.name=="Decks").children.map(el=>el.id);
-    for(let id of decksFolders){
-      this.decks[id] = new Deck(id);
+    let decksFolders = game.folders.find(el=>el.name=="Decks")?.children.map(el=>el.id);
+    if(decksFolders != null){
+      for(let id of decksFolders){
+        this.decks[id] = new Deck(id);
+      }  
     }
   }
 

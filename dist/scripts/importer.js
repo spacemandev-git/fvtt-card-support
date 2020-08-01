@@ -8,6 +8,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import { Decks } from './deck.js';
+export const mod_name = 'sdf-decks';
 export const log = (...args) => {
     return console.log("Deck Importer | " + args);
 };
