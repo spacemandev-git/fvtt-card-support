@@ -7,7 +7,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import { mod_name } from './importer.js';
+const mod_scope = "world";
 // Flags
 //cardData //on cards
 //cardMacros
@@ -20,7 +20,7 @@ export class Deck {
      */
     constructor(folderID) {
         this.folder = game.folders.get(folderID);
-        let state = this.folder.getFlag(mod_name, 'deckState');
+        let state = this.folder.getFlag(mod_scope, 'deckState');
         if (state == undefined) {
             let cardEntries = this.folder['content'].map(el => el.id);
             this._cards = cardEntries;
@@ -38,7 +38,7 @@ export class Deck {
     }
     updateState() {
         return __awaiter(this, void 0, void 0, function* () {
-            yield this.folder.setFlag(mod_name, 'deckState', {
+            yield this.folder.setFlag(mod_scope, 'deckState', {
                 state: this._state,
                 cards: this._cards,
                 discard: this._discard
@@ -115,7 +115,7 @@ export class Deck {
                 ui.notifications.error(game.i18n.localize('DECK.ERROR'));
                 reject("Card Not Found");
             }
-            resolve(entry.getFlag(mod_name, "cardData"));
+            resolve(entry.getFlag(mod_scope, "cardData"));
         });
     }
     get deck() { return this._state; }
@@ -193,9 +193,9 @@ export class Decks {
                         folder: deckfolderId,
                         img: target + card.img
                     });
-                    cardEntry.setFlag(mod_name, 'cardData', card.data); //obj
-                    cardEntry.setFlag(mod_name, 'cardBack', target + card.back); //str
-                    cardEntry.setFlag(mod_name, 'cardMacros', {}); //obj 
+                    cardEntry.setFlag(mod_scope, 'cardData', card.data); //obj
+                    cardEntry.setFlag(mod_scope, 'cardBack', target + card.back); //str
+                    cardEntry.setFlag(mod_scope, 'cardMacros', {}); //obj 
                 }
             }
             this.decks[deckfolderId] = new Deck(deckfolderId);
