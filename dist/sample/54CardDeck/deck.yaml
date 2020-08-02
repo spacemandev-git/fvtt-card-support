@@ -425,6 +425,7 @@ data:
 name: black_joker
 sdfv: 0.6
 img: black_joker.png
+back: gray_back.png
 data:
   value: JOKER
   suit: BLACK
