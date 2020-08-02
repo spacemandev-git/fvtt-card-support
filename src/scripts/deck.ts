@@ -166,6 +166,7 @@ export class Decks{
       const deckZip = await JSZip.loadAsync(deckfile);
       console.log(deckfile)
       if(!deckZip.file("deck.yaml")){
+        ui.notifications.error("Improper SDF!")
         reject("Deck.yaml Not Found!")
       }
 
@@ -191,8 +192,13 @@ export class Decks{
       for(let c of deckyaml){
         let card = <Card>c;
         //Upload Image to Folder
-        let img = await deckZip.file(`images/${card.img}`).async('blob')
-        let card_back = await deckZip.file(`images/${card.back}`).async('blob')
+        let img = await deckZip.file(`images/${card.img}`)?.async('blob')
+        let card_back = await deckZip.file(`images/${card.back}`)?.async('blob')
+        if(img == undefined || card_back == undefined){
+          console.log(card);
+          ui.notifications.error(`${card.name} is broken.`)
+          continue;
+        }
         await uploadFile(target, new File([img], card.img))
         await uploadFile(target, new File([card_back], card.back))
         

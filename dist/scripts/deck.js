@@ -144,7 +144,7 @@ export class Decks {
      */
     create(deckfile) {
         return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
-            var _a;
+            var _a, _b, _c;
             //If DeckFolder doesn't exist create it
             let DecksFolderID = (_a = game.folders.find(el => el.name == "Decks")) === null || _a === void 0 ? void 0 : _a.id;
             if (!DecksFolderID) {
@@ -158,6 +158,7 @@ export class Decks {
             const deckZip = yield JSZip.loadAsync(deckfile);
             console.log(deckfile);
             if (!deckZip.file("deck.yaml")) {
+                ui.notifications.error("Improper SDF!");
                 reject("Deck.yaml Not Found!");
             }
             //Create a JournalEntry Folder and File Upload Folder for the Deck
@@ -180,8 +181,13 @@ export class Decks {
             for (let c of deckyaml) {
                 let card = c;
                 //Upload Image to Folder
-                let img = yield deckZip.file(`images/${card.img}`).async('blob');
-                let card_back = yield deckZip.file(`images/${card.back}`).async('blob');
+                let img = yield ((_b = deckZip.file(`images/${card.img}`)) === null || _b === void 0 ? void 0 : _b.async('blob'));
+                let card_back = yield ((_c = deckZip.file(`images/${card.back}`)) === null || _c === void 0 ? void 0 : _c.async('blob'));
+                if (img == undefined || card_back == undefined) {
+                    console.log(card);
+                    ui.notifications.error(`${card.name} is broken.`);
+                    continue;
+                }
                 yield uploadFile(target, new File([img], card.img));
                 yield uploadFile(target, new File([card_back], card.back));
                 if (!card.qty) {
