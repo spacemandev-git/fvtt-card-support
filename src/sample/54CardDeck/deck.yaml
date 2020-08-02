@@ -1,0 +1,430 @@
+name: 2_of_clubs
+sdfv: 0.6
+img: 2_of_clubs.png
+back: gray_back.png
+data:
+  value: 2
+  suit: Clubs
+---
+name: 3_of_clubs
+sdfv: 0.6
+img: 3_of_clubs.png
+back: gray_back.png
+data:
+  value: 2
+  suit: Clubs
+---
+name: 4_of_clubs
+sdfv: 0.6
+img: 4_of_clubs.png
+back: gray_back.png
+data:
+  value: 2
+  suit: Clubs
+---
+name: 5_of_clubs
+sdfv: 0.6
+img: 5_of_clubs.png
+back: gray_back.png
+data:
+  value: 2
+  suit: Clubs
+---
+name: 6_of_clubs
+sdfv: 0.6
+img: 6_of_clubs.png
+back: gray_back.png
+data:
+  value: 2
+  suit: Clubs
+---
+name: 7_of_clubs
+sdfv: 0.6
+img: 7_of_clubs.png
+back: gray_back.png
+data:
+  value: 2
+  suit: Clubs
+---
+name: 8_of_clubs
+sdfv: 0.6
+img: 8_of_clubs.png
+back: gray_back.png
+data:
+  value: 2
+  suit: Clubs
+---
+name: 9_of_clubs
+sdfv: 0.6
+img: 9_of_clubs.png
+back: gray_back.png
+data:
+  value: 2
+  suit: Clubs
+---
+name: 10_of_clubs
+sdfv: 0.6
+img: 10_of_clubs.png
+back: gray_back.png
+data:
+  value: 2
+  suit: Clubs
+---
+name: ace_of_clubs
+sdfv: 0.6
+img: ace_of_clubs.png
+back: gray_back.png
+data:
+  value: 2
+  suit: Clubs
+---
+name: jack_of_clubs
+sdfv: 0.6
+img: jack_of_clubs.png
+back: gray_back.png
+data:
+  value: 2
+  suit: Clubs
+---
+name: queen_of_clubs
+sdfv: 0.6
+img: queen_of_clubs.png
+back: gray_back.png
+data:
+  value: 2
+  suit: Clubs
+---
+name: king_of_clubs
+sdfv: 0.6
+img: king_of_clubs.png
+back: gray_back.png
+data:
+  value: 2
+  suit: Clubs
+---
+name: 2_of_diamonds
+sdfv: 0.6
+img: 2_of_diamonds.png
+back: gray_back.png
+data:
+  value: 2
+  suit: Diamonds
+---
+name: 3_of_diamonds
+sdfv: 0.6
+img: 3_of_diamonds.png
+back: gray_back.png
+data:
+  value: 2
+  suit: Diamonds
+---
+name: 4_of_diamonds
+sdfv: 0.6
+img: 4_of_diamonds.png
+back: gray_back.png
+data:
+  value: 2
+  suit: Diamonds
+---
+name: 5_of_diamonds
+sdfv: 0.6
+img: 5_of_diamonds.png
+back: gray_back.png
+data:
+  value: 2
+  suit: Diamonds
+---
+name: 6_of_diamonds
+sdfv: 0.6
+img: 6_of_diamonds.png
+back: gray_back.png
+data:
+  value: 2
+  suit: Diamonds
+---
+name: 7_of_diamonds
+sdfv: 0.6
+img: 7_of_diamonds.png
+back: gray_back.png
+data:
+  value: 2
+  suit: Diamonds
+---
+name: 8_of_diamonds
+sdfv: 0.6
+img: 8_of_diamonds.png
+back: gray_back.png
+data:
+  value: 2
+  suit: Diamonds
+---
+name: 9_of_diamonds
+sdfv: 0.6
+img: 9_of_diamonds.png
+back: gray_back.png
+data:
+  value: 2
+  suit: Diamonds
+---
+name: 10_of_diamonds
+sdfv: 0.6
+img: 10_of_diamonds.png
+back: gray_back.png
+data:
+  value: 2
+  suit: Diamonds
+---
+name: ace_of_diamonds
+sdfv: 0.6
+img: ace_of_diamonds.png
+back: gray_back.png
+data:
+  value: 2
+  suit: Diamonds
+---
+name: jack_of_diamonds
+sdfv: 0.6
+img: jack_of_diamonds.png
+back: gray_back.png
+data:
+  value: 2
+  suit: Diamonds
+---
+name: queen_of_diamonds
+sdfv: 0.6
+img: queen_of_diamonds.png
+back: gray_back.png
+data:
+  value: 2
+  suit: Diamonds
+---
+name: king_of_diamonds
+sdfv: 0.6
+img: king_of_diamonds.png
+back: gray_back.png
+data:
+  value: 2
+  suit: Diamonds
+---
+name: 2_of_hearts
+sdfv: 0.6
+img: 2_of_hearts.png
+back: gray_back.png
+data:
+  value: 2
+  suit: Hearts
+---
+name: 3_of_hearts
+sdfv: 0.6
+img: 3_of_hearts.png
+back: gray_back.png
+data:
+  value: 2
+  suit: Hearts
+---
+name: 4_of_hearts
+sdfv: 0.6
+img: 4_of_hearts.png
+back: gray_back.png
+data:
+  value: 2
+  suit: Hearts
+---
+name: 5_of_hearts
+sdfv: 0.6
+img: 5_of_hearts.png
+back: gray_back.png
+data:
+  value: 2
+  suit: Hearts
+---
+name: 6_of_hearts
+sdfv: 0.6
+img: 6_of_hearts.png
+back: gray_back.png
+data:
+  value: 2
+  suit: Hearts
+---
+name: 7_of_hearts
+sdfv: 0.6
+img: 7_of_hearts.png
+back: gray_back.png
+data:
+  value: 2
+  suit: Hearts
+---
+name: 8_of_hearts
+sdfv: 0.6
+img: 8_of_hearts.png
+back: gray_back.png
+data:
+  value: 2
+  suit: Hearts
+---
+name: 9_of_hearts
+sdfv: 0.6
+img: 9_of_hearts.png
+back: gray_back.png
+data:
+  value: 2
+  suit: Hearts
+---
+name: 10_of_hearts
+sdfv: 0.6
+img: 10_of_hearts.png
+back: gray_back.png
+data:
+  value: 2
+  suit: Hearts
+---
+name: ace_of_hearts
+sdfv: 0.6
+img: ace_of_hearts.png
+back: gray_back.png
+data:
+  value: 2
+  suit: Hearts
+---
+name: jack_of_hearts
+sdfv: 0.6
+img: jack_of_hearts.png
+back: gray_back.png
+data:
+  value: 2
+  suit: Hearts
+---
+name: queen_of_hearts
+sdfv: 0.6
+img: queen_of_hearts.png
+back: gray_back.png
+data:
+  value: 2
+  suit: Hearts
+---
+name: king_of_hearts
+sdfv: 0.6
+img: king_of_hearts.png
+back: gray_back.png
+data:
+  value: 2
+  suit: Hearts
+---
+name: 2_of_spades
+sdfv: 0.6
+img: 2_of_spades.png
+back: gray_back.png
+data:
+  value: 2
+  suit: Spades
+---
+name: 3_of_spades
+sdfv: 0.6
+img: 3_of_spades.png
+back: gray_back.png
+data:
+  value: 2
+  suit: Spades
+---
+name: 4_of_spades
+sdfv: 0.6
+img: 4_of_spades.png
+back: gray_back.png
+data:
+  value: 2
+  suit: Spades
+---
+name: 5_of_spades
+sdfv: 0.6
+img: 5_of_spades.png
+back: gray_back.png
+data:
+  value: 2
+  suit: Spades
+---
+name: 6_of_spades
+sdfv: 0.6
+img: 6_of_spades.png
+back: gray_back.png
+data:
+  value: 2
+  suit: Spades
+---
+name: 7_of_spades
+sdfv: 0.6
+img: 7_of_spades.png
+back: gray_back.png
+data:
+  value: 2
+  suit: Spades
+---
+name: 8_of_spades
+sdfv: 0.6
+img: 8_of_spades.png
+back: gray_back.png
+data:
+  value: 2
+  suit: Spades
+---
+name: 9_of_spades
+sdfv: 0.6
+img: 9_of_spades.png
+back: gray_back.png
+data:
+  value: 2
+  suit: Spades
+---
+name: 10_of_spades
+sdfv: 0.6
+img: 10_of_spades.png
+back: gray_back.png
+data:
+  value: 2
+  suit: Spades
+---
+name: ace_of_spades
+sdfv: 0.6
+img: ace_of_spades.png
+back: gray_back.png
+data:
+  value: 2
+  suit: Spades
+---
+name: jack_of_spades
+sdfv: 0.6
+img: jack_of_spades.png
+back: gray_back.png
+data:
+  value: 2
+  suit: Spades
+---
+name: queen_of_spades
+sdfv: 0.6
+img: queen_of_spades.png
+back: gray_back.png
+data:
+  value: 2
+  suit: Spades
+---
+name: king_of_spades
+sdfv: 0.6
+img: king_of_spades.png
+back: gray_back.png
+data:
+  value: 2
+  suit: Spades
+---
+name: red_joker
+sdfv: 0.6
+img: red_joker.png
+back: gray_back.png
+data: 
+  value: JOKER
+  suit: RED
+---
+name: black_joker
+sdfv: 0.6
+img: black_joker.png
+data:
+  value: JOKER
+  suit: BLACK

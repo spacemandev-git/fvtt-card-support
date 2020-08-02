@@ -1,0 +1,415 @@
+name: 2C
+sdfv: 0.6
+img: 2C.png
+back: blue_back.png
+data:
+  value: 2
+  suit: Clubs
+---
+name: 3C
+sdfv: 0.6
+img: 3C.png
+back: blue_back.png
+data:
+  value: 2
+  suit: Clubs
+---
+name: 4C
+sdfv: 0.6
+img: 4C.png
+back: blue_back.png
+data:
+  value: 2
+  suit: Clubs
+---
+name: 5C
+sdfv: 0.6
+img: 5C.png
+back: blue_back.png
+data:
+  value: 2
+  suit: Clubs
+---
+name: 6C
+sdfv: 0.6
+img: 6C.png
+back: blue_back.png
+data:
+  value: 2
+  suit: Clubs
+---
+name: 7C
+sdfv: 0.6
+img: 7C.png
+back: blue_back.png
+data:
+  value: 2
+  suit: Clubs
+---
+name: 8C
+sdfv: 0.6
+img: 8C.png
+back: blue_back.png
+data:
+  value: 2
+  suit: Clubs
+---
+name: 9C
+sdfv: 0.6
+img: 9C.png
+back: blue_back.png
+data:
+  value: 2
+  suit: Clubs
+---
+name: 10C
+sdfv: 0.6
+img: 10C.png
+back: blue_back.png
+data:
+  value: 2
+  suit: Clubs
+---
+name: AC
+sdfv: 0.6
+img: AC.png
+back: blue_back.png
+data:
+  value: 2
+  suit: Clubs
+---
+name: JC
+sdfv: 0.6
+img: JC.png
+back: blue_back.png
+data:
+  value: 2
+  suit: Clubs
+---
+name: QC
+sdfv: 0.6
+img: QC.png
+back: blue_back.png
+data:
+  value: 2
+  suit: Clubs
+---
+name: KC
+sdfv: 0.6
+img: KC.png
+back: blue_back.png
+data:
+  value: 2
+  suit: Clubs
+---
+name: 2D
+sdfv: 0.6
+img: 2D.png
+back: blue_back.png
+data:
+  value: 2
+  suit: Diamonds
+---
+name: 3D
+sdfv: 0.6
+img: 3D.png
+back: blue_back.png
+data:
+  value: 2
+  suit: Diamonds
+---
+name: 4D
+sdfv: 0.6
+img: 4D.png
+back: blue_back.png
+data:
+  value: 2
+  suit: Diamonds
+---
+name: 5D
+sdfv: 0.6
+img: 5D.png
+back: blue_back.png
+data:
+  value: 2
+  suit: Diamonds
+---
+name: 6D
+sdfv: 0.6
+img: 6D.png
+back: blue_back.png
+data:
+  value: 2
+  suit: Diamonds
+---
+name: 7D
+sdfv: 0.6
+img: 7D.png
+back: blue_back.png
+data:
+  value: 2
+  suit: Diamonds
+---
+name: 8D
+sdfv: 0.6
+img: 8D.png
+back: blue_back.png
+data:
+  value: 2
+  suit: Diamonds
+---
+name: 9D
+sdfv: 0.6
+img: 9D.png
+back: blue_back.png
+data:
+  value: 2
+  suit: Diamonds
+---
+name: 10D
+sdfv: 0.6
+img: 10D.png
+back: blue_back.png
+data:
+  value: 2
+  suit: Diamonds
+---
+name: AD
+sdfv: 0.6
+img: AD.png
+back: blue_back.png
+data:
+  value: 2
+  suit: Diamonds
+---
+name: JD
+sdfv: 0.6
+img: JD.png
+back: blue_back.png
+data:
+  value: 2
+  suit: Diamonds
+---
+name: QD
+sdfv: 0.6
+img: QD.png
+back: blue_back.png
+data:
+  value: 2
+  suit: Diamonds
+---
+name: KD
+sdfv: 0.6
+img: KD.png
+back: blue_back.png
+data:
+  value: 2
+  suit: Diamonds
+---
+name: 2H
+sdfv: 0.6
+img: 2H.png
+back: blue_back.png
+data:
+  value: 2
+  suit: Hearts
+---
+name: 3H
+sdfv: 0.6
+img: 3H.png
+back: blue_back.png
+data:
+  value: 2
+  suit: Hearts
+---
+name: 4H
+sdfv: 0.6
+img: 4H.png
+back: blue_back.png
+data:
+  value: 2
+  suit: Hearts
+---
+name: 5H
+sdfv: 0.6
+img: 5H.png
+back: blue_back.png
+data:
+  value: 2
+  suit: Hearts
+---
+name: 6H
+sdfv: 0.6
+img: 6H.png
+back: blue_back.png
+data:
+  value: 2
+  suit: Hearts
+---
+name: 7H
+sdfv: 0.6
+img: 7H.png
+back: blue_back.png
+data:
+  value: 2
+  suit: Hearts
+---
+name: 8H
+sdfv: 0.6
+img: 8H.png
+back: blue_back.png
+data:
+  value: 2
+  suit: Hearts
+---
+name: 9H
+sdfv: 0.6
+img: 9H.png
+back: blue_back.png
+data:
+  value: 2
+  suit: Hearts
+---
+name: 10H
+sdfv: 0.6
+img: 10H.png
+back: blue_back.png
+data:
+  value: 2
+  suit: Hearts
+---
+name: AH
+sdfv: 0.6
+img: AH.png
+back: blue_back.png
+data:
+  value: 2
+  suit: Hearts
+---
+name: JH
+sdfv: 0.6
+img: JH.png
+back: blue_back.png
+data:
+  value: 2
+  suit: Hearts
+---
+name: QH
+sdfv: 0.6
+img: QH.png
+back: blue_back.png
+data:
+  value: 2
+  suit: Hearts
+---
+name: KH
+sdfv: 0.6
+img: KH.png
+back: blue_back.png
+data:
+  value: 2
+  suit: Hearts
+---
+name: 2S
+sdfv: 0.6
+img: 2S.png
+back: blue_back.png
+data:
+  value: 2
+  suit: Spades
+---
+name: 3S
+sdfv: 0.6
+img: 3S.png
+back: blue_back.png
+data:
+  value: 2
+  suit: Spades
+---
+name: 4S
+sdfv: 0.6
+img: 4S.png
+back: blue_back.png
+data:
+  value: 2
+  suit: Spades
+---
+name: 5S
+sdfv: 0.6
+img: 5S.png
+back: blue_back.png
+data:
+  value: 2
+  suit: Spades
+---
+name: 6S
+sdfv: 0.6
+img: 6S.png
+back: blue_back.png
+data:
+  value: 2
+  suit: Spades
+---
+name: 7S
+sdfv: 0.6
+img: 7S.png
+back: blue_back.png
+data:
+  value: 2
+  suit: Spades
+---
+name: 8S
+sdfv: 0.6
+img: 8S.png
+back: blue_back.png
+data:
+  value: 2
+  suit: Spades
+---
+name: 9S
+sdfv: 0.6
+img: 9S.png
+back: blue_back.png
+data:
+  value: 2
+  suit: Spades
+---
+name: 10S
+sdfv: 0.6
+img: 10S.png
+back: blue_back.png
+data:
+  value: 2
+  suit: Spades
+---
+name: AS
+sdfv: 0.6
+img: AS.png
+back: blue_back.png
+data:
+  value: 2
+  suit: Spades
+---
+name: JS
+sdfv: 0.6
+img: JS.png
+back: blue_back.png
+data:
+  value: 2
+  suit: Spades
+---
+name: QS
+sdfv: 0.6
+img: QS.png
+back: blue_back.png
+data:
+  value: 2
+  suit: Spades
+---
+name: KS
+sdfv: 0.6
+img: KS.png
+back: blue_back.png
+data:
+  value: 2
+  suit: Spades
