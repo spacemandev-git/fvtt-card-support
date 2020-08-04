@@ -69,14 +69,15 @@ export class Deck {
     discardCard(cardId) {
         return __awaiter(this, void 0, void 0, function* () {
             return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
-                if (this._cards.includes(cardId) && !this._state.includes(cardId)) {
+                //if(this._cards.includes(cardId) && !this._state.includes(cardId)){
+                if (this._cards.includes(cardId)) {
                     //this._state.splice(this._state.indexOf(cardId), 1)
                     this.discard.push(cardId);
                     this.updateState();
-                    resolve(true);
+                    resolve(this._discard.toString());
                 }
                 else {
-                    reject(false);
+                    reject("Either this card isn't part of this deck, or it's not been properly drawn yet!");
                 }
             }));
         });

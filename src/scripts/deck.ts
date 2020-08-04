@@ -70,15 +70,16 @@ export class Deck{
    * Takes in a Card ID and returns true if the card was discarded.
    * @param cardId JournalEntry ID of the Card you wish you discard that's in this deck
    */
-  public async discardCard(cardId:string):Promise<boolean>{
+  public async discardCard(cardId:string):Promise<string>{
     return new Promise( async (resolve, reject) => {
-      if(this._cards.includes(cardId) && !this._state.includes(cardId)){
+      //if(this._cards.includes(cardId) && !this._state.includes(cardId)){
+      if(this._cards.includes(cardId)){
         //this._state.splice(this._state.indexOf(cardId), 1)
         this.discard.push(cardId);
         this.updateState();
-        resolve(true);
+        resolve(this._discard.toString());
       } else {
-        reject(false);
+        reject("Either this card isn't part of this deck, or it's not been properly drawn yet!");
       }
     })
   }

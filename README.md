@@ -37,7 +37,7 @@ Stores three lists: allcards, deck, and discard.
 
 ```deck.reset()``` resets the deck.deck to original state and empties the discard
 
-```deck.discard(cardID:string)``` puts a card in the discard pile. The card must be part of it's original cards AND not in the current state
+```deck.discardCard(cardID:string)``` puts a card in the discard pile. The card must be part of it's original cards AND not in the current state
 
 ```deck.shuffle()``` Shuffles the current deck.deck 
 
