@@ -63,8 +63,13 @@ async function cardHUD(tileHUD, html, options) {
     })
   }
   const takeCard = async (td:TileData) => {
-    // UI.cardhotbar.populator.addToHand(cardID)
-    // Delete this tile
+    return new Promise((resolve, reject) => {
+      // UI.cardhotbar.populator.addToHand(cardID)
+      // Delete this tile
+      ui['cardHotbar'].populator.addToHand([td.flags[mod_scope]['cardID']])
+      canvas.tiles.get(td._id).delete();
+      resolve();
+    })    
   }
   const discardCard = async(td:TileData) => {
     return new Promise((resolve,reject) => {

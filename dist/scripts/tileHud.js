@@ -41,17 +41,12 @@ function cardHUD(tileHUD, html, options) {
             return new Promise((resolve, reject) => {
                 //Create New Tile at Current Tile's X & Y
                 let cardEntry = game.journal.get(td.flags[mod_scope].cardID);
-                let t = canvas.tiles.worldTransform;
-                const _x = (td.x - t.tx) / canvas.stage.scale.x;
-                const _y = (td.y - t.ty) / canvas.stage.scale.y;
-                let currentCardImg = td.img;
                 let newImg = "";
-                console.log(currentCardImg);
-                if (currentCardImg == cardEntry.data['img']) {
+                if (td.img == cardEntry.data['img']) {
                     // Card if front up, switch to back
                     newImg = cardEntry.getFlag(mod_scope, "cardBack");
                 }
-                else if (currentCardImg == cardEntry.getFlag(mod_scope, "cardBack")) {
+                else if (td.img == cardEntry.getFlag(mod_scope, "cardBack")) {
                     // Card is back up
                     newImg = cardEntry.data['img'];
                 }
@@ -59,7 +54,6 @@ function cardHUD(tileHUD, html, options) {
                     ui.notifications.error("What you doing m8? Stop breaking my code");
                     reject(false);
                 }
-                console.log(newImg);
                 Tile.create({
                     img: newImg,
                     x: td.x,
@@ -73,8 +67,13 @@ function cardHUD(tileHUD, html, options) {
             });
         });
         const takeCard = (td) => __awaiter(this, void 0, void 0, function* () {
-            // UI.cardhotbar.populator.addToHand(cardID)
-            // Delete this tile
+            return new Promise((resolve, reject) => {
+                // UI.cardhotbar.populator.addToHand(cardID)
+                // Delete this tile
+                ui['cardHotbar'].populator.addToHand([td.flags[mod_scope]['cardID']]);
+                canvas.tiles.get(td._id).delete();
+                resolve();
+            });
         });
         const discardCard = (td) => __awaiter(this, void 0, void 0, function* () {
             return new Promise((resolve, reject) => {
