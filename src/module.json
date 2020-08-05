@@ -9,7 +9,13 @@
   "url": "https://github.com/Brownie79/fvtt-sdf-importer",
   "manifest": "https://github.com/Brownie79/fvtt-sdf-importer/releases/download/latest/module.json",
   "download": "https://github.com/Brownie79/fvtt-sdf-importer/releases/download/latest/module.zip",
-  "esmodules": ["./scripts/importer.js", "./lib/js-yaml.js", "./lib/jszip.js", "./scripts/drop.js"],
+  "esmodules": [
+    "./scripts/importer.js", 
+    "./scripts/tileHud.js",
+    "./scripts/drop.js",
+    "./lib/js-yaml.js", 
+    "./lib/jszip.js" 
+  ],
   "styles": ["styles/sdf.css"],
   "languages": [
     {

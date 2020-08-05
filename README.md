@@ -13,10 +13,13 @@ A FolderID refers to the DeckID, and the JournalEntry ID refers to the Card ID.
 ### game.decks
 
 ```game.decks.get(deckId:string)```
+
 Give it a ID String of the deck you want to fetch and it'll return the DECK Object (see DECK object below)
 
 //Probably just use the SDF button instead of this method directly
+
 ```game.decks.create(deckfile:File)```
+
 Give it a File Object that references a valid SDF zip file (see below). It will create a subfolder under "Decks", unzip the image files and build the deck object. 
 
 

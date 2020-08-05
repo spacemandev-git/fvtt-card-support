@@ -1,15 +1,6 @@
 /// <reference types="js-yaml" />
 import {Card} from './card'
-import {mod_name} from './importer.js';
-
-const mod_scope = "world";
-
-
-// Flags
-//cardData //on cards
-//cardMacros
-//cardBack 
-//deckState //on folders
+import {mod_scope} from './constants.js';
 
 export class Deck{
   private _cards: string[] // All Cards
@@ -100,7 +91,7 @@ export class Deck{
    * Returns the next card in the pile
    */
   public async drawCard():Promise<string>{
-    let card = this._state.pop()
+    let card = this._state.pop();
     await this.updateState();
     return card;
   }
@@ -205,14 +196,21 @@ export class Decks{
         
         if(!card.qty){card.qty = 1}
         for(let i=0; i< card.qty; i++){
-          let cardEntry = await JournalEntry.create({
+          await JournalEntry.create({
             name: card.name,
             folder: deckfolderId,
-            img: target+card.img 
+            img: target+card.img,
+            flags:{
+              [mod_scope]: {
+                cardData: card.data,
+                cardBack: target+card.back,
+                cardMacros: {}
+              }
+            } 
           }) 
-          cardEntry.setFlag(mod_scope, 'cardData', card.data) //obj
-          cardEntry.setFlag(mod_scope, 'cardBack', target+card.back) //str
-          cardEntry.setFlag(mod_scope, 'cardMacros', {}) //obj 
+          //cardEntry.setFlag(mod_scope, 'cardData', card.data) //obj
+          //cardEntry.setFlag(mod_scope, 'cardBack', target+card.back) //str
+          //cardEntry.setFlag(mod_scope, 'cardMacros', {}) //obj 
         }
       }
 

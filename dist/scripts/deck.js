@@ -7,12 +7,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-const mod_scope = "world";
-// Flags
-//cardData //on cards
-//cardMacros
-//cardBack 
-//deckState //on folders
+import { mod_scope } from './constants.js';
 export class Deck {
     /**
      * Builds a Deck Object
@@ -195,14 +190,21 @@ export class Decks {
                     card.qty = 1;
                 }
                 for (let i = 0; i < card.qty; i++) {
-                    let cardEntry = yield JournalEntry.create({
+                    yield JournalEntry.create({
                         name: card.name,
                         folder: deckfolderId,
-                        img: target + card.img
+                        img: target + card.img,
+                        flags: {
+                            [mod_scope]: {
+                                cardData: card.data,
+                                cardBack: target + card.back,
+                                cardMacros: {}
+                            }
+                        }
                     });
-                    cardEntry.setFlag(mod_scope, 'cardData', card.data); //obj
-                    cardEntry.setFlag(mod_scope, 'cardBack', target + card.back); //str
-                    cardEntry.setFlag(mod_scope, 'cardMacros', {}); //obj 
+                    //cardEntry.setFlag(mod_scope, 'cardData', card.data) //obj
+                    //cardEntry.setFlag(mod_scope, 'cardBack', target+card.back) //str
+                    //cardEntry.setFlag(mod_scope, 'cardMacros', {}) //obj 
                 }
             }
             this.decks[deckfolderId] = new Deck(deckfolderId);

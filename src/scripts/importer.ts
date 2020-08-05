@@ -1,7 +1,8 @@
 import { Decks } from './deck.js';
-export const mod_name = 'sdf-decks'
+import {mod_scope} from './constants.js';
+
 export const log = (...args: any[]) => {
-  return console.log("Deck Importer | " + args);
+  return console.log(`Deck Importer | ${args}`);
 };
 
 Hooks.once("ready", async () => {
@@ -24,7 +25,7 @@ Hooks.once("ready", async () => {
 })
 
 
-Hooks.on('renderJournalDirectory', (app, html, data) => {
+Hooks.on('renderJournalDirectory', (_app, html, _data) => {
   const deckImportButton = $(`<button class="importButton">${game.i18n.localize("DECK.Import_Button")}</button>`);
   html.find(".directory-footer").append(deckImportButton);
 
@@ -52,4 +53,15 @@ Hooks.on('renderJournalDirectory', (app, html, data) => {
       }
     }).render(true)
   })
+})
+
+
+Hooks.on("renderMacroDirectory", (macroDir, html, _options) => {
+  macroDir.entities.forEach(el => {
+    let flag = el.getFlag(mod_scope, 'cardID');
+    if(flag){
+      let id = el.data._id;
+      html.find(`li[data-entity-id="${id}"]`).remove();
+    }
+  });
 })

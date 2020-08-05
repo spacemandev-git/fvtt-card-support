@@ -25,15 +25,23 @@ Hooks.once("canvasReady", (_) => {
         }
     }));
 });
-function handleDroppedFolder(_folderId, _x, _y) {
+function handleDroppedFolder(folderId, x, y) {
     return __awaiter(this, void 0, void 0, function* () {
         return new Promise((resolve, reject) => {
+            let t = canvas.tiles.worldTransform;
+            const _x = (x - t.tx) / canvas.stage.scale.x;
+            const _y = (y - t.ty) / canvas.stage.scale.y;
             Tile.create({
                 img: `modules/sdf-decks/assets/${Math.floor(Math.random() * 10) + 1}.png`,
                 x: _x,
                 y: _y,
                 width: 350,
-                height: 500
+                height: 400,
+                flags: {
+                    'sdf-decks': {
+                        'deckID': folderId
+                    }
+                }
             });
             resolve();
         });
