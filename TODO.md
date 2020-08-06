@@ -6,6 +6,7 @@ v1
 4. Remove / Hiding elements that aren't working 
 5. Flipping cards in hand
 6. Compact Hand function and rework addToHand() accordingly
+7. Delete option for cards in hand
 
 v2
 1. Paging/longer hotbar/support for more cards

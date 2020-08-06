@@ -5,7 +5,7 @@ export const log = (...args: any[]) => {
   return console.log(`Deck Importer | ${args}`);
 };
 
-Hooks.once("ready", async () => {
+Hooks.on("ready", async () => {
   //Creates A "Decks" folder where to unzip SDF Files
 
   let src = "data";

@@ -7,9 +7,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+import { mod_scope } from "./constants.js";
 // Add the listener to the board html element
 Hooks.once("canvasReady", (_) => {
-    document.getElementById("board").addEventListener("drop", (event) => __awaiter(this, void 0, void 0, function* () {
+    document.getElementById("board").addEventListener("drop", (event) => __awaiter(void 0, void 0, void 0, function* () {
         // Try to extract the data (type + src)
         let data;
         try {
@@ -38,7 +39,7 @@ function handleDroppedFolder(folderId, x, y) {
                 width: 350,
                 height: 400,
                 flags: {
-                    'sdf-decks': {
+                    [mod_scope]: {
                         'deckID': folderId
                     }
                 }

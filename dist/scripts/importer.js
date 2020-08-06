@@ -12,7 +12,7 @@ import { mod_scope } from './constants.js';
 export const log = (...args) => {
     return console.log(`Deck Importer | ${args}`);
 };
-Hooks.once("ready", () => __awaiter(void 0, void 0, void 0, function* () {
+Hooks.on("ready", () => __awaiter(void 0, void 0, void 0, function* () {
     //Creates A "Decks" folder where to unzip SDF Files
     let src = "data";
     //@ts-ignore

@@ -14,30 +14,33 @@ export class Deck {
      * @param cardlist List of Journal Entry IDs that correspond to this deck
      */
     constructor(folderID) {
-        this.folder = game.folders.get(folderID);
-        let state = this.folder.getFlag(mod_scope, 'deckState');
+        this.deckID = game.folders.get(folderID)._id;
+        let state = game.folders.get(folderID).getFlag(mod_scope, 'deckState');
         if (state == undefined) {
-            let cardEntries = this.folder['content'].map(el => el.id);
+            console.log("State undefined");
+            let cardEntries = game.folders.get(folderID)['content'].map(el => el.id);
             this._cards = cardEntries;
             this._state = cardEntries;
             this._discard = [];
             this.updateState().then(() => {
-                console.log(`${folderID} state updated!`);
+                console.log(`${folderID} state created!`);
             });
         }
         else {
-            this._state = state['state'];
-            this._cards = state['cards'];
-            this._discard = state['discard'];
+            console.log("DeckState Loaded: ", state);
+            let stateObj = JSON.parse(state);
+            this._state = stateObj['state'];
+            this._cards = stateObj['cards'];
+            this._discard = stateObj['discard'];
         }
     }
     updateState() {
         return __awaiter(this, void 0, void 0, function* () {
-            yield this.folder.setFlag(mod_scope, 'deckState', {
+            yield game.folders.get(this.deckID).setFlag(mod_scope, 'deckState', JSON.stringify({
                 state: this._state,
                 cards: this._cards,
                 discard: this._discard
-            });
+            }));
         });
     }
     /**
@@ -67,8 +70,8 @@ export class Deck {
                 //if(this._cards.includes(cardId) && !this._state.includes(cardId)){
                 if (this._cards.includes(cardId)) {
                     //this._state.splice(this._state.indexOf(cardId), 1)
-                    this.discard.push(cardId);
-                    this.updateState();
+                    this._discard.push(cardId);
+                    yield this.updateState();
                     resolve(this._discard.toString());
                 }
                 else {
@@ -83,7 +86,7 @@ export class Deck {
     resetDeck() {
         return __awaiter(this, void 0, void 0, function* () {
             return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
-                this._state = this._cards;
+                this._state = duplicate(this._cards);
                 this._discard = [];
                 yield this.updateState();
                 resolve(this._state);
@@ -114,9 +117,30 @@ export class Deck {
             resolve(entry.getFlag(mod_scope, "cardData"));
         });
     }
-    get deck() { return this._state; }
-    get discard() { return this._discard; }
-    get allcards() { return this._cards; }
+    /**
+     * Removes a list of cardIDs from the discard pile
+     * @param cardIDs List of Journal Entry IDs to remove from this discard pile
+     */
+    removeFromDiscard(cardIDs) {
+        return __awaiter(this, void 0, void 0, function* () {
+            this._discard = this._discard.map(el => {
+                if (!cardIDs.includes(el)) {
+                    return el;
+                }
+            });
+            yield this.updateState();
+        });
+    }
+    /**
+     * Adds Cards to the temporary deck state. Reset() will wipe them out
+     * @param cardIDs
+     */
+    addToDeck(cardIDs) {
+        return __awaiter(this, void 0, void 0, function* () {
+            this._state.concat(cardIDs);
+            yield this.updateState();
+        });
+    }
 }
 export class Decks {
     constructor() { }
@@ -202,9 +226,6 @@ export class Decks {
                             }
                         }
                     });
-                    //cardEntry.setFlag(mod_scope, 'cardData', card.data) //obj
-                    //cardEntry.setFlag(mod_scope, 'cardBack', target+card.back) //str
-                    //cardEntry.setFlag(mod_scope, 'cardMacros', {}) //obj 
                 }
             }
             this.decks[deckfolderId] = new Deck(deckfolderId);
@@ -228,7 +249,7 @@ function uploadFile(path, file) {
         let targetPath = path + file.name;
         if (filesInFolder.includes(targetPath)) {
             return;
-        }
+        } //don't upload same file multiple times
         yield FilePicker.upload(src, path, file, {});
     });
 }

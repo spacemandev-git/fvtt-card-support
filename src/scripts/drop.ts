@@ -1,3 +1,5 @@
+import { mod_scope } from "./constants.js";
+
 // Add the listener to the board html element
 Hooks.once("canvasReady", (_) => {
   document.getElementById("board").addEventListener("drop", async (event) => {
@@ -29,7 +31,7 @@ async function handleDroppedFolder(folderId, x, y){
       width: 350,
       height: 400,
       flags: {
-        'sdf-decks': {
+        [mod_scope]: {
           'deckID': folderId
         }
       }

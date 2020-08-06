@@ -2,3 +2,19 @@
   min-width: 96%;
   margin: 10px 10px;
 }
+
+
+.card-container {
+  width: auto;
+  height: auto;
+  overflow: scroll;
+}
+
+.card-container .card-list {
+  list-style-type: none;
+  display: grid;
+  grid-template-columns: repeat(4, 131.2px);
+  grid-auto-rows: 182.4px;
+  gap: 15px 10px;
+  /* gap: 15px 10px; */
+}

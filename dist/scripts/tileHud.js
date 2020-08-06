@@ -9,17 +9,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 import { mod_scope } from './constants.js';
 Hooks.on('renderTileHUD', (tileHUD, html, options) => {
-    var _a, _b, _c, _d;
+    var _a, _b, _c, _d, _e, _f;
     console.log(tileHUD);
     console.log(options.flags);
     if (((_b = (_a = options.flags) === null || _a === void 0 ? void 0 : _a[mod_scope]) === null || _b === void 0 ? void 0 : _b.cardID) != undefined) {
-        cardHUD(tileHUD, html, options);
+        cardHUD(tileHUD, html);
     }
     else if (((_d = (_c = options.flags) === null || _c === void 0 ? void 0 : _c[mod_scope]) === null || _d === void 0 ? void 0 : _d.deckID) != undefined) {
-        deckHUD();
+        deckHUD((_f = (_e = options.flags) === null || _e === void 0 ? void 0 : _e[mod_scope]) === null || _f === void 0 ? void 0 : _f.deckID, html);
     }
 });
-function cardHUD(tileHUD, html, options) {
+function cardHUD(tileHUD, html) {
     return __awaiter(this, void 0, void 0, function* () {
         const handDiv = $('<i class="control-icon fa fa-hand-paper" aria-hidden="true" title="Take"></i>');
         const flipDiv = $('<i class="control-icon fa fa-undo" aria-hidden="true" title="Flip"></i>');
@@ -38,63 +38,107 @@ function cardHUD(tileHUD, html, options) {
         });
         //Embdded Functions
         const flipCard = (td) => __awaiter(this, void 0, void 0, function* () {
-            return new Promise((resolve, reject) => {
-                //Create New Tile at Current Tile's X & Y
-                let cardEntry = game.journal.get(td.flags[mod_scope].cardID);
-                let newImg = "";
-                if (td.img == cardEntry.data['img']) {
-                    // Card if front up, switch to back
-                    newImg = cardEntry.getFlag(mod_scope, "cardBack");
-                }
-                else if (td.img == cardEntry.getFlag(mod_scope, "cardBack")) {
-                    // Card is back up
-                    newImg = cardEntry.data['img'];
-                }
-                else {
-                    ui.notifications.error("What you doing m8? Stop breaking my code");
-                    reject(false);
-                }
-                Tile.create({
-                    img: newImg,
-                    x: td.x,
-                    y: td.y,
-                    width: td.width,
-                    height: td.height,
-                    flags: td.flags
-                });
-                //Delete this tile
-                canvas.tiles.get(td._id).delete();
+            //Create New Tile at Current Tile's X & Y
+            let cardEntry = game.journal.get(td.flags[mod_scope].cardID);
+            let newImg = "";
+            if (td.img == cardEntry.data['img']) {
+                // Card if front up, switch to back
+                newImg = cardEntry.getFlag(mod_scope, "cardBack");
+            }
+            else if (td.img == cardEntry.getFlag(mod_scope, "cardBack")) {
+                // Card is back up
+                newImg = cardEntry.data['img'];
+            }
+            else {
+                ui.notifications.error("What you doing m8? Stop breaking my code");
+                return;
+            }
+            Tile.create({
+                img: newImg,
+                x: td.x,
+                y: td.y,
+                width: td.width,
+                height: td.height,
+                flags: td.flags
             });
+            //Delete this tile
+            canvas.tiles.get(td._id).delete();
         });
         const takeCard = (td) => __awaiter(this, void 0, void 0, function* () {
-            return new Promise((resolve, reject) => {
-                // UI.cardhotbar.populator.addToHand(cardID)
-                // Delete this tile
-                ui['cardHotbar'].populator.addToHand([td.flags[mod_scope]['cardID']]);
-                canvas.tiles.get(td._id).delete();
-                resolve();
-            });
+            // UI.cardhotbar.populator.addToHand(cardID)
+            // Delete this tile
+            ui['cardHotbar'].populator.addToHand([td.flags[mod_scope]['cardID']]);
+            canvas.tiles.get(td._id).delete();
         });
         const discardCard = (td) => __awaiter(this, void 0, void 0, function* () {
-            return new Promise((resolve, reject) => {
-                // Add Card to Discard for the Deck
-                let deckId = game.journal.get(td.flags[mod_scope].cardID).data['folder'];
-                console.log("Deck ID: ", deckId);
-                game.decks.get(deckId).discardCard(td.flags[mod_scope].cardID);
-                // Delete Tile
-                canvas.tiles.get(td._id).delete();
-                resolve();
-            });
+            // Add Card to Discard for the Deck
+            let deckId = game.journal.get(td.flags[mod_scope].cardID).data['folder'];
+            console.log("Deck ID: ", deckId);
+            game.decks.get(deckId).discardCard(td.flags[mod_scope].cardID);
+            // Delete Tile
+            canvas.tiles.get(td._id).delete();
         });
     });
 }
-function deckHUD() {
+function deckHUD(deckID, html) {
     return __awaiter(this, void 0, void 0, function* () {
         // Draw To Hand
         // Draw to Hand Flipped (?)
+        const handDiv = $('<i class="control-icon fa fa-hand-paper" aria-hidden="true" title="Take"></i>');
+        html.find(".left").append(handDiv);
+        handDiv.click((ev) => drawToHand());
         // Show Discard
         // Add Discard Back to Deck
+        const discardDiv = $('<i class="control-icon fa fa-trash" aria-hidden="true" title="Discard Pile"></i>');
+        html.find(".left").append(discardDiv);
+        discardDiv.click((ev) => showDiscard());
         // Reset Deck
+        const resetDiv = $('<i class="control-icon fa fa-undo" aria-hidden="true" title="Reset Deck (Original state, unshuffled, with all cards)"></i>');
+        html.find(".left").append(resetDiv);
+        resetDiv.click((ev) => resetDeck());
         // Shuffle
+        const shuffleDiv = $('<i class="control-icon fa fa-random" aria-hidden="true" title="Shuffle"></i>');
+        html.find(".left").append(shuffleDiv);
+        shuffleDiv.click((ev) => shuffleDeck());
+        let deck = game.decks.get(deckID);
+        let deckName = game.folders.get(deckID).data.name;
+        //Embedded Functions
+        const drawToHand = () => __awaiter(this, void 0, void 0, function* () {
+            if (ui['cardHotbar'].getNextSlot() == -1) {
+                ui.notifications.error("No more room in your hand");
+                return;
+            }
+            let card = yield deck.drawCard();
+            ui['cardHotbar'].populator.addToHand([card]);
+        });
+        const showDiscard = () => __awaiter(this, void 0, void 0, function* () {
+            let discardPile = [];
+            for (let card of deck._discard) {
+                discardPile.push(game.journal.get(card));
+            }
+            let template = yield renderTemplate('modules/sdf-decks/templates/cardgrid.html', { cards: discardPile });
+            console.log(template);
+            console.log(discardPile);
+            new Dialog({
+                title: "Discard Pile",
+                content: template,
+                buttons: {
+                    ok: {
+                        label: "Close"
+                    },
+                    ShuffleBack: {
+                        label: "Shuffle Discard back into the deck"
+                    }
+                }
+            }, { width: 600, height: 500 }).render(true);
+        });
+        const resetDeck = () => __awaiter(this, void 0, void 0, function* () {
+            deck.resetDeck();
+            ui.notifications.info(`${deckName} was reset to it's original state.`);
+        });
+        const shuffleDeck = () => __awaiter(this, void 0, void 0, function* () {
+            deck.shuffle();
+            ui.notifications.info(`${deckName} has ${deck._state.length} cards which were shuffled successfully!`);
+        });
     });
 }

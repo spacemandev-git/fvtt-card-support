@@ -4,40 +4,44 @@ import {mod_scope} from './constants.js';
 
 export class Deck{
   private _cards: string[] // All Cards
-  private _discard: string[] // Discard Pile
-  private _state: string[] // Current Cards
-  private folder: Folder
+  public _discard: string[] // Discard Pile
+  public _state: string[] // Current Cards
+  private deckID: string
 
   /**
    * Builds a Deck Object
    * @param cardlist List of Journal Entry IDs that correspond to this deck
    */
   constructor(folderID:string){
-    this.folder = game.folders.get(folderID)
-    let state = this.folder.getFlag(mod_scope, 'deckState') 
+    this.deckID = game.folders.get(folderID)._id
+    let state = game.folders.get(folderID).getFlag(mod_scope, 'deckState')
     if(state == undefined){
-      let cardEntries = this.folder['content'].map(el=>el.id)
+      console.log("State undefined")
+      let cardEntries = game.folders.get(folderID)['content'].map(el=>el.id)
       this._cards = cardEntries;
       this._state = cardEntries;
       this._discard = [];
       this.updateState().then(()=>{
-        console.log(`${folderID} state updated!`)
+        console.log(`${folderID} state created!`)
       })
     } else {
-      this._state = state['state']
-      this._cards = state['cards']
-      this._discard = state['discard']
+      console.log("DeckState Loaded: ", state);
+      let stateObj = JSON.parse(state); 
+      this._state = stateObj['state']
+      this._cards = stateObj['cards']
+      this._discard = stateObj['discard']
     }
   }
 
   private async updateState(){
-    await this.folder.setFlag(mod_scope, 'deckState', {
+    await game.folders.get(this.deckID).setFlag(mod_scope, 'deckState', JSON.stringify({
       state: this._state,
       cards: this._cards,
       discard: this._discard
-    })
+    }))
   }
 
+  
   /**
    * Shuffles the Current Deck
    */
@@ -66,8 +70,8 @@ export class Deck{
       //if(this._cards.includes(cardId) && !this._state.includes(cardId)){
       if(this._cards.includes(cardId)){
         //this._state.splice(this._state.indexOf(cardId), 1)
-        this.discard.push(cardId);
-        this.updateState();
+        this._discard.push(cardId);
+        await this.updateState();
         resolve(this._discard.toString());
       } else {
         reject("Either this card isn't part of this deck, or it's not been properly drawn yet!");
@@ -80,7 +84,7 @@ export class Deck{
    */
   public async resetDeck():Promise<string[]> {
     return new Promise(async (resolve, reject)=>{
-      this._state = this._cards
+      this._state = duplicate(this._cards)
       this._discard = []
       await this.updateState();
       resolve(this._state)
@@ -111,9 +115,27 @@ export class Deck{
     })
   }
 
-  get deck(){return this._state}
-  get discard(){return this._discard}
-  get allcards(){return this._cards}
+  /**
+   * Removes a list of cardIDs from the discard pile 
+   * @param cardIDs List of Journal Entry IDs to remove from this discard pile 
+   */
+  public async removeFromDiscard(cardIDs: string[]){
+    this._discard = this._discard.map(el=> {
+      if(!cardIDs.includes(el)){
+        return el;
+      }
+    })
+    await this.updateState();
+  }
+
+  /**
+   * Adds Cards to the temporary deck state. Reset() will wipe them out
+   * @param cardIDs 
+   */
+  public async addToDeck(cardIDs:string[]){
+    this._state.concat(cardIDs);
+    await this.updateState()
+  }
 }
 
 export class Decks{
@@ -208,9 +230,6 @@ export class Decks{
               }
             } 
           }) 
-          //cardEntry.setFlag(mod_scope, 'cardData', card.data) //obj
-          //cardEntry.setFlag(mod_scope, 'cardBack', target+card.back) //str
-          //cardEntry.setFlag(mod_scope, 'cardMacros', {}) //obj 
         }
       }
 
@@ -233,6 +252,6 @@ async function uploadFile(path:string, file:File){
   }
   let filesInFolder = (await FilePicker.browse(src, path)).files 
   let targetPath = path+file.name
-  if(filesInFolder.includes(targetPath)){return;}
+  if(filesInFolder.includes(targetPath)){return;} //don't upload same file multiple times
   await FilePicker.upload(src, path, file, {})
 }

@@ -1,0 +1,71 @@
+name: 2_of_clubs
+sdfv: 0.6
+img: 2_of_clubs.png
+back: gray_back.png
+data:
+  value: 2
+  suit: Clubs
+---
+name: 3_of_clubs
+sdfv: 0.6
+img: 3_of_clubs.png
+back: gray_back.png
+data:
+  value: 2
+  suit: Clubs
+---
+name: 4_of_clubs
+sdfv: 0.6
+img: 4_of_clubs.png
+back: gray_back.png
+data:
+  value: 2
+  suit: Clubs
+---
+name: 5_of_clubs
+sdfv: 0.6
+img: 5_of_clubs.png
+back: gray_back.png
+data:
+  value: 2
+  suit: Clubs
+---
+name: 6_of_clubs
+sdfv: 0.6
+img: 6_of_clubs.png
+back: gray_back.png
+data:
+  value: 2
+  suit: Clubs
+---
+name: 7_of_clubs
+sdfv: 0.6
+img: 7_of_clubs.png
+back: gray_back.png
+data:
+  value: 2
+  suit: Clubs
+---
+name: 8_of_clubs
+sdfv: 0.6
+img: 8_of_clubs.png
+back: gray_back.png
+data:
+  value: 2
+  suit: Clubs
+---
+name: 9_of_clubs
+sdfv: 0.6
+img: 9_of_clubs.png
+back: gray_back.png
+data:
+  value: 2
+  suit: Clubs
+---
+name: 10_of_clubs
+sdfv: 0.6
+img: 10_of_clubs.png
+back: gray_back.png
+data:
+  value: 2
+  suit: Clubs
