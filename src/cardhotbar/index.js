@@ -203,15 +203,20 @@ Hooks.once("canvasReady", (_) => {
       console.debug(data);
       console.debug(m);
       console.debug(je);
-      await createTileFromItem(je.id, event.clientX, event.clientY)
+      await createTileFromItem(je.id, event.clientX, event.clientY, event.altKey)
 //    } catch (err) {
 //      return;
 //    }
   });
 });
 
-async function createTileFromItem(objId, x, y){
-  let imgPath = game.journal.get(objId).data.img
+async function createTileFromItem(objId, x, y, alt){
+  let imgPath = ""
+  if(alt){
+    imgPath = game.journal.get(objId).getFlag("world", "cardBack")
+  } else {
+    imgPath = game.journal.get(objId).data.img
+  }
   console.log(imgPath);
 
   // Determine the Tile Size:
