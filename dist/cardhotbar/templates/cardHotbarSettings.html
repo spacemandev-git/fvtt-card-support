@@ -1,0 +1,55 @@
+<div class="chbSettings" id="card-hotbar-settings-form"">
+    <form autocomplete="off" onsubmit="event.preventDefault()">
+    <h1 class="module-header">Global card Hotbar Settings</h1>
+    <p>These settings apply to the additional card Hotbar for all players. However, this will not override cardizations a player chooses for themself.</p>
+    <h2>Main Color Settings</h2>
+    <div class = "formgroup">
+        <label>{{localize "cardHotbar.settings.chbPrimaryColor.name"}}</label>
+        <div class = "colorsplash" id="chbPrimaryColorSplash">
+            <input type="text" value= "{{chbPrimaryColor}}" name="chbPrimaryColor">
+        </div>
+        <p class="hint">{{localize "cardHotbar.settings.chbPrimaryColor.nameHint"}}</p>
+    </div>
+    <div class = "formgroup">
+        <label>{{localize "cardHotbar.settings.chbBorderColor.name"}}</label>
+        <div class = "colorsplash" id="chbBorderColorSplash">
+            <input type="text" value="{{chbBorderColor}}" name="chbBorderColor">
+        </div>
+        <p class="hint">{{localize "cardHotbar.settings.chbBorderColor.nameHint"}}</p>
+    </div>
+    <h2>Position Settings</h2>
+    <div class = "formgroup">
+        <label>{{localize "cardHotbar.settings.chbXPos.name"}}</label>
+        <input type="number" value="{{chbXPos}}" name="chbXPos">
+        <p class="hint">{{localize "cardHotbar.settings.chbXPos.nameHint"}}</p>
+    </div>
+    <div class = "formgroup">
+        <label>{{localize "cardHotbar.settings.chbYPos.name"}}</label>
+        <input type="number" value="{{chbYPos}}" name="chbYPos">
+        <p class="hint">{{localize "cardHotbar.settings.chbYPos.nameHint"}}</p>
+    </div>
+    <h2>Mouseover Color Settings</h2>
+    <div class = "formgroup">
+        <label>{{localize "cardHotbar.settings.chbBorderColorActive.name"}}</label>
+        <div class = "colorsplash" id="chbBorderColorActiveSplash">
+            <input type="text" value="{{chbBorderColorActive}}" name="chbBorderColorActive">
+        </div>
+        <p class="hint">{{localize "cardHotbar.settings.chbBorderColorActive.nameHint"}}</p>
+    </div>
+    <div class = "formgroup">
+        <label>{{localize "cardHotbar.settings.chbBorderColorInactive.name"}}</label>
+        <div class = "colorsplash" id="chbBorderColorInactiveSplash">
+            <input type="text" value="{{chbBorderColorInactive}}" name="chbBorderColorInactive">
+        </div>
+            <p class="hint">{{localize "cardHotbar.settings.chbBorderColorInactive.nameHint"}}</p>
+    </div>
+    <div class="form-group" style="margin-top: 20px;">
+        <button type="button" name="reset">
+            <i class="fas fa-refresh"></i> Reset to Default
+        </button>
+        <button type="submit" name="submit">
+            <i class="fas fa-save"></i> Save
+        </button>
+    </div> 
+    </form>
+</div>

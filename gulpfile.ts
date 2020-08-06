@@ -17,7 +17,8 @@ gulp.task('copy', async () => {
     gulp.src('src/sample/**').pipe(gulp.dest('dist/sample/'))
     gulp.src('src/styles/**/*.css').pipe(gulp.dest('dist/styles/'))
     gulp.src('src/lang/**/*.json').pipe(gulp.dest('dist/lang/'))
-    gulp.src('src/lib/**/*.js').pipe(gulp.dest('dist/lib/')) 
+    gulp.src('src/lib/**/*.js').pipe(gulp.dest('dist/lib/'))
+    gulp.src('src/cardhotbar/**').pipe(gulp.dest('dist/cardhotbar/')) 
     resolve();
   })
 })

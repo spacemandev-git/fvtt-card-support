@@ -7,8 +7,8 @@
     "build": "gulp build",
     "foundry": "gulp build && cp.bat"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "spacemandev",
+  "license": "MIT",
   "devDependencies": {
     "@types/gulp": "^4.0.6",
     "@types/js-yaml": "^3.12.5",

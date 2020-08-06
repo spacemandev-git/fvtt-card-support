@@ -1,7 +1,7 @@
 import { mod_scope } from "./constants.js";
 
 // Add the listener to the board html element
-Hooks.once("canvasReady", (_) => {
+Hooks.once("canvasReady", () => {
   document.getElementById("board").addEventListener("drop", async (event) => {
     // Try to extract the data (type + src)
     let data;
@@ -25,7 +25,7 @@ async function handleDroppedFolder(folderId, x, y){
     const _y = (y - t.ty) / canvas.stage.scale.y
 
     Tile.create({
-      img: `modules/sdf-decks/assets/${Math.floor(Math.random() * 10) + 1}.png`,
+      img: `modules/cardsupport/assets/${Math.floor(Math.random() * 10) + 1}.png`,
       x: _x,
       y: _y,
       width: 350,

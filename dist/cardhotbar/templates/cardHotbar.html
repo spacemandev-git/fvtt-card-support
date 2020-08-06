@@ -1,0 +1,35 @@
+<div id="card-hotbar" class="flexrow">
+    <div id="card-hotbar-directory-controls" class="bar-controls flexcol">
+        <a id="card-bar-toggle">
+            <i class="fas fa-times"></i>
+            <i class="fas fa-caret-down"></i>
+            <img src="modules/cardsupport/cardhotbar/img/poker-hand.png" class="collapsed">
+        </a>
+        <div class= "expanded">        
+            <a id="reset-deck">
+                <i class="fas fa-recycle"></i>
+            </a>
+            <a id="swap-deck">
+                <i class="fas fa-exchange-alt"></i>
+            </a>
+        </div>
+    </div>
+    <nav id="card-action-bar" class="flexrow {{barClass}}" style>
+        <ol id="card-macro-list" class="flexrow" data-page="{{page}}">
+            {{#each macros}}
+            <li class="macro {{this.cssClass}}" data-slot="{{this.slot}}"
+                {{#if this.macro}}data-macro-id="{{this.macro._id}}"{{/if}}>
+                {{#if this.icon}}
+                <img class="macro-icon" src="{{this.icon}}"/>
+                {{/if}}
+<!--                <button class="macro {{this.cssClass}}" data-slot="{{this.slot}}"></button> -->
+            </li>
+            {{/each}}
+        </ol>
+        <div id="card-hotbar-page-controls" class="bar-controls flexcol">
+            <a class="page-control" data-action="page-up"><i class="fas fa-angle-up"></i></a>
+            <span class="page-number">{{page}}</span>
+            <a class="page-control" data-action="page-down"><i class="fas fa-angle-down"></i></a>
+        </div>
+    </nav>
+</div>

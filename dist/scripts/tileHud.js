@@ -116,9 +116,7 @@ function deckHUD(deckID, html) {
             for (let card of deck._discard) {
                 discardPile.push(game.journal.get(card));
             }
-            let template = yield renderTemplate('modules/sdf-decks/templates/cardgrid.html', { cards: discardPile });
-            console.log(template);
-            console.log(discardPile);
+            let template = yield renderTemplate('modules/cardsupport/templates/cardgrid.html', { cards: discardPile });
             new Dialog({
                 title: "Discard Pile",
                 content: template,
