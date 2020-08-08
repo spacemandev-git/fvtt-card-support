@@ -127,6 +127,8 @@ export class Deck {
                 if (!cardIDs.includes(el)) {
                     return el;
                 }
+            }).filter(el => {
+                return el != null;
             });
             yield this.updateState();
         });

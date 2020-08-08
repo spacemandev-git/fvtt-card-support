@@ -1,7 +1,20 @@
 <div class="card-container"> 
   <div class="card-list">
     {{#each cards}}
-    <div style="background-image: url({{this.data.img}}); background-size: 131.2px 182.4px; background-repeat: no-repeat"></div>
+    <div id="{{this._id}}">
+      <img src="{{this.data.img}}" class="card-img" />
+      <div class="item-controls">
+        <span style="flex:1"></span>
+        <a id="{{this._id}}-take" class="control"><i class="icon-hand" title="Take"></i></a>
+        <a id="{{this._id}}-burn" class="control"><i class="icon-burn" title="Burn"></i></a>
+        <a id="{{this._id}}-topdeck" class="control"><i class="icon-deck-of-cards" title="Return to Top of Deck"></i></a>
+        <span style="flex:1"></span>
+      </div>
+    </div>
     {{/each}}
   </div>
+</div>
+<div id="discardfooter">
+  <button id="shuffleBack">Shuffle Discard Back Into Deck</button>
+  <button id="close">Close</button>
 </div>

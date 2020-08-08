@@ -3,18 +3,41 @@
   margin: 10px 10px;
 }
 
-
 .card-container {
   width: auto;
   height: auto;
-  overflow: scroll;
 }
 
 .card-container .card-list {
-  list-style-type: none;
   display: grid;
   grid-template-columns: repeat(4, 131.2px);
-  grid-auto-rows: 182.4px;
+  grid-auto-rows: auto;
   gap: 15px 10px;
-  /* gap: 15px 10px; */
+}
+
+.card-container .card-img {
+  height: 182.4px;
+  width: 131.2px;
+}
+
+.card-container .item-controls {
+  display:flex;
+  flex-direction: row;
+  padding-top: 5px;
+}
+
+.card-container .item-controls .control {
+  padding-left: 1px;
+  padding-right: 1px;
+}
+
+#discardfooter {
+  padding-top: 20px;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+}
+
+#discardfooter button{
+  height: max(50px);
 }

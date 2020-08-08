@@ -3,10 +3,10 @@ import {Card} from './card'
 import {mod_scope} from './constants.js';
 
 export class Deck{
-  private _cards: string[] // All Cards
+  public _cards: string[] // All Cards
   public _discard: string[] // Discard Pile
   public _state: string[] // Current Cards
-  private deckID: string
+  public deckID: string
 
   /**
    * Builds a Deck Object
@@ -124,6 +124,8 @@ export class Deck{
       if(!cardIDs.includes(el)){
         return el;
       }
+    }).filter(el => {
+      return el != null;
     })
     await this.updateState();
   }

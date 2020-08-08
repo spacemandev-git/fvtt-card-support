@@ -84,9 +84,9 @@ function deckHUD(deckID, html) {
     return __awaiter(this, void 0, void 0, function* () {
         // Draw To Hand
         // Draw to Hand Flipped (?)
-        const handDiv = $('<i class="control-icon fa fa-hand-paper" aria-hidden="true" title="Take"></i>');
+        const handDiv = $('<i class="control-icon fa fa-hand-paper" aria-hidden="true" title="Draw"></i>');
         html.find(".left").append(handDiv);
-        handDiv.click((ev) => drawToHand());
+        handDiv.click((ev) => draw());
         // Show Discard
         // Add Discard Back to Deck
         const discardDiv = $('<i class="control-icon fa fa-trash" aria-hidden="true" title="Discard Pile"></i>');
@@ -100,10 +100,15 @@ function deckHUD(deckID, html) {
         const shuffleDiv = $('<i class="control-icon fa fa-random" aria-hidden="true" title="Shuffle"></i>');
         html.find(".left").append(shuffleDiv);
         shuffleDiv.click((ev) => shuffleDeck());
+        const viewDiv = $('<i class="control-icon fa fa-eye" aria-hidden="true" title="Shuffle"></i>');
+        html.find(".left").append(viewDiv);
+        viewDiv.click(ev => viewDeck());
         let deck = game.decks.get(deckID);
         let deckName = game.folders.get(deckID).data.name;
         //Embedded Functions
-        const drawToHand = () => __awaiter(this, void 0, void 0, function* () {
+        const draw = () => __awaiter(this, void 0, void 0, function* () {
+            // Ask How many cards they want to draw, default 1
+            // Tick Box to Draw to Table
             if (ui['cardHotbar'].getNextSlot() == -1) {
                 ui.notifications.error("No more room in your hand");
                 return;
@@ -116,19 +121,7 @@ function deckHUD(deckID, html) {
             for (let card of deck._discard) {
                 discardPile.push(game.journal.get(card));
             }
-            let template = yield renderTemplate('modules/cardsupport/templates/cardgrid.html', { cards: discardPile });
-            new Dialog({
-                title: "Discard Pile",
-                content: template,
-                buttons: {
-                    ok: {
-                        label: "Close"
-                    },
-                    ShuffleBack: {
-                        label: "Shuffle Discard back into the deck"
-                    }
-                }
-            }, { width: 600, height: 500 }).render(true);
+            new DiscardPile({ pile: discardPile, deck: deck }, {}).render(true);
         });
         const resetDeck = () => __awaiter(this, void 0, void 0, function* () {
             deck.resetDeck();
@@ -138,5 +131,79 @@ function deckHUD(deckID, html) {
             deck.shuffle();
             ui.notifications.info(`${deckName} has ${deck._state.length} cards which were shuffled successfully!`);
         });
+        const viewDeck = () => __awaiter(this, void 0, void 0, function* () {
+            //ask how many cards they want to view, default value all cards
+        });
     });
+}
+class DiscardPile extends FormApplication {
+    constructor(object, options = {}) {
+        super(object, options);
+        this.pile = object['pile'];
+        this.deck = object['deck'];
+    }
+    static get defaultOptions() {
+        return mergeObject(super.defaultOptions, {
+            id: "discardpile",
+            title: "Discard Pile",
+            template: "modules/cardsupport/templates/cardgrid.html",
+            classes: ["sheet"],
+            height: 600,
+            width: 600,
+        });
+    }
+    getData() {
+        let data = {
+            cards: this.pile
+        };
+        return data;
+    }
+    activateListeners(html) {
+        return __awaiter(this, void 0, void 0, function* () {
+            html.find('#close').click((ev) => {
+                this.close();
+            });
+            html.find("#shuffleBack").click((ev) => {
+                game.decks.get(this.deck.deckID).addToDeck(this.pile.map(el => el._id));
+                game.decks.get(this.deck.deckID).removeFromDiscard(this.pile.map(el => el._id));
+                game.decks.get(this.deck.deckID).shuffle();
+                this.pile = [];
+                this.render(true);
+            });
+            // Take
+            for (let card of this.pile) {
+                html.find(`#${card._id}-take`).click((ev) => {
+                    if (ui['cardHotbar'].getNextSlot() == -1) {
+                        ui.notifications.error("No more room in your hand");
+                        return;
+                    }
+                    ui['cardHotbar'].populator.addToHand([card._id]);
+                    game.decks.get(this.deck.deckID).removeFromDiscard([card._id]);
+                    this.pile = this.pile.filter(el => { return el._id != card._id; });
+                    this.render(true);
+                });
+            }
+            // Burn
+            for (let card of this.pile) {
+                html.find(`#${card._id}-burn`).click((ev) => {
+                    game.decks.get(this.deck.deckID).removeFromDiscard([card._id]);
+                    ui.notifications.info(`${card._id} was removed from discard!`);
+                    this.pile = this.pile.filter(el => { return el._id != card._id; });
+                    this.render(true);
+                });
+            }
+            // Top Of Deck
+            for (let card of this.pile) {
+                html.find(`#${card._id}-topdeck`).click((ev) => {
+                    game.decks.get(this.deck.deckID).addToDeck([card._id]);
+                    game.decks.get(this.deck.deckID).removeFromDiscard([card._id]);
+                    this.pile = this.pile.filter(el => { return el._id != card._id; });
+                    this.render(true);
+                });
+            }
+        });
+    }
+    _updateObject(evt, data) {
+        return __awaiter(this, void 0, void 0, function* () { });
+    }
 }
