@@ -134,7 +134,7 @@ export class Deck {
         });
     }
     /**
-     *
+     * Removes a list of cardsIDs
      * @param cardsIDs list of JournalEntry IDs to remove from the current state
      */
     removeFromState(cardsIDs) {
@@ -155,7 +155,7 @@ export class Deck {
      */
     addToDeck(cardIDs) {
         return __awaiter(this, void 0, void 0, function* () {
-            this._state.concat(cardIDs);
+            cardIDs.forEach(el => this._state.push(el));
             yield this.updateState();
         });
     }

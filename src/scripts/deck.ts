@@ -132,7 +132,7 @@ export class Deck{
 
 
   /**
-   * 
+   * Removes a list of cardsIDs
    * @param cardsIDs list of JournalEntry IDs to remove from the current state
    */
   public async removeFromState(cardsIDs: string[]){
@@ -151,7 +151,7 @@ export class Deck{
    * @param cardIDs 
    */
   public async addToDeck(cardIDs:string[]){
-    this._state.concat(cardIDs);
+    cardIDs.forEach(el=>this._state.push(el))
     await this.updateState()
   }
 }

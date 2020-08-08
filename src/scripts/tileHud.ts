@@ -215,8 +215,10 @@ class DiscardPile extends FormApplication {
     })
 
     html.find("#shuffleBack").click(() => {
-      (<Deck>game.decks.get(this.deck.deckID)).addToDeck(this.pile.map(el=>el._id));
-      (<Deck>game.decks.get(this.deck.deckID)).removeFromDiscard(this.pile.map(el=>el._id));
+      let cardIds = this.pile.map(el => el._id);
+      console.log(cardIds);
+      (<Deck>game.decks.get(this.deck.deckID)).addToDeck(cardIds);
+      (<Deck>game.decks.get(this.deck.deckID)).removeFromDiscard(cardIds);
       (<Deck>game.decks.get(this.deck.deckID)).shuffle();
       this.pile = [];
       this.render(true);
