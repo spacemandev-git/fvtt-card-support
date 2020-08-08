@@ -135,6 +135,29 @@ async function deckHUD(deckID:string, html) {
 
   const viewDeck = async() => {
     //ask how many cards they want to view, default value all cards
+    let template = `
+    <div>
+      <p> 
+        <h3> How many cards do you want to view? </h3> 
+        <input id="cardNum" value=${deck._state.length} type="number" style='width:50px;'/> 
+      </p>
+    </div>
+    `
+    new Dialog({
+      title: "View Cards",
+      content: template,
+      buttons: {
+        ok: {
+          label: "View",
+          callback: async (html:any) => {
+            new ViewPile({
+              deckID: deck.deckID,
+              viewNum: html.find("#cardNum")[0].value
+            }, {}).render(true);
+          }
+        }
+      }
+    }).render(true)
   }
 }
 
@@ -180,7 +203,8 @@ class DiscardPile extends FormApplication {
 
   getData(){
     let data = {
-      cards: this.pile
+      cards: this.pile,
+      discard: true
     }
     return data;
   }
@@ -232,6 +256,54 @@ class DiscardPile extends FormApplication {
       })
     }
   }
+}
 
-  async _updateObject(_evt, _data) {}
+class ViewPile extends FormApplication {
+  deckID: string = "";
+  viewNum: number = 0;
+
+  constructor(obj, opts = {}){
+    super(obj, opts)
+    this.deckID = obj['deckID']
+    this.viewNum = obj['viewNum']
+  }
+
+  static get defaultOptions(){
+    return mergeObject(super.defaultOptions, {
+      id: "viewpile",
+      title: "View Deck",
+      template: "modules/cardsupport/templates/cardgrid.html",
+      classes: ['sheet'],
+    })
+  }
+  getData() {
+    let deck =(<Deck>game.decks.get(this.deckID))
+    let cardIDs = deck._state.slice(deck._state.length - this.viewNum)
+
+    let data = {
+      cards: cardIDs.map(el => {
+        return game.journal.get(el)
+      }).reverse(),
+      discard: false
+    }
+    return data;
+  }
+
+  async activateListeners(html){
+    let deck =(<Deck>game.decks.get(this.deckID))
+    let cardIDs = deck._state.slice(deck._state.length - this.viewNum)
+
+    // Take
+    for(let card of cardIDs){
+      html.find(`#${card}-take`).click(() => {
+        if(ui['cardHotbar'].getNextSlot() == -1){
+          ui.notifications.error("No more room in your hand")
+          return;
+        }
+        ui['cardHotbar'].populator.addToHand([card]);
+        (<Deck>game.decks.get(this.deckID)).removeFromState([card]);
+        this.close();
+      })
+    }
+  }
 }

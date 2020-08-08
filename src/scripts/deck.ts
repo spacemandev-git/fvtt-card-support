@@ -130,6 +130,22 @@ export class Deck{
     await this.updateState();
   }
 
+
+  /**
+   * 
+   * @param cardsIDs list of JournalEntry IDs to remove from the current state
+   */
+  public async removeFromState(cardsIDs: string[]){
+    this._state = this._state.map(el => {
+      if(!cardsIDs.includes(el)){
+        return el;
+      }
+    }).filter(el => {
+      return el != null;
+    })
+    await this.updateState();
+  }
+
   /**
    * Adds Cards to the temporary deck state. Reset() will wipe them out
    * @param cardIDs 
