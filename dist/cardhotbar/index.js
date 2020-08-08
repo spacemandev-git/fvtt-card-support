@@ -204,7 +204,8 @@ Hooks.once("canvasReady", (_) => {
       console.debug(m);
       console.debug(je);
       await createTileFromItem(je.id, event.clientX, event.clientY, event.altKey)
-//    } catch (err) {
+      m.delete();
+      //    } catch (err) {
 //      return;
 //    }
   });

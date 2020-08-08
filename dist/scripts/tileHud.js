@@ -160,10 +160,10 @@ class DiscardPile extends FormApplication {
     }
     activateListeners(html) {
         return __awaiter(this, void 0, void 0, function* () {
-            html.find('#close').click((ev) => {
+            html.find('#close').click(() => {
                 this.close();
             });
-            html.find("#shuffleBack").click((ev) => {
+            html.find("#shuffleBack").click(() => {
                 game.decks.get(this.deck.deckID).addToDeck(this.pile.map(el => el._id));
                 game.decks.get(this.deck.deckID).removeFromDiscard(this.pile.map(el => el._id));
                 game.decks.get(this.deck.deckID).shuffle();
@@ -172,7 +172,7 @@ class DiscardPile extends FormApplication {
             });
             // Take
             for (let card of this.pile) {
-                html.find(`#${card._id}-take`).click((ev) => {
+                html.find(`#${card._id}-take`).click(() => {
                     if (ui['cardHotbar'].getNextSlot() == -1) {
                         ui.notifications.error("No more room in your hand");
                         return;
@@ -185,7 +185,7 @@ class DiscardPile extends FormApplication {
             }
             // Burn
             for (let card of this.pile) {
-                html.find(`#${card._id}-burn`).click((ev) => {
+                html.find(`#${card._id}-burn`).click(() => {
                     game.decks.get(this.deck.deckID).removeFromDiscard([card._id]);
                     ui.notifications.info(`${card._id} was removed from discard!`);
                     this.pile = this.pile.filter(el => { return el._id != card._id; });
@@ -194,7 +194,7 @@ class DiscardPile extends FormApplication {
             }
             // Top Of Deck
             for (let card of this.pile) {
-                html.find(`#${card._id}-topdeck`).click((ev) => {
+                html.find(`#${card._id}-topdeck`).click(() => {
                     game.decks.get(this.deck.deckID).addToDeck([card._id]);
                     game.decks.get(this.deck.deckID).removeFromDiscard([card._id]);
                     this.pile = this.pile.filter(el => { return el._id != card._id; });
@@ -203,7 +203,7 @@ class DiscardPile extends FormApplication {
             }
         });
     }
-    _updateObject(evt, data) {
+    _updateObject(_evt, _data) {
         return __awaiter(this, void 0, void 0, function* () { });
     }
 }
