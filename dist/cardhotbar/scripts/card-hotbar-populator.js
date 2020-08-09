@@ -10,7 +10,7 @@ export class cardHotbarPopulator {
         // Make a new macro for the Journal
         const maxSlot = 10; 
         let journal = {};
-        let firstEmpty = this.getNextSlot() + 1;
+        let firstEmpty = this.getNextSlot();
         //check for invalid input
         if (!cardId.length) {
             ui.notifications.notify.error("Please provide an array of cardIds");
@@ -50,9 +50,9 @@ export class cardHotbarPopulator {
     }
     
     compact() {
-        let filled = this.macroMap.filter(function (card) {
+        let filled = duplicate( this.macroMap.filter(function (card) {
             return card != null;
-          });
+          }) );
         filled.unshift(null);
         console.debug("Card Hotbar | Compacting... ");
         console.debug(filled);
@@ -63,18 +63,18 @@ export class cardHotbarPopulator {
     //or the last available slot number otherwise
     getNextSlot() {
         console.debug ("Card Hotbar | Checking macroMap for next available slot...");
+        //have to perform some trickery so that the null at slot 0 is not picked up incorrectly.
         let slotCheck = this.macroMap.slice(1);
         const maxSlot = 10
-        if (slotCheck.length < maxSlot) {
-            slotCheck.length = maxSlot;
-            console.debug("Card Hotbar | Filling slotCheck...");
-            const startSlot = this.macroMap.length +1;
-            slotCheck.fill(null, startSlot, maxSlot);
-        }
+        slotCheck.length = maxSlot;
+        const startSlot = this.macroMap.filter(slot => slot).length;
+        console.debug("Card Hotbar | Filling slotCheck...");
+        console.debug(startSlot, maxSlot);
+        slotCheck.fill(null,startSlot,maxSlot);
         console.debug("Card Hotbar | slotCheck");
         console.debug(slotCheck);
         let result = slotCheck.findIndex(this.checkSlotNull) 
-        return result != -1 ? result +1 : -1 ;  
+        return result != -1 ? result + 1 : -1 ;  
     } 
 
     checkSlotNull(cardId) {
@@ -102,7 +102,7 @@ export class cardHotbarPopulator {
     chbSetMacro(macroId, slot) {
         console.debug("card Hotbar |", "Setting macro", slot, macroId);
         this.macroMap[slot] = macroId;
-        this.macroMap = duplicate( this.compact() );
+//        this.macroMap = duplicate( this.compact() );
         ui.cardHotbar.getcardHotbarMacros();
         this._updateFlags().then(render => { 
             return ui.cardHotbar.render();
@@ -134,7 +134,8 @@ export class cardHotbarPopulator {
      */
     chbUnsetMacro(slot) {
         this.macroMap[slot] = null;
-        this.macroMap = duplicate( this.compact() );
+//        this.macroMap = duplicate( this.compact() );
+        ui.cardHotbar.getcardHotbarMacros();
         return this._updateFlags();
     }
 

@@ -94,7 +94,7 @@ async function cardHotbarInit() {
     }
   })
 */
-  ui.cardHotbar.populator.compact();
+//  ui.cardHotbar.populator.compact();
   ui.cardHotbar.render(true, obj);
 }
 
