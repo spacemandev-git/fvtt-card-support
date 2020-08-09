@@ -11,6 +11,7 @@ export class cardHotbarPopulator {
         //generate macro for card
         //TODO: better consolidate with code in index.js in hotbarDrop hook (call hook? make function at least?)
         // Make a new macro for the Journal
+        const maxSlot = 10; 
         let journal = {};
         let firstEmpty = this.getNextSlot();
         //check for invalid input
@@ -23,7 +24,7 @@ export class cardHotbarPopulator {
             return false;
         }
         for (let i = 0; i < cardId.length; i++) { 
-            if ( this.macroMap.length > i + firstEmpty ) {
+            if ( maxSlot >= i + firstEmpty ) {
                 journal = game.journal.get(cardId[i]);
                 Macro.create({
                     name: `Card: ${journal.name}`,
@@ -66,12 +67,12 @@ export class cardHotbarPopulator {
     getNextSlot() {
         console.debug ("Card Hotbar | Checking macroMap for next available slot...");
         let slotCheck = this.macroMap.slice(1);
-        let maxSlot = 10
+        const maxSlot = 10
         if (slotCheck.length < maxSlot) {
             slotCheck.length = maxSlot;
             console.debug("Card Hotbar | Filling slotCheck...");
-            //slotCheck.length ? slotCheck.length : 0, maxSlot +1
-            slotCheck.fill(null, 0, maxSlot);
+            const startSlot = this.macroMap.length +1;
+            slotCheck.fill(null, startSlot, maxSlot);
         }
         console.debug("Card Hotbar | slotCheck");
         console.debug(slotCheck);
