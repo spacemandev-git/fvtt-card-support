@@ -298,7 +298,7 @@ export class cardHotbar extends Hotbar {
           const macro = game.macros.get(li.data("macro-id"));
           return macro ? macro.owner : false;
         },
-        callback: li => {
+        callback: async li => {
           const macro = game.macros.get(li.data("macro-id"));
           const index = li.data("slot");
           console.debug(macro);
@@ -313,7 +313,7 @@ export class cardHotbar extends Hotbar {
             console.debug("Card Hotbar | Discarding card...");
             //this needs to be added as a function. getCardDeck needs to be added to decks API also.
             mDeck.discardCard(mCardId);
-            ui.cardHotbar.populator.chbUnsetMacro(index);
+            await ui.cardHotbar.populator.chbUnsetMacro(index);
             macro.delete();
             ui.cardHotbar.getcardHotbarMacros();
 //            ui.cardHotbar.populator.chbSetMacros();

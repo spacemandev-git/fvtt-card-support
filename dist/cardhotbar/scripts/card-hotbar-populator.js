@@ -133,11 +133,10 @@ export class cardHotbarPopulator {
      * @param {number} slot
      * @return {Promise<unknown>} Promise indicating whether the macro was removed.
      */
-    chbUnsetMacro(slot) {
+    async chbUnsetMacro(slot) {
         this.macroMap[slot] = null;
-//        this.macroMap = duplicate( this.compact() );
+        this.macroMap = duplicate( await this.compact() );
         ui.cardHotbar.getcardHotbarMacros();
-        return this._updateFlags();
     }
 
     /**
