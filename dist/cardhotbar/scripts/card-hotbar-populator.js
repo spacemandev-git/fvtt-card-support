@@ -3,7 +3,7 @@ export class cardHotbarPopulator {
         this.macroMap = this.chbGetMacros();
     }
 
-    async addCardToHand(cardId) {
+    async addToHand(cardId) {
         let empty = this.macroMap.filter(function (card) {
             return card === null;
           });
@@ -12,13 +12,17 @@ export class cardHotbarPopulator {
         //TODO: better consolidate with code in index.js in hotbarDrop hook (call hook? make function at least?)
         // Make a new macro for the Journal
         let journal = {};
-        let firstEmpty = this.macroMap.findIndex(null);
+        let firstEmpty = this.getNextSlot();
         //check for invalid input
-        if (!cardID.length) {
-            ui.notifications.notify.error("Please provide an array of cardIDs");
+        if (!cardId.length) {
+            ui.notifications.notify.error("Please provide an array of cardIds");
             return false;
         } 
-        for (let i = 0; i < cardID.length; i++) { 
+        if ( firstEmpty === -1 ) {
+            ui.notifications.notify.error("There is no room in your hand.");
+            return false;
+        }
+        for (let i = 0; i < cardId.length; i++) { 
             if ( this.macroMap.length > i + firstEmpty ) {
                 journal = game.journal.get(cardId[i]);
                 Macro.create({
@@ -26,7 +30,7 @@ export class cardHotbarPopulator {
                     type: "script",
                     flags: {
                     "world": {
-                        "cardID": `${journal.id}`,
+                        "cardId": `${journal.id}`,
                     }
                     },
                     scope: "global",
@@ -39,7 +43,7 @@ export class cardHotbarPopulator {
                     window.cardHotbar.chbSetMacro(macro.id, firstEmpty+i);
                 });
             } else {
-                ui.notifications.notify.warn("Not enough space in hand, at least 1 card not added.");
+                ui.notifications.error("Not enough space in hand, at least 1 card not added.");
                 ui.cardHotbar.render();
                 return -1;
             }
@@ -56,6 +60,30 @@ export class cardHotbarPopulator {
         console.debug(filled);
         return filled;
     }
+
+    //checks to see if there is available space in the hand. Returns -1 if entirely full (this is an error code)
+    //or the last available slot number otherwise
+    getNextSlot() {
+        console.debug ("Card Hotbar | Checking macroMap for next available slot...");
+        let slotCheck = this.macroMap.slice(1);
+        let maxSlot = 10
+        if (slotCheck.length < maxSlot) {
+            slotCheck.length = maxSlot;
+            console.debug("Card Hotbar | Filling slotCheck...");
+            //slotCheck.length ? slotCheck.length : 0, maxSlot +1
+            slotCheck.fill(null, 0, maxSlot);
+        }
+        console.debug("Card Hotbar | slotCheck");
+        console.debug(slotCheck);
+        let result = slotCheck.findIndex(this.checkSlotNull) 
+        return result != -1 ? result +1 : -1 ;  
+    } 
+
+    checkSlotNull(cardId) {
+        return cardId == null;     
+    }
+
+
 
     //TO DO: Create single chbGetMacro function for completeness and convenience.
     

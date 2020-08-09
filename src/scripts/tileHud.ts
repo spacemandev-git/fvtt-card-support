@@ -108,7 +108,7 @@ async function deckHUD(deckID:string, html) {
     // Ask How many cards they want to draw, default 1
     // Tick Box to Draw to Table
 
-    if(ui['cardHotbar'].getNextSlot() == -1){
+    if(ui['cardHotbar'].populator.getNextSlot() == -1){
       ui.notifications.error("No more room in your hand")
       return;
     }
@@ -227,7 +227,7 @@ class DiscardPile extends FormApplication {
     // Take
     for(let card of this.pile){
       html.find(`#${card._id}-take`).click(() => {
-        if(ui['cardHotbar'].getNextSlot() == -1){
+        if(ui['cardHotbar'].populator.getNextSlot() == -1){
           ui.notifications.error("No more room in your hand")
           return;
         }
@@ -298,7 +298,7 @@ class ViewPile extends FormApplication {
     // Take
     for(let card of cardIDs){
       html.find(`#${card}-take`).click(() => {
-        if(ui['cardHotbar'].getNextSlot() == -1){
+        if(ui['cardHotbar'].populator.getNextSlot() == -1){
           ui.notifications.error("No more room in your hand")
           return;
         }
