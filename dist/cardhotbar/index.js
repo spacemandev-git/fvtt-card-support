@@ -96,7 +96,6 @@ async function cardHotbarInit() {
 */
 
   ui.cardHotbar.render(true, obj);
-  ui.cardHotbar.getNextSlot();
 }
 
 
@@ -186,7 +185,7 @@ Hooks.on("renderHotbar", async () => {
 Hooks.on('rendercardHotbar', async () => {
   console.debug("Card Hotbar | The card hotbar just rendered!");
 });
-
+/* USE SPACEMAN'S VERSION
 // Add the listener to the board html element
 //remember to use new 0.70 hook to cancel harmless error about no slot available
 Hooks.once("canvasReady", (_) => {
@@ -209,7 +208,7 @@ Hooks.once("canvasReady", (_) => {
 //      return;
 //    }
   });
-});
+}); */
 
 async function createTileFromItem(objId, x, y, alt){
   let imgPath = ""
