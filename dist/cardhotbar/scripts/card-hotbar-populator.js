@@ -121,9 +121,8 @@ export class cardHotbarPopulator {
          * !
          */
         for (let slot = 1; slot < 11; slot++) {
-            this.macroMap[slot] = macros[slot];
+            this.macroMap[slot] = ui.cardHotbar.macros[slot];
         }
-        this.macroMap = duplicate( this.compact() );
         await this._updateFlags();
         return ui.cardHotbar.render();
     }
