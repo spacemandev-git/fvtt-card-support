@@ -4,16 +4,13 @@ export class cardHotbarPopulator {
     }
 
     async addToHand(cardId) {
-        let empty = this.macroMap.filter(function (card) {
-            return card === null;
-          });
         console.debug("Card Hotbar | Adding card to hand...");
         //generate macro for card
         //TODO: better consolidate with code in index.js in hotbarDrop hook (call hook? make function at least?)
         // Make a new macro for the Journal
         const maxSlot = 10; 
         let journal = {};
-        let firstEmpty = this.getNextSlot();
+        let firstEmpty = this.getNextSlot() + 1;
         //check for invalid input
         if (!cardId.length) {
             ui.notifications.notify.error("Please provide an array of cardIds");
