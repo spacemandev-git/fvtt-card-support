@@ -303,21 +303,21 @@ export class cardHotbar extends Hotbar {
           const index = li.data("slot");
           console.debug(macro);
           console.debug(index);
- //         try{
+          try{
             const mCardId = macro.getFlag("world","cardId");
-            console.debug(mCardId);
-            const mJournal = game.journal.get(mCardId);
-            console.debug(mJournal);
-            const mDeck = game.decks.get(mJournal.data.folder);
+//            console.debug(mCardId);
+//            const mJournal = game.journal.get(mCardId);
+//            console.debug(mJournal);
+            const mDeck = game.decks.get( game.journal.get(mCardId).data.folder);
             console.debug(mDeck);
             console.debug("Card Hotbar | Discarding card...");
-            //this needs to be added as a function. getCardDeck needs to be added to decks API also.
+            //add discard as a this needs to be added as a function.
             mDeck.discardCard(mCardId);
             await ui.cardHotbar.populator.chbUnsetMacro(index);
             macro.delete();
- //         } catch (e) {
-//            console.debug ("Card Hotbar | could not properly discard card from hand");
-//          }
+          } catch (e) {
+            console.debug ("Card Hotbar | Could not properly discard card from hand");
+          }
         }
       },
       {
