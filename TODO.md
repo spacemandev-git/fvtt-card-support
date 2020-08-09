@@ -20,6 +20,7 @@ v1
 2. Add discard back to main deck without resetting deck (DONE)
 3. View Discard Pile (DONE)
 4. Draw to Table
+5. Fix "view card" hovertext (currently says "shuffle")
 
 v2
 1. Burnt/Removed from Play Pile for decks 
