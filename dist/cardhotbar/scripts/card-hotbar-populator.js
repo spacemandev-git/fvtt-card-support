@@ -137,6 +137,10 @@ export class cardHotbarPopulator {
         this.macroMap[slot] = null;
         this.macroMap = duplicate( await this.compact() );
         ui.cardHotbar.getcardHotbarMacros();
+        this._updateFlags().then(render => { 
+            return ui.cardHotbar.render();
+        });
+// await?        ui.cardHotbar.getcardHotbarMacros();
     }
 
     /**

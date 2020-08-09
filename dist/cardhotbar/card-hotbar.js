@@ -315,8 +315,6 @@ export class cardHotbar extends Hotbar {
             mDeck.discardCard(mCardId);
             await ui.cardHotbar.populator.chbUnsetMacro(index);
             macro.delete();
-            ui.cardHotbar.getcardHotbarMacros();
-//            ui.cardHotbar.populator.chbSetMacros();
  //         } catch (e) {
 //            console.debug ("Card Hotbar | could not properly discard card from hand");
 //          }
