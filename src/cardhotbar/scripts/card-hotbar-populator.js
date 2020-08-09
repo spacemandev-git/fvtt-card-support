@@ -50,14 +50,19 @@ export class cardHotbarPopulator {
     }
     
     async compact() {
-//        this.macroMap = this.chbGetMacros();
+//      this.macroMap = this.chbGetMacros();
         console.debug ("Card Hotbar | macroMap is: ");
         console.debug (this.macroMap);
         let filled = this.macroMap.filter(function (card) {
             return card != null;
           });
+        filled.unshift(null);
+//        let fillCount = filled.length
+//        filled.fill(null, fillCount, this.macroMap.length);
         console.debug ("Card Hotbar | filled is: ");
-        console.debug (filled); 
+        console.debug (filled);
+
+        this.chbSetMacros(filled)
     }
 
     /**
