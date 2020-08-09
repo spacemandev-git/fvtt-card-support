@@ -64,8 +64,9 @@ export class cardHotbarPopulator {
     getNextSlot() {
         console.debug ("Card Hotbar | Checking macroMap for next available slot...");
         //have to perform some trickery so that the null at slot 0 is not picked up incorrectly.
+        //functionally, this will return the actual slot number when 1 is added again at end.
         let slotCheck = this.macroMap.slice(1);
-        const maxSlot = 10
+        const maxSlot = 10;
         slotCheck.length = maxSlot;
         const startSlot = this.macroMap.filter(slot => slot).length;
         console.debug("Card Hotbar | Filling slotCheck...");
