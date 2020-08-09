@@ -239,7 +239,31 @@ export class cardHotbar extends Hotbar {
         callback: li => {
           const macro = game.macros.get(li.data("macro-id"));
           console.debug("Card Hotbar | Flipping card...");
-          //add code for default card playing action here
+          /*  //Embdded Functions
+  const flipCard = async (td:TileData) => {
+    //Create New Tile at Current Tile's X & Y
+    let cardEntry = game.journal.get(td.flags[mod_scope].cardID)
+    let newImg = "";
+    
+    if(td.img == cardEntry.data['img']){
+      // Card if front up, switch to back
+      newImg = cardEntry.getFlag(mod_scope, "cardBack")
+    } else if(td.img == cardEntry.getFlag(mod_scope, "cardBack")){
+      // Card is back up
+      newImg = cardEntry.data['img']
+    } else{ 
+      ui.notifications.error("What you doing m8? Stop breaking my code");
+      return;
+    }
+    Tile.create({
+      img: newImg,
+      x: td.x,
+      y: td.y,
+      width: td.width,
+      height: td.height, 
+      flags: td.flags
+    })*/
+
         }
       },
       {
