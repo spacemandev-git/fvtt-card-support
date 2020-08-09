@@ -49,6 +49,17 @@ export class cardHotbarPopulator {
         }
     }
     
+    async compact() {
+//        this.macroMap = this.chbGetMacros();
+        console.debug ("Card Hotbar | macroMap is: ");
+        console.debug (this.macroMap);
+        let filled = this.macroMap.filter(function (card) {
+            return card != null;
+          });
+        console.debug ("Card Hotbar | filled is: ");
+        console.debug (filled); 
+    }
+
     /**
      * Returns the first empty card slot number
      * @return {number}

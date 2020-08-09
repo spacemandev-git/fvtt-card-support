@@ -96,7 +96,6 @@ async function cardHotbarInit() {
 */
 
   ui.cardHotbar.render(true, obj);
-  ui.cardHotbar.getNextSlot();
 }
 
 
