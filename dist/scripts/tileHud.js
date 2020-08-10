@@ -100,7 +100,7 @@ function deckHUD(deckID, html) {
         const shuffleDiv = $('<i class="control-icon fa fa-random" aria-hidden="true" title="Shuffle"></i>');
         html.find(".left").append(shuffleDiv);
         shuffleDiv.click((ev) => shuffleDeck());
-        const viewDiv = $('<i class="control-icon fa fa-eye" aria-hidden="true" title="Shuffle"></i>');
+        const viewDiv = $('<i class="control-icon fa fa-eye" aria-hidden="true" title="View Deck"></i>');
         html.find(".left").append(viewDiv);
         viewDiv.click(ev => viewDeck());
         let deck = game.decks.get(deckID);

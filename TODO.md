@@ -6,6 +6,8 @@ v1
 4. Remove / Hiding elements that aren't working  (DONE)
 5. Flipping cards in hand
 6. Compact Hand function and rework addToHand() accordingly
+7. Get Player Hand
+8. Mark Cards as done
 
 v2
 1. Paging/longer hotbar/support for more cards
@@ -20,6 +22,8 @@ v1
 2. Add discard back to main deck without resetting deck (DONE)
 3. View Discard Pile (DONE)
 4. Draw to Table
+5. Append Cards to Deck
+
 
 v2
 1. Burnt/Removed from Play Pile for decks 

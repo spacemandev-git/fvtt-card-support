@@ -96,7 +96,7 @@ async function deckHUD(deckID:string, html) {
   html.find(".left").append(shuffleDiv)
   shuffleDiv.click((ev) => shuffleDeck())
 
-  const viewDiv = $('<i class="control-icon fa fa-eye" aria-hidden="true" title="Shuffle"></i>')
+  const viewDiv = $('<i class="control-icon fa fa-eye" aria-hidden="true" title="View Deck"></i>')
   html.find(".left").append(viewDiv);
   viewDiv.click(ev => viewDeck())
 
