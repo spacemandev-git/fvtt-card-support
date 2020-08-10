@@ -298,7 +298,7 @@ export class cardHotbar extends Hotbar {
         }
       },
 
-      /* disabled for now at least?
+      /* disabled for now at least until it's more useful? Same thing can be done once JE is shown.
       {
         name: "Reveal Card",
         icon: '<i class="fas fa-sun"></i>',
@@ -337,10 +337,24 @@ export class cardHotbar extends Hotbar {
           const macro = game.macros.get(li.data("macro-id"));
           return !macro;
         },
-        callback: li => {
+        callback: async li => {
           const macro = game.macros.get(li.data("macro-id"));
           console.debug("Card Hotbar | Drawing multiple cards...");
-          //code to draw multiple card here - game.decks.get(deckid).drawCard() with loop and incrementing Next.
+          //hardcoded 3 card draw for now for demonstration purposes. TO DO: replace with dialog to choose number (default to 3?)
+          let curDeck = game.decks.get( game.user.getFlag("world","sdf-deck-cur") );
+          let cards = [];
+          console.debug(curDeck);
+          if (curDeck) {
+            //TO DO: add interface for user to choose drawn card number here.
+            for (let i=1; i<=3; i++) {
+               let card = await curDeck.drawCard();
+               cards.push(card);
+            }
+            console.debug(cards);
+            ui.cardHotbar.populator.addToHand(cards);
+          } else {
+            ui.notifications.error("Please set a deck to draw from.");
+          }
         }
       },
     ]);
