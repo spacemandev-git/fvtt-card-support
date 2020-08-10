@@ -84,6 +84,8 @@ export class cardHotbar extends Hotbar {
       }
       m.icon = m.macro ? m.macro.data.img : null;
     }
+//    game.user.unsetFlag('cardsupport', 'chbMacroMap');
+//    game.user.setFlag('cardsupport', 'chbMacroMap', this.populator);
     return macros;
   }
 
@@ -128,7 +130,6 @@ export class cardHotbar extends Hotbar {
   async assigncardHotbarMacro(macro, slot, {fromSlot=null}={}) {
     console.debug("card Hotbar | assigncardHotbarMarcro", macro, slot, fromSlot);
     if ( !(macro instanceof Macro) && (macro !== null) ) throw new Error("Invalid Macro provided");
-//    const chbMacros = this.populator.chbGetMacros();
 
     // If a slot was not provided, get the first available slot
     slot = slot ? parseInt(slot) : Array.fromRange(10).find(i => !(i in ui.cardHotbar));
@@ -238,7 +239,31 @@ export class cardHotbar extends Hotbar {
         callback: li => {
           const macro = game.macros.get(li.data("macro-id"));
           console.debug("Card Hotbar | Flipping card...");
-          //add code for default card playing action here
+          /*  //Embdded Functions
+  const flipCard = async (td:TileData) => {
+    //Create New Tile at Current Tile's X & Y
+    let cardEntry = game.journal.get(td.flags[mod_scope].cardID)
+    let newImg = "";
+    
+    if(td.img == cardEntry.data['img']){
+      // Card if front up, switch to back
+      newImg = cardEntry.getFlag(mod_scope, "cardBack")
+    } else if(td.img == cardEntry.getFlag(mod_scope, "cardBack")){
+      // Card is back up
+      newImg = cardEntry.data['img']
+    } else{ 
+      ui.notifications.error("What you doing m8? Stop breaking my code");
+      return;
+    }
+    Tile.create({
+      img: newImg,
+      x: td.x,
+      y: td.y,
+      width: td.width,
+      height: td.height, 
+      flags: td.flags
+    })*/
+
         }
       },
       {
@@ -321,89 +346,6 @@ export class cardHotbar extends Hotbar {
     ]);
   }
 
-      /* -------------------------------------------- */
-  /**
-   * Change the current deck to a deck that the user picks using a dialog
-   * @return {Promise}    A promise which resolves based on the user's selection
-   */
-  swapDeck() {
-    console.debug("Card Hotbar | Swapping current deck...");
-    return new Promise(resolve => {
-      let newDeck = "zyWWggP2LgFPj3Nv";
-      //let curDeck = "HawjSPEVGF5c43KA";
-      game.user.setFlag("world","sdf-deck-cur", newDeck);
-      // create dropdown with contents of Object.keys(game.decks.decks) (why not just game.decks?)
-      //Now I get "cannot read propert getFlag of Null"
-      resolve(true);
-    });
-  }
-
-      /* -------------------------------------------- */
-  /**
-   * Reset a deck to its default state
-   * @return {Promise}    A promise which resolves once the deck is reset
-   */
-
-  resetDeck() {
-    let curDeck 
-    return new Promise(resolve => {
-      console.debug("Card Hotbar | Resetting current deck...");
-      let curDeck = game.decks.get(game.user.getFlag("world","sdf-deck-cur"));
-      //add confirmation dialog logic here
-      //run swapDeck first if no current deck defined.
-      curDeck.resetDeck();
-    resolve(true);
-    });  
-  }
-
-  
-      /* -------------------------------------------- */
-  /**
-   * Get the first available card slot and save it as a flag
-   * Saves the number of the first available slot to a flag and returns it
-   * Number is -1 if no slot is available.
-   * @return {number}   the slot number of the next avaialble card
-   */
-
-   //write some sort of hookscall all... setting the nextslot flag is taking too long?
-   //or is it that setFlag fails every OTHER time? the hell?
-    async getNextSlot() {
-    let firstInactiveSlotNum = -1;
-    //ui.cardHotbar.macros = ui.cardHotbar.getcardHotbarMacros(1);
-    let macs = duplicate(ui.cardHotbar.macros);
-    console.debug("Card Hotbar | macs is");
-    console.debug(macs);
-    console.debug("Card Hotbar | Setting next slot value..."); 
-    await game.user.unsetFlag("world","sdf-card-next-slot");
-    for(let i = 0; i < macs.length; i++) { 
-      console.debug(i);
-      console.debug(macs[i].cssClass);
-      if(macs[i].cssClass == "next" ) {
-        console.debug(`Card Hotbar | i is ${i}, slot ${macs[i].slot}, cssClass ${macs[i].cssClass}. Case: Standard. Returning slot (i+1)`);
-        await game.user.setFlag("world","sdf-card-next-slot", (i+1) );
-        return (i+1);
-      }
-
-      if(macs[i].cssClass == "inactive" && firstInactiveSlotNum == -1 ) {
-        firstInactiveSlotNum = i+1;
-      }
-
-      //perform extra check if last slot
-      if( i == (macs.length-1) ) {
-        //no next was present for some reason, but there's still a blank slot
-        if(macs[i].cssClass != "next" && firstInactiveSlotNum != -1) {
-          console.debug(`Card Hotbar | i is ${i}, cssClass is ${macs[i].cssClass}. Case: No "next" was found but there is an inactive. Returning slot ${firstInactiveSlotNum}.`);
-          await game.user.setFlag("world","sdf-card-next-slot", firstInactiveSlotNum);
-          return firstInactiveSlotNum;
-        } else {
-          //Player hand is full, return error value
-          console.debug(`Card Hotbar | i is ${i}, cssClass is ${macs[i].cssClass}. Case: hand is full, return error}.`);
-          await game.user.setFlag("world","sdf-card-next-slot", -1);
-          return -1; 
-        }
-      }
-    }
-  }
 
   	/* -------------------------------------------- */
   /*  Event Listeners and Handlers
@@ -413,8 +355,6 @@ export class cardHotbar extends Hotbar {
   activateListeners(html) {
     super.activateListeners(html);
     html.find('#card-bar-toggle').click(this._onToggleBar.bind(this));
-    html.find('#swap-deck').click(this.swapDeck.bind(this));
-    html.find('#reset-deck').click(this.resetDeck.bind(this));
     //    Disable pages for now, will just work with first page.
     //    html.find(".page-control").click(this._onClickPageControl.bind(this));
   }
