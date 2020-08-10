@@ -241,6 +241,9 @@ export class cardHotbar extends Hotbar {
         icon: '<i class="fas fa-edit"></i>',
         condition: li => {
           const macro = game.macros.get(li.data("macro-id"));
+          if (macro) {
+            if (macro.getFlag("world", "sideUp") == "back" ) return false;
+          }
           return macro ? macro.owner : false;
         },
         callback: li => {
@@ -264,6 +267,8 @@ export class cardHotbar extends Hotbar {
           ui.cardHotbar.getcardHotbarMacros();
           ui.cardHotbar.macros[li.data("slot")-1].sideUp = newSideUp;
           ui.cardHotbar.render();
+          //added hook so that a module or system can perform a public announcement if needed to prevent cheating
+          Hooks.callAll("heldCardFlipped");
         }
       },
 
