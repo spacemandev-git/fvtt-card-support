@@ -448,7 +448,9 @@ export class cardHotbar extends Hotbar {
 
     // Case 2 - trigger a Macro
     else {
+      //abort if card is face down
       const macro = game.macros.get(li.dataset.macroId);
+      if (macro.getFlag("world","sideUp") == "back") return;
       return macro.execute();
     }
   }
