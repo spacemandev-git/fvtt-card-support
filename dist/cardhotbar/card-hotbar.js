@@ -230,6 +230,31 @@ export class cardHotbar extends Hotbar {
       //TODO: Add JQuery to visually deprecte delete and edit card. Add code where needed. Create More menu with submenus?
       //change draw one to click blank and/or add button.
       {
+        name: "Discard",
+        icon: '<i class="fas fa-trash"></i>',
+        condition: li => {
+          const macro = game.macros.get(li.data("macro-id"));
+          return macro ? macro.owner : false;
+        },
+        callback: async li => {
+          const macro = game.macros.get(li.data("macro-id"));
+          const index = li.data("slot");
+          try{
+            const mCardId = macro.getFlag("world","cardId");
+            const mDeck = game.decks.get( game.journal.get(mCardId).data.folder);
+            console.debug("Card Hotbar | Discarding card (macro, slot, deck)...");
+            console.debug(macro);
+            console.debug(index);
+            console.debug(mDeck);
+            mDeck.discardCard(mCardId);
+            await ui.cardHotbar.populator.chbUnsetMacro(index);
+            macro.delete();
+          } catch (e) {
+            console.debug ("Card Hotbar | Could not properly discard card from hand");
+          }
+        }
+      },
+      {
         name: "Flip Card",
         icon: '<i class="fas fa-undo"></i>',
         condition: li => {
@@ -293,31 +318,7 @@ export class cardHotbar extends Hotbar {
           macro.sheet.render(true);
         }
       },
-      {
-        name: "Discard",
-        icon: '<i class="fas fa-trash"></i>',
-        condition: li => {
-          const macro = game.macros.get(li.data("macro-id"));
-          return macro ? macro.owner : false;
-        },
-        callback: async li => {
-          const macro = game.macros.get(li.data("macro-id"));
-          const index = li.data("slot");
-          try{
-            const mCardId = macro.getFlag("world","cardId");
-            const mDeck = game.decks.get( game.journal.get(mCardId).data.folder);
-            console.debug("Card Hotbar | Discarding card (macro, slot, deck)...");
-            console.debug(macro);
-            console.debug(index);
-            console.debug(mDeck);
-            mDeck.discardCard(mCardId);
-            await ui.cardHotbar.populator.chbUnsetMacro(index);
-            macro.delete();
-          } catch (e) {
-            console.debug ("Card Hotbar | Could not properly discard card from hand");
-          }
-        }
-      },
+
       {
         name: "Switch Deck",
         icon: '<i class="fas fa-exchange-alt"></i>',
@@ -447,11 +448,9 @@ export class cardHotbar extends Hotbar {
     // Case 1 - draw a card
     if ( li.classList.contains("next") ) {
       console.debug("Card Hotbar | Drawing 1 card from current deck...");
-      /* REPLACE WITH CARD DRAW
-      const macro = await Macro.create({name: "New Macro", type: "chat", scope: "global"});
-      await ui.cardHotbar.assigncardHotbarMacro(macro, li.dataset.slot);
-      macro.sheet.render(true);
-      */
+      let deck = game.decks.get( game.user.getFlag("world", "sdf-deck-cur") );
+      let card = await deck.drawCard();
+      ui.cardHotbar.populator.addToHand([card]);
     }
 
     // Case 2 - trigger a Macro
