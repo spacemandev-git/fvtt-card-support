@@ -523,7 +523,8 @@ export class cardHotbar extends Hotbar {
         const macro = game.macros.get(li.dataset.macroId);
         const tooltip = document.createElement("SPAN");
         tooltip.classList.add("tooltip");
-        tooltip.textContent = macro.name;
+        let sideUp = macro.getFlag("world","sideUp"); 
+        !sideUp || sideUp == "front" ? tooltip.textContent = macro.name : tooltip.textContent="???";
         li.appendChild(tooltip);
       } 
     
