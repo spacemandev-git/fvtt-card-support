@@ -274,9 +274,11 @@ export class cardHotbar extends Hotbar {
           return macro ? macro.owner : false;
         },
         callback: li => {
-          const macro = game.macros.get(li.data("macro-id"));
-          console.debug("Card Hotbar | Revealing card...");
-          //add code to show card's journal card here. Possibly submenu to select players.
+          const journal = game.journal.get ( game.macros.get( li.data("macro-id") ).getFlag("world","cardId") );
+          console.debug("Card Hotbar | Revealing card to all players...");
+//          console.debug( game.macros.get( li.data("macro-id") ) );
+          journal.show("image", true);
+
         }
       },
       {
@@ -301,17 +303,13 @@ export class cardHotbar extends Hotbar {
         callback: async li => {
           const macro = game.macros.get(li.data("macro-id"));
           const index = li.data("slot");
-          console.debug(macro);
-          console.debug(index);
           try{
             const mCardId = macro.getFlag("world","cardId");
-//            console.debug(mCardId);
-//            const mJournal = game.journal.get(mCardId);
-//            console.debug(mJournal);
             const mDeck = game.decks.get( game.journal.get(mCardId).data.folder);
+            console.debug("Card Hotbar | Discarding card (macro, slot, deck)...");
+            console.debug(macro);
+            console.debug(index);
             console.debug(mDeck);
-            console.debug("Card Hotbar | Discarding card...");
-            //add discard as a this needs to be added as a function.
             mDeck.discardCard(mCardId);
             await ui.cardHotbar.populator.chbUnsetMacro(index);
             macro.delete();
@@ -321,16 +319,16 @@ export class cardHotbar extends Hotbar {
         }
       },
       {
-        name: "Draw Card",
-        icon: '<i class="fas fa-plus"></i>',
+        name: "Switch Deck",
+        icon: '<i class="fas fa-exchange-alt"></i>',
         condition: li => {
           const macro = game.macros.get(li.data("macro-id"));
           return !macro;
         },
         callback: li => {
           const macro = game.macros.get(li.data("macro-id"));
-          console.debug("Card Hotbar | Drawing 1 card...");
-          //code to draw card here - game.decks.get(deckid).drawCard()
+          console.debug("Card Hotbar | Switching decks");
+          //code to switch decks here
         }
       },
       {
@@ -539,8 +537,10 @@ export class cardHotbar extends Hotbar {
     
       else {
         const tooltip = document.createElement("SPAN");
+        //add better name getting logic.
+        let curDeck = game.folders.get( game.user.getFlag("world","sdf-deck-cur") ).name || "None"
         tooltip.classList.add("tooltip");
-        tooltip.textContent = "Click or right-click to draw";
+        tooltip.textContent = `Deck: ${curDeck}. Click to draw or right-click.`;
         li.appendChild(tooltip);
       }
     

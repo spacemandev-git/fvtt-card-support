@@ -34,8 +34,7 @@ export class cardHotbarPopulator {
                     scope: "global",
                     //Change first argument to "text" to show the journal entry as default.
                     //NOTE: In order for this macro to work (0.6.5 anyway) there MUST be text (content attribute must not be null).
-                    command: `game.journal.get("${journal.id}").show("image", false);`,
-
+                    command: `game.journal.get("${journal.id}").sheet.render(true, {sheetMode: "image"} );`,
                     img: `${game.journal.get(journal.id).data.img}`
                 }).then(macro => {
                     window.cardHotbar.chbSetMacro(macro.id, firstEmpty+i);
@@ -103,7 +102,6 @@ export class cardHotbarPopulator {
     chbSetMacro(macroId, slot) {
         console.debug("card Hotbar |", "Setting macro", slot, macroId);
         this.macroMap[slot] = macroId;
-//        this.macroMap = duplicate( this.compact() );
         ui.cardHotbar.getcardHotbarMacros();
         this._updateFlags().then(render => { 
             return ui.cardHotbar.render();
@@ -140,7 +138,6 @@ export class cardHotbarPopulator {
         this._updateFlags().then(render => { 
             return ui.cardHotbar.render();
         });
-// await?        ui.cardHotbar.getcardHotbarMacros();
     }
 
     /**
