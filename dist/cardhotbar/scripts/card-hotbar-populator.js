@@ -67,8 +67,10 @@ export class cardHotbarPopulator {
             sideUp = "front";
         } else{ 
             ui.notifications.error("What you doing m8? Stop breaking Spaceman's code that Norc stole...");
-            return sideup;
+            return sideUp;
         }
+        //TO DO: combine with mm.update statement below
+        await mm.setFlag("world","sideUp",sideUp);
         await mm.update({img: newImg});
         return sideUp;
     }

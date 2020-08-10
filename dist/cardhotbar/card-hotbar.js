@@ -83,6 +83,11 @@ export class cardHotbar extends Hotbar {
         nextCard = true;
       }
       m.icon = m.macro ? m.macro.data.img : null;
+      //additional logic to store card facing
+      //TO DO: improve to replace hard-coded value with the default draw-mode when added
+      let defaultSide = "front"
+      let curSide = m.macro ? m.macro.getFlag("world","sideUp") || defaultSide : defaultSide;
+      m.sideUp = curSide ? curSide : defaultSide;
     }
 //    game.user.unsetFlag('cardsupport', 'chbMacroMap');
 //    game.user.setFlag('cardsupport', 'chbMacroMap', this.populator);
@@ -254,8 +259,10 @@ export class cardHotbar extends Hotbar {
         callback: li => {
           const macro = game.macros.get(li.data("macro-id"));
           console.debug("Card Hotbar | Flipping card...");
-          console.debug(`Card Hotbar | New facing: ${ ui.cardHotbar.populator.flipCard( li.data("slot")  ) }.` );
+          let newSideUp = ui.cardHotbar.populator.flipCard( li.data("slot")  );
+          console.debug(`Card Hotbar | New facing: ${newSideUp}.` );
           ui.cardHotbar.getcardHotbarMacros();
+          ui.cardHotbar.macros[li.data("slot")-1].sideUp = newSideUp;
           ui.cardHotbar.render();
         }
       },
