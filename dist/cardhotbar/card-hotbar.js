@@ -227,8 +227,39 @@ export class cardHotbar extends Hotbar {
    */
   _contextMenu(html) {
     new ContextMenu(html, ".macro", [
-      //TODO: Add JQuery to visually deprecte delete and edit card. Add code where needed. Create More menu with submenus?
-      //change draw one to click blank and/or add button.
+
+      //TODO: Add JQuery to visually deprecte edit card. Add dialogs
+
+      //active options
+      {
+        name: "Edit Card Macro",
+        icon: '<i class="fas fa-edit"></i>',
+        condition: li => {
+          const macro = game.macros.get(li.data("macro-id"));
+          return macro ? macro.owner : false;
+        },
+        callback: li => {
+          const macro = game.macros.get(li.data("macro-id"));
+          macro.sheet.render(true);
+        }
+      },
+
+      {
+        name: "Flip Card",
+        icon: '<i class="fas fa-undo"></i>',
+        condition: li => {
+          const macro = game.macros.get(li.data("macro-id"));
+          return macro ? macro.owner : false;
+        },
+        callback: li => {
+          const macro = game.macros.get(li.data("macro-id"));
+          console.debug("Card Hotbar | Flipping card...");
+          console.debug(`Card Hotbar | New facing: ${ ui.cardHotbar.populator.flipCard( li.data("slot")  ) }.` );
+          ui.cardHotbar.getcardHotbarMacros();
+          ui.cardHotbar.render();
+        }
+      },
+
       {
         name: "Discard",
         icon: '<i class="fas fa-trash"></i>',
@@ -254,43 +285,8 @@ export class cardHotbar extends Hotbar {
           }
         }
       },
-      {
-        name: "Flip Card",
-        icon: '<i class="fas fa-undo"></i>',
-        condition: li => {
-          const macro = game.macros.get(li.data("macro-id"));
-          return macro ? macro.owner : false;
-        },
-        callback: li => {
-          const macro = game.macros.get(li.data("macro-id"));
-          console.debug("Card Hotbar | Flipping card...");
-          /*  //Embdded Functions
-  const flipCard = async (td:TileData) => {
-    //Create New Tile at Current Tile's X & Y
-    let cardEntry = game.journal.get(td.flags[mod_scope].cardID)
-    let newImg = "";
-    
-    if(td.img == cardEntry.data['img']){
-      // Card if front up, switch to back
-      newImg = cardEntry.getFlag(mod_scope, "cardBack")
-    } else if(td.img == cardEntry.getFlag(mod_scope, "cardBack")){
-      // Card is back up
-      newImg = cardEntry.data['img']
-    } else{ 
-      ui.notifications.error("What you doing m8? Stop breaking my code");
-      return;
-    }
-    Tile.create({
-      img: newImg,
-      x: td.x,
-      y: td.y,
-      width: td.width,
-      height: td.height, 
-      flags: td.flags
-    })*/
 
-        }
-      },
+      /* disabled for now at least?
       {
         name: "Reveal Card",
         icon: '<i class="fas fa-sun"></i>',
@@ -301,24 +297,14 @@ export class cardHotbar extends Hotbar {
         callback: li => {
           const journal = game.journal.get ( game.macros.get( li.data("macro-id") ).getFlag("world","cardId") );
           console.debug("Card Hotbar | Revealing card to all players...");
-//          console.debug( game.macros.get( li.data("macro-id") ) );
+          //console.debug( game.macros.get( li.data("macro-id") ) );
           journal.show("image", true);
-
+          ui.notifications.notify("Card now revealed to all players...");          
         }
       },
-      {
-        name: "Edit Card Macro",
-        icon: '<i class="fas fa-edit"></i>',
-        condition: li => {
-          const macro = game.macros.get(li.data("macro-id"));
-          return macro ? macro.owner : false;
-        },
-        callback: li => {
-          const macro = game.macros.get(li.data("macro-id"));
-          macro.sheet.render(true);
-        }
-      },
+      */
 
+      //inactive slot options
       {
         name: "Switch Deck",
         icon: '<i class="fas fa-exchange-alt"></i>',

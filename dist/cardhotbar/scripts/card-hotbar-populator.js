@@ -48,6 +48,31 @@ export class cardHotbarPopulator {
         return ui.cardHotbar.render();
     }
     
+    async flipCard(slot) {
+        //delete and recreate instead of update?? hrrm.
+        let cardEntry = game.journal.get(  game.macros.get( this.macroMap[slot] ).getFlag("world", "cardId" ) );
+        let mm = ui.cardHotbar.macros[slot - 1].macro;
+        let newImg = "";
+        let sideUp = "";
+        console.debug(cardEntry);
+        console.debug(mm);
+
+        if(mm.data.img == cardEntry.data['img']){
+            // Card is front up, switch to back
+            newImg = cardEntry.getFlag("world", "cardBack");
+            sideUp = "back";            
+        } else if( mm.data.img == cardEntry.getFlag("world", "cardBack") ) {
+            // Card is back up
+            newImg = cardEntry.data['img']
+            sideUp = "front";
+        } else{ 
+            ui.notifications.error("What you doing m8? Stop breaking Spaceman's code that Norc stole...");
+            return sideup;
+        }
+        await mm.update({img: newImg});
+        return sideUp;
+    }
+
     compact() {
         let filled = duplicate( this.macroMap.filter(function (card) {
             return card != null;
