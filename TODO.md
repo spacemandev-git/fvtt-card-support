@@ -30,3 +30,4 @@ v2
 2. Import single card to deck // Append to Deck
 3. Register and call hooks on deck initalization
 4. Deal to Players (requires Sockets)
+5. Card Add GUI
