@@ -31,13 +31,13 @@ export class cardHotbarFlagsForm extends FormApplication {
             chbYPos: cardHotbarSettings.getCHBYPos(),        };
         if (this.reset == true) {
             data = {    
-                chbPrimaryColor: game.settings.settings.get("card-hotbar.chbPrimaryColor").default,
-                chbBorderColor: game.settings.settings.get("card-hotbar.chbBorderColor").default,
-                chbBorderColorActive: game.settings.settings.get("card-hotbar.chbBorderColorActive").default,
-                chbBorderColorInactive: game.settings.settings.get("card-hotbar.chbBorderColorInactive").default,
+                chbPrimaryColor: game.settings.settings.get("cardsupport.chbPrimaryColor").default,
+                chbBorderColor: game.settings.settings.get("cardsupport.chbBorderColor").default,
+                chbBorderColorActive: game.settings.settings.get("cardsupport.chbBorderColorActive").default,
+                chbBorderColorInactive: game.settings.settings.get("cardsupport.chbBorderColorInactive").default,
 
-                chbXPos: game.settings.settings.get("card-hotbar.chbXPos").default,
-                chbYPos: game.settings.settings.get("card-hotbar.chbYPos").default
+                chbXPos: game.settings.settings.get("cardsupport.chbXPos").default,
+                chbYPos: game.settings.settings.get("cardsupport.chbYPos").default
             };
         }
         this.render;
@@ -55,13 +55,13 @@ export class cardHotbarFlagsForm extends FormApplication {
      *  'key':entry.metadata.package+'.'+entry.metadata.name
      */
     async _updateObject(e, d) {
-        await game.user.setFlag("card-hotbar", "chbPrimaryColor", d.chbPrimaryColor);
-        await game.user.setFlag("card-hotbar", "chbBorderColor", d.chbBorderColor);
-        await game.user.setFlag("card-hotbar", "chbBorderColorActive", d.chbBorderColorActive);
-        await game.user.setFlag("card-hotbar", "chbBorderColorInactive", d.chbBorderColorInactive);
+        await game.user.setFlag("cardsupport", "chbPrimaryColor", d.chbPrimaryColor);
+        await game.user.setFlag("cardsupport", "chbBorderColor", d.chbBorderColor);
+        await game.user.setFlag("cardsupport", "chbBorderColorActive", d.chbBorderColorActive);
+        await game.user.setFlag("cardsupport", "chbBorderColorInactive", d.chbBorderColorInactive);
 
-        await game.user.setFlag("card-hotbar","chbXPos", d.chbXPos);
-        await game.user.setFlag("card-hotbar","chbYPos", d.chbYPos);
+        await game.user.setFlag("cardsupport","chbXPos", d.chbXPos);
+        await game.user.setFlag("cardsupport","chbYPos", d.chbYPos);
         this.render();
         ui.notifications.notify("Saving... Please refresh Foundry to apply changes.");                                                     
     }

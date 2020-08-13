@@ -10,7 +10,7 @@ export class cardHotbarSettingsForm extends FormApplication {
     static get defaultOptions() {
         return mergeObject(super.defaultOptions, {
             id: "card-hotbar-settings-form",
-            title: "(𝗚𝗠 𝗢𝗻𝗹𝘆) Set Default Global card Hotbar",
+            title: "(𝗚𝗠 𝗢𝗻𝗹𝘆) Set Default Global Player Hand",
             template: "./modules/card-hotbar/templates/cardHotbarSettings.html",
             classes: ["sheet"],
             width: 500,
@@ -20,23 +20,23 @@ export class cardHotbarSettingsForm extends FormApplication {
 
     getData() {
         let data = {        
-            chbPrimaryColor: game.settings.get("card-hotbar", "chbPrimaryColor"), 
-            chbBorderColor: game.settings.get("card-hotbar", "chbBorderColor"),
-            chbBorderColorActive: game.settings.get("card-hotbar", "chbBorderColorActive"),
-            chbBorderColorInactive: game.settings.get("card-hotbar", "chbBorderColorInactive"),
+            chbPrimaryColor: game.settings.get("cardsupport", "chbPrimaryColor"), 
+            chbBorderColor: game.settings.get("cardsupport", "chbBorderColor"),
+            chbBorderColorActive: game.settings.get("cardsupport", "chbBorderColorActive"),
+            chbBorderColorInactive: game.settings.get("cardsupport", "chbBorderColorInactive"),
 
-            chbXPos: game.settings.get("card-hotbar", "chbXPos"),
-            chbYPos: game.settings.get("card-hotbar", "chbYPos")
+            chbXPos: game.settings.get("cardsupport", "chbXPos"),
+            chbYPos: game.settings.get("cardsupport", "chbYPos")
         };
         if (this.reset == true) {
             data = {    
-                chbPrimaryColor: game.settings.settings.get("card-hotbar.chbPrimaryColor").default,
-                chbBorderColor: game.settings.settings.get("card-hotbar.chbBorderColor").default,
-                chbBorderColorActive: game.settings.settings.get("card-hotbar.chbBorderColorActive").default,
-                chbBorderColorInactive: game.settings.settings.get("card-hotbar.chbBorderColorInactive").default,
+                chbPrimaryColor: game.settings.settings.get("cardsupport.chbPrimaryColor").default,
+                chbBorderColor: game.settings.settings.get("cardsupport.chbBorderColor").default,
+                chbBorderColorActive: game.settings.settings.get("cardsupport.chbBorderColorActive").default,
+                chbBorderColorInactive: game.settings.settings.get("cardsupport.chbBorderColorInactive").default,
 
-                chbXPos: game.settings.settings.get("card-hotbar.chbXPos").default,
-                chbYPos: game.settings.settings.get("card-hotbar.chbYPos").default
+                chbXPos: game.settings.settings.get("cardsupport.chbXPos").default,
+                chbYPos: game.settings.settings.get("cardsupport.chbYPos").default
             };
         }
         this.render;
@@ -55,12 +55,12 @@ export class cardHotbarSettingsForm extends FormApplication {
      */
     async _updateObject(e, d) {
         console.debug("card Hotbar | Attempting to update settings with form values...");
-        game.settings.set("card-hotbar", "chbPrimaryColor", d.chbPrimaryColor);
-        game.settings.set("card-hotbar", "chbBorderColor", d.chbBorderColor);
-        game.settings.set("card-hotbar", "chbBorderColorActive", d.chbBorderColorActive);
-        game.settings.set("card-hotbar", "chbBorderColorInactive", d.chbBorderColorInactive);
-        game.settings.set("card-hotbar","chbXPos", d.chbXPos);
-        game.settings.set("card-hotbar","chbYPos", d.chbYPos);
+        game.settings.set("cardsupport", "chbPrimaryColor", d.chbPrimaryColor);
+        game.settings.set("cardsupport", "chbBorderColor", d.chbBorderColor);
+        game.settings.set("cardsupport", "chbBorderColorActive", d.chbBorderColorActive);
+        game.settings.set("cardsupport", "chbBorderColorInactive", d.chbBorderColorInactive);
+        game.settings.set("cardsupport","chbXPos", d.chbXPos);
+        game.settings.set("cardsupport","chbYPos", d.chbYPos);
         this.render();
         ui.notifications.notify("Saving... Please refresh Foundry to apply changes.");                                                     
     }

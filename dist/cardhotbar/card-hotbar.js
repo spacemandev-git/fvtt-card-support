@@ -135,7 +135,7 @@ export class cardHotbar extends Hotbar {
    * @return {Promise}          A Promise which resolves once the User update is complete
    */
   async assigncardHotbarMacro(macro, slot, {fromSlot=null}={}) {
-    //console.debug("card Hotbar | assigncardHotbarMarcro", macro, slot, fromSlot);
+    //console.debug("Card Hotbar | assigncardHotbarMarcro", macro, slot, fromSlot);
     if ( !(macro instanceof Macro) && (macro !== null) ) throw new Error("Invalid Macro provided");
 
     // If a slot was not provided, get the first available slot
@@ -145,30 +145,30 @@ export class cardHotbar extends Hotbar {
 
     // Update the hotbar data
     const update = duplicate(ui.cardHotbar);
-    //console.debug("card Hotbar |", slot);
+    //console.debug("Card Hotbar |", slot);
     if ( macro ) await this.populator.chbSetMacro(macro.id,slot);
     else {
-      //console.debug('card Hotbar | Unsetting!');
+      //console.debug('Card Hotbar | Unsetting!');
       await this.populator.chbUnsetMacro(slot);
     }
 
     //functional but needs cleanup
-    //console.debug("card Hotbar | Finding move origin");
+    //console.debug("Card Hotbar | Finding move origin");
     if ( fromSlot ) {
-      //console.debug("card Hotbar |", ui.cardHotbar.macros);
-      //console.debug("card Hotbar |", ui.cardHotbar.macros[fromSlot-1]?.macro, ui.cardHotbar.macros[fromSlot-1]?.macro === macro);
+      //console.debug("Card Hotbar |", ui.cardHotbar.macros);
+      //console.debug("Card Hotbar |", ui.cardHotbar.macros[fromSlot-1]?.macro, ui.cardHotbar.macros[fromSlot-1]?.macro === macro);
      
       if (ui.cardHotbar.macros[fromSlot-1]?.macro === macro) {
-        //console.debug("card Hotbar | internal move detected!");
+        //console.debug("Card Hotbar | internal move detected!");
         if ( fromSlot != slot ) {
-          //console.debug(`card Hotbar | trying to delete slot ${fromSlot} in cardHotbar`);
+          //console.debug(`Card Hotbar | trying to delete slot ${fromSlot} in cardHotbar`);
           await this.populator.chbUnsetMacro(fromSlot);
         }
       } else {
-        //console.debug("card Hotbar | drop from core macro hotbar detected!");
+        //console.debug("Card Hotbar | drop from core macro hotbar detected!");
       }
     } else {
-      //console.debug("card Hotbar | non-hotbar drop detected!");
+      //console.debug("Card Hotbar | non-hotbar drop detected!");
     }
  
     ui.cardHotbar.render();
@@ -379,7 +379,7 @@ export class cardHotbar extends Hotbar {
   async _onDrop(event) {
     event.preventDefault();
     //console.debug(event);
-    //console.debug("card Hotbar | card-hotbar drop detected!");
+    //console.debug("Card Hotbar | card-hotbar drop detected!");
     // Try to extract the data
     let data;
     try {
@@ -401,11 +401,11 @@ export class cardHotbar extends Hotbar {
 
 
     //If needed, temporarily hijack assignHotbarMacro to trick core/modules to auto-create macros for cardHotbar instead
-    //only needs to be done when dropping an item onto the card Hotbar.
+    //only needs to be done when dropping an item onto the Card Hotbar.
     //revert once assign card macro complete
-    //console.debug("card Hotbar | Dropped type:", data.type);
+    //console.debug("Card Hotbar | Dropped type:", data.type);
     if (data.type == "Tile" || data.type =="JournalEntry") {
-      //console.debug("card Hotbar | Attempting monkey hotpatch!");
+      //console.debug("Card Hotbar | Attempting monkey hotpatch!");
       let coreAssignHotbarMacro = game.user.assignHotbarMacro;
       game.user.assignHotbarMacro = this.assigncardHotbarMacro.bind(this); 
       Hooks.once("cardHotbarAssignComplete", () => game.user.assignHotbarMacro = coreAssignHotbarMacro);
@@ -413,11 +413,11 @@ export class cardHotbar extends Hotbar {
   
     //does this need to be set to false when done?
     if ( await Hooks.call("hotbarDrop", this, data, cardSlot) === undefined ) {
-      //console.debug("card Hotbar | hotbarDrop not found, reverting monkey hotpatch!")
+      //console.debug("Card Hotbar | hotbarDrop not found, reverting monkey hotpatch!")
       game.user.assignHotbarMacro = coreAssignHotbarMacro; 
       return; 
     } else {
-      //console.debug("card Hotbar | hotbarDrop true");
+      //console.debug("Card Hotbar | hotbarDrop true");
     }
     
     //This should never be called because the journal entry should now be a macro due to hotbarDrop 
@@ -429,7 +429,7 @@ export class cardHotbar extends Hotbar {
     //console.debug ("Card Hotbar | je is:");
     //console.debug (je);
       if ( je ) {
-        //console.debug("card Hotbar | Journal Entry provided:", macro, "cardSlot", data.cardSlot);
+        //console.debug("Card Hotbar | Journal Entry provided:", macro, "cardSlot", data.cardSlot);
         await this.assigncardHotbarJE(je, cardSlot, {fromSlot: data.cardSlot});
       }
     return;
@@ -438,8 +438,8 @@ export class cardHotbar extends Hotbar {
     // Only handles Macro drops
     const macro = await this._getDropMacro(data);
     if ( macro ) {
-      //console.debug("card Hotbar | macro provided:", macro, "fromSlot", data.cardSlot);
-      //console.debug("card Hotbar | monkey hotpatch?", game.user.assignHotbarMacro === this.assigncardHotbarMacro);
+      //console.debug("Card Hotbar | macro provided:", macro, "fromSlot", data.cardSlot);
+      //console.debug("Card Hotbar | monkey hotpatch?", game.user.assignHotbarMacro === this.assigncardHotbarMacro);
         await this.assigncardHotbarMacro(macro, cardSlot, {fromSlot: data.cardSlot});
     }
 
@@ -481,7 +481,7 @@ export class cardHotbar extends Hotbar {
   /** @override */
   _onDragStart(event) {
     //hide tooltip so it doesn't get in the way
-    //onsole.debug("card Hotbar | Attempting to hide tooltip.");
+    //onsole.debug("Card Hotbar | Attempting to hide tooltip.");
 
     const li = event.currentTarget.closest(".macro");
     if ( !li.dataset.macroId ) return false;
@@ -501,7 +501,7 @@ export class cardHotbar extends Hotbar {
    * @private
    */
   async _getDropMacro(data) {
-    //console.debug("card Hotbar | in _getDropMacro", data);
+    //console.debug("Card Hotbar | in _getDropMacro", data);
     if ( data.type !== "Macro" ) return null;
 
     // Case 1 - Data explicitly provided (but no ID)
@@ -540,7 +540,7 @@ export class cardHotbar extends Hotbar {
 
     // Handle hover-in
     if ( event.type === "mouseenter" ) {
-      //console.debug("card Hotbar | Macro tooltip override fired!");
+      //console.debug("Card Hotbar | Macro tooltip override fired!");
       this._hover = li.dataset.slot;
       if ( hasAction ) {
         const macro = game.macros.get(li.dataset.macroId);
