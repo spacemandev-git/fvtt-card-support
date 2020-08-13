@@ -131,7 +131,7 @@ Hooks.on("renderSettingsConfig", async () => {
   $(chbSetDiv).addClass('chb-global');
   $(chbSetDiv).attr('id', 'chbSetDiv');
 
-  let chbFlagDiv = $(coreSetDiv).next();
+  let chbFlagDiv = $(chbSetDiv).next();
   $(chbFlagDiv).addClass('chb-setting');
   $(chbFlagDiv).addClass('chb-user');
   $(chbFlagDiv).attr('id', 'chbFlagDiv');
