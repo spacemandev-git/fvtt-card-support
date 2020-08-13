@@ -109,12 +109,48 @@ function deckHUD(deckID, html) {
         const draw = () => __awaiter(this, void 0, void 0, function* () {
             // Ask How many cards they want to draw, default 1
             // Tick Box to Draw to Table
-            if (ui['cardHotbar'].populator.getNextSlot() == -1) {
-                ui.notifications.error("No more room in your hand");
-                return;
-            }
-            let card = yield deck.drawCard();
-            ui['cardHotbar'].populator.addToHand([card]);
+            let takeDialogTemplate = `
+    <h2>How many cards?</h2>
+    <input type="number" id="numCards" value=1 style="flex:1"/>
+    
+    <h2>Draw With Replacement?</h2>
+    <h3>If checked, card will be a duplicate and not impact deck state</h3>
+    <input type="checkbox" id="infiniteDraw" />    
+    `;
+            new Dialog({
+                title: "Take Cards",
+                content: takeDialogTemplate,
+                buttons: {
+                    take: {
+                        label: "Take Cards",
+                        callback: (html) => __awaiter(this, void 0, void 0, function* () {
+                            let numCards = html.find("#numCards")[0].value;
+                            console.log("Num Cards: ", numCards);
+                            if (html.find("#infiniteDraw")[0].checked) {
+                                for (let i = 0; i < numCards; i++) {
+                                    console.log(`${i} missippi`);
+                                    if (ui['cardHotbar'].populator.getNextSlot() == -1) {
+                                        ui.notifications.error("No more room in your hand");
+                                        return;
+                                    }
+                                    let card = deck.infinteDraw();
+                                    ui['cardHotbar'].populator.addToHand([card]);
+                                }
+                            }
+                            else {
+                                for (let i = 0; i < numCards; i++) {
+                                    if (ui['cardHotbar'].populator.getNextSlot() == -1) {
+                                        ui.notifications.error("No more room in your hand");
+                                        return;
+                                    }
+                                    let card = yield deck.drawCard();
+                                    ui['cardHotbar'].populator.addToHand([card]);
+                                }
+                            }
+                        })
+                    }
+                }
+            }).render(true);
         });
         const showDiscard = () => __awaiter(this, void 0, void 0, function* () {
             let discardPile = [];

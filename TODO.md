@@ -23,6 +23,7 @@ v1
 3. View Discard Pile (DONE)
 4. Draw to Table
 5. Append Cards to Deck
+6. Infinite Draw
 
 
 v2

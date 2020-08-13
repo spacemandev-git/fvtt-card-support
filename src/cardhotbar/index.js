@@ -174,16 +174,16 @@ Hooks.on("hotbarDrop", (hotbar, data, slot) => {
 });
 
 Hooks.once('rendercardHotbar', () => {
-  console.debug("Card Hotbar | Performing initial collapse");
+  //console.debug("Card Hotbar | Performing initial collapse");
   ui.cardHotbar.collapse();
 });
 
 Hooks.on("renderHotbar", async () => {
-  console.debug("Card Hotbar | The core hotbar just rendered!");
+  //console.debug("Card Hotbar | The core hotbar just rendered!");
 });
 
 Hooks.on('rendercardHotbar', async () => {
-  console.debug("Card Hotbar | The card hotbar just rendered!");
+  //console.debug("Card Hotbar | The card hotbar just rendered!");
 });
 
 /* USE SPACEMAN'S VERSION? */
