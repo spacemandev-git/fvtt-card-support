@@ -146,27 +146,27 @@ export class cardHotbar extends Hotbar {
     //console.debug("card Hotbar |", slot);
     if ( macro ) await this.populator.chbSetMacro(macro.id,slot);
     else {
-      console.debug('card Hotbar | Unsetting!');
+      //console.debug('card Hotbar | Unsetting!');
       await this.populator.chbUnsetMacro(slot);
     }
 
     //functional but needs cleanup
-    console.debug("card Hotbar | Finding move origin");
+    //console.debug("card Hotbar | Finding move origin");
     if ( fromSlot ) {
-      console.debug("card Hotbar |", ui.cardHotbar.macros);
-      console.debug("card Hotbar |", ui.cardHotbar.macros[fromSlot-1]?.macro, ui.cardHotbar.macros[fromSlot-1]?.macro === macro);
+      //console.debug("card Hotbar |", ui.cardHotbar.macros);
+      //console.debug("card Hotbar |", ui.cardHotbar.macros[fromSlot-1]?.macro, ui.cardHotbar.macros[fromSlot-1]?.macro === macro);
      
       if (ui.cardHotbar.macros[fromSlot-1]?.macro === macro) {
-        console.debug("card Hotbar | internal move detected!");
+        //console.debug("card Hotbar | internal move detected!");
         if ( fromSlot != slot ) {
-          console.debug(`card Hotbar | trying to delete slot ${fromSlot} in cardHotbar`);
+          //console.debug(`card Hotbar | trying to delete slot ${fromSlot} in cardHotbar`);
           await this.populator.chbUnsetMacro(fromSlot);
         }
       } else {
-        console.debug("card Hotbar | drop from core macro hotbar detected!");
+        //console.debug("card Hotbar | drop from core macro hotbar detected!");
       }
     } else {
-      console.debug("card Hotbar | non-hotbar drop detected!");
+      //console.debug("card Hotbar | non-hotbar drop detected!");
     }
  
     ui.cardHotbar.render();
@@ -261,9 +261,9 @@ export class cardHotbar extends Hotbar {
         },
         callback: li => {
           const macro = game.macros.get(li.data("macro-id"));
-          console.debug("Card Hotbar | Flipping card...");
+          //console.debug("Card Hotbar | Flipping card...");
           let newSideUp = ui.cardHotbar.populator.flipCard( li.data("slot")  );
-          console.debug(`Card Hotbar | New facing: ${newSideUp}.` );
+          //console.debug(`Card Hotbar | New facing: ${newSideUp}.` );
           ui.cardHotbar.getcardHotbarMacros();
           ui.cardHotbar.macros[li.data("slot")-1].sideUp = newSideUp;
           ui.cardHotbar.render();
@@ -285,15 +285,15 @@ export class cardHotbar extends Hotbar {
           try{
             const mCardId = macro.getFlag("world","cardId");
             const mDeck = game.decks.get( game.journal.get(mCardId).data.folder);
-            console.debug("Card Hotbar | Discarding card (macro, slot, deck)...");
-            console.debug(macro);
-            console.debug(index);
-            console.debug(mDeck);
+            //console.debug("Card Hotbar | Discarding card (macro, slot, deck)...");
+            //console.debug(macro);
+            //console.debug(index);
+            //console.debug(mDeck);
             mDeck.discardCard(mCardId);
             await ui.cardHotbar.populator.chbUnsetMacro(index);
             macro.delete();
           } catch (e) {
-            console.debug ("Card Hotbar | Could not properly discard card from hand");
+            //console.debug ("Card Hotbar | Could not properly discard card from hand");
           }
         }
       },
@@ -326,7 +326,7 @@ export class cardHotbar extends Hotbar {
         },
         callback: li => {
           const macro = game.macros.get(li.data("macro-id"));
-          console.debug("Card Hotbar | Switching decks");
+          //console.debug("Card Hotbar | Switching decks");
           //code to switch decks here
         }
       },
@@ -339,18 +339,18 @@ export class cardHotbar extends Hotbar {
         },
         callback: async li => {
           const macro = game.macros.get(li.data("macro-id"));
-          console.debug("Card Hotbar | Drawing multiple cards...");
+          //console.debug("Card Hotbar | Drawing multiple cards...");
           //hardcoded 3 card draw for now for demonstration purposes. TO DO: replace with dialog to choose number (default to 3?)
           let curDeck = game.decks.get( game.user.getFlag("world","sdf-deck-cur") );
           let cards = [];
-          console.debug(curDeck);
+          //console.debug(curDeck);
           if (curDeck) {
             //TO DO: add interface for user to choose drawn card number here.
             for (let i=1; i<=3; i++) {
                let card = await curDeck.drawCard();
                cards.push(card);
             }
-            console.debug(cards);
+            //console.debug(cards);
             ui.cardHotbar.populator.addToHand(cards);
           } else {
             ui.notifications.error("Please set a deck to draw from.");
@@ -403,7 +403,7 @@ export class cardHotbar extends Hotbar {
     //revert once assign card macro complete
     //console.debug("card Hotbar | Dropped type:", data.type);
     if (data.type == "Tile" || data.type =="JournalEntry") {
-      console.debug("card Hotbar | Attempting monkey hotpatch!");
+      //console.debug("card Hotbar | Attempting monkey hotpatch!");
       let coreAssignHotbarMacro = game.user.assignHotbarMacro;
       game.user.assignHotbarMacro = this.assigncardHotbarMacro.bind(this); 
       Hooks.once("cardHotbarAssignComplete", () => game.user.assignHotbarMacro = coreAssignHotbarMacro);
@@ -415,7 +415,7 @@ export class cardHotbar extends Hotbar {
       game.user.assignHotbarMacro = coreAssignHotbarMacro; 
       return; 
     } else {
-      console.debug("card Hotbar | hotbarDrop true");
+      //console.debug("card Hotbar | hotbarDrop true");
     }
     
     //This should never be called because the journal entry should now be a macro due to hotbarDrop 
@@ -427,7 +427,7 @@ export class cardHotbar extends Hotbar {
     //console.debug ("Card Hotbar | je is:");
     //console.debug (je);
       if ( je ) {
-        console.debug("card Hotbar | Journal Entry provided:", macro, "cardSlot", data.cardSlot);
+        //console.debug("card Hotbar | Journal Entry provided:", macro, "cardSlot", data.cardSlot);
         await this.assigncardHotbarJE(je, cardSlot, {fromSlot: data.cardSlot});
       }
     return;

@@ -128,7 +128,6 @@ async function deckHUD(deckID:string, html) {
             console.log("Num Cards: ", numCards)
             if(html.find("#infiniteDraw")[0].checked){
               for(let i=0; i<numCards; i++){
-                console.log(`${i} missippi`)
                 if(ui['cardHotbar'].populator.getNextSlot() == -1){
                   ui.notifications.error("No more room in your hand")
                   return;
