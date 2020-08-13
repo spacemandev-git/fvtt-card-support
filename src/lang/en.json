@@ -2,5 +2,31 @@
   "DECK.Import_Button": "SDF Import",
   "DECK.Dialog_Title": "Select a SDF Zip file",
   "DECK.Cancel": "Cancel",
-  "DECK.ERROR": "Something broke! Check Console for more information."
+  "DECK.ERROR": "Something broke! Check Console for more information.",
+
+
+  
+  "CARD.modname": "Card Support (Unofficial)",
+  "CARD.mod": "cardsupport",
+  "CARD.chbTitle": "Player Hand Settings",  
+  "CARD.chbPrimaryColor": {
+          "name": "Player Hand Color:",
+          "nameHint": "Background color for the player's hand."
+      },
+  "CARD.chbBorderColor": {
+          "name": "Player Hand Border Color:",
+          "nameHint": "Border color of each card in hand."
+      },
+  "CARD.chbBorderColorActive": {
+          "name": "Player Hand Highlight Color:",
+          "nameHint": "Border color of card in hand when hovered."
+      },
+  "CARD.chbXPos":{
+          "name": "Player Hand Horizontal Position",
+          "nameHint": "Higher values are further to the right of the screen horizontally."
+      },
+  "CARD.chbYPos":{
+          "name": "Player Hand Vertical Position",
+          "nameHint": "Higher values are further up the screen vertically."
+      }
 }

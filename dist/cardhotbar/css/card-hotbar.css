@@ -99,10 +99,12 @@
     cursor: pointer;
 }
 
+/* Next functionality disabled
 #card-hotbar .macro.next {
     border: 6px dashed #777777bb;
     box-shadow: none;
 }
+*/
 
 #card-hotbar img {
     box-sizing: border-box;
@@ -267,13 +269,7 @@ div#client-settings div#chbSetDiv {
     background-color: #d3d3d380;
     padding: 4px;
     margin-bottom: 0;
-    border-bottom: none;
     padding-bottom: 0;
-}
-
-div#client-settings div#coreSetDiv {
-    margin-top: 0;
-    border-top: none;
 }
 
 /* with apologies to sdenec, lifted from Tidy UI Settings module, which you should install... */

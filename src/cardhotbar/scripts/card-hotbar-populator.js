@@ -127,7 +127,7 @@ export class cardHotbarPopulator {
      * @return {Promise<unknown>} Promise indicating whether the macro was set and the hotbar was rendered.
      */
     chbSetMacro(macroId, slot) {
-        //console.debug("card Hotbar |", "Setting macro", slot, macroId);
+        //console.debug("Card Hotbar |", "Setting macro", slot, macroId);
         this.macroMap[slot] = macroId;
         ui.cardHotbar.getcardHotbarMacros();
         this._updateFlags().then(render => { 

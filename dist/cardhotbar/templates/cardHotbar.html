@@ -5,16 +5,13 @@
             <i class="fas fa-caret-down"></i>
             <img src="modules/cardsupport/cardhotbar/img/poker-hand.png" class="collapsed">
         </a>
+        <!--
         <div class= "expanded">        
-        <!-- 
-            <a id="reset-deck">
-                <i class="fas fa-recycle"></i>
+            <a id="settings" class="vertbar">
+                <i class="fas fa-cog"></i>
             </a>
-            <a id="swap-deck">
-                <i class="fas fa-exchange-alt"></i>
-            </a>
-        -->
         </div>
+        -->
     </div>
     <nav id="card-action-bar" class="flexrow {{barClass}}" style>
         <ol id="card-macro-list" class="flexrow" data-page="{{page}}">
@@ -24,7 +21,6 @@
                 {{#if this.icon}}
                 <img class="macro-icon" src="{{this.icon}}"/>
                 {{/if}}
-<!--                <button class="macro {{this.cssClass}}" data-slot="{{this.slot}}"></button> -->
             </li>
             {{/each}}
         </ol>

@@ -1,47 +1,50 @@
 <div class="chbSettings" id="card-hotbar-flags-form"">
     <form autocomplete="off" onsubmit="event.preventDefault()">
-    <h1 class="module-header">Your card Hotbar Settings</h1>
-    <p>To discard your cardizations and use the standard settings recommended by the GM instead, use the Reset button in the bottom left.</p>
-    <h2>Main Color Settings</h2>
+    <h1 class="module-header">Your Player Hand Settings</h1>
+    <p>To discard your customizations and use the standard settings recommended by the GM instead, use the Reset button in the bottom left.</p>
+    <h2>Draw Mode</h2>
+    <p>PLACE FACE UP OR FACE DOWN TOGGLE HERE</p>
+    <!-- TO DO: Implement MEEEEEE
     <div class = "formgroup">
-        <label>{{localize "cardHotbar.settings.chbPrimaryColor.name"}}</label>
+        <label>{{localize "CARD.drawMode.name"}}</label>
+        <div class = "" id="chbDrawMode">
+            <input type="text" value="{{chbDrawMode}}" name="chbDrawMode">
+        </div>
+            <p class="hint">{{localize "CARD.chbBorderColorInactive.nameHint"}}</p>
+    </div>
+    -->    
+    <h2>Color Settings</h2>
+    <div class = "formgroup">
+        <label>{{localize "CARD.chbPrimaryColor.name"}}</label>
         <div class = "colorsplash" id="chbPrimaryColorSplash">
             <input type="text" value= "{{chbPrimaryColor}}" name="chbPrimaryColor">
         </div>
-        <p class="hint">{{localize "cardHotbar.settings.chbPrimaryColor.nameHint"}}</p>
+        <p class="hint">{{localize "CARD.chbPrimaryColor.nameHint"}}</p>
     </div>
     <div class = "formgroup">
-        <label>{{localize "cardHotbar.settings.chbBorderColor.name"}}</label>
+        <label>{{localize "CARD.chbBorderColor.name"}}</label>
         <div class = "colorsplash" id="chbBorderColorSplash">
             <input type="text" value="{{chbBorderColor}}" name="chbBorderColor">
         </div>
-        <p class="hint">{{localize "cardHotbar.flag.chbBorderColor.nameHint"}}</p>
-    </div>
-    <h2>Position Settings</h2>
-    <div class = "formgroup">
-        <label>{{localize "cardHotbar.settings.chbXPos.name"}}</label>
-        <input type="number" value="{{chbXPos}}" name="chbXPos">
-        <p class="hint">{{localize "cardHotbar.settings.chbXPos.nameHint"}}</p>
+        <p class="hint">{{localize "CARD.chbBorderColor.nameHint"}}</p>
     </div>
     <div class = "formgroup">
-        <label>{{localize "cardHotbar.settings.chbYPos.name"}}</label>
-        <input type="number" value="{{chbYPos}}" name="chbYPos">
-        <p class="hint">{{localize "cardHotbar.settings.chbYPos.nameHint"}}</p>
-    </div>
-    <h2>Mouseover Color Settings</h2>
-    <div class = "formgroup">
-        <label>{{localize "cardHotbar.settings.chbBorderColorActive.name"}}</label>
+        <label>{{localize "CARD.chbBorderColorActive.name"}}</label>
         <div class = "colorsplash" id="chbBorderColorActiveSplash">
             <input type="text" value="{{chbBorderColorActive}}" name="chbBorderColorActive">
         </div>
-        <p class="hint">{{localize "cardHotbar.settings.chbBorderColorActive.nameHint"}}</p>
+        <p class="hint">{{localize "CARD.chbBorderColorActive.nameHint"}}</p>
+    </div>
+    <h2>Position Settings</h2>
+    <div class = "formgroup">
+        <label>{{localize "CARD.chbXPos.name"}}</label>
+        <input type="number" value="{{chbXPos}}" name="chbXPos">
+        <p class="hint">{{localize "CARD.chbXPos.nameHint"}}</p>
     </div>
     <div class = "formgroup">
-        <label>{{localize "cardHotbar.settings.chbBorderColorInactive.name"}}</label>
-        <div class = "colorsplash" id="chbBorderColorInactiveSplash">
-            <input type="text" value="{{chbBorderColorInactive}}" name="chbBorderColorInactive">
-        </div>
-            <p class="hint">{{localize "cardHotbar.settings.chbBorderColorInactive.nameHint"}}</p>
+        <label>{{localize "CARD.chbYPos.name"}}</label>
+        <input type="number" value="{{chbYPos}}" name="chbYPos">
+        <p class="hint">{{localize "CARD.chbYPos.nameHint"}}</p>
     </div>
     <div class="form-group" style="margin-top: 20px;">
         <button type="button" name="reset">
