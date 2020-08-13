@@ -94,7 +94,7 @@ async function cardHotbarInit() {
     }
   })
 */
-
+  ui.cardHotbar.populator.compact();
   ui.cardHotbar.render(true, obj);
 }
 
@@ -185,7 +185,8 @@ Hooks.on("renderHotbar", async () => {
 Hooks.on('rendercardHotbar', async () => {
   console.debug("Card Hotbar | The card hotbar just rendered!");
 });
-/* USE SPACEMAN'S VERSION
+
+/* USE SPACEMAN'S VERSION? */
 // Add the listener to the board html element
 //remember to use new 0.70 hook to cancel harmless error about no slot available
 Hooks.once("canvasReady", (_) => {
@@ -196,19 +197,20 @@ Hooks.once("canvasReady", (_) => {
       data = JSON.parse(event.dataTransfer.getData("text/plain"));
       if(data.type == "Folder"){return;}
       let m = game.macros.get(data.id);
-      let je = game.journal.get( m.getFlag("world", "cardID") );  
+      let je = game.journal.get( m.getFlag("world", "cardId") );  
       console.debug("Card Hotbar | Canvas drop detected");
       console.debug(event);
       console.debug(data);
       console.debug(m);
       console.debug(je);
-      await createTileFromItem(je.id, event.clientX, event.clientY, event.altKey)
+      await createTileFromItem(je.id, event.clientX, event.clientY, event.altKey);
+      await ui.cardHotbar.populator.chbUnsetMacro(data.cardSlot);
       m.delete();
       //    } catch (err) {
 //      return;
 //    }
   });
-}); */
+}); 
 
 async function createTileFromItem(objId, x, y, alt){
   let imgPath = ""

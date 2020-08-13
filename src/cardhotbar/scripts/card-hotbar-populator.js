@@ -3,43 +3,44 @@ export class cardHotbarPopulator {
         this.macroMap = this.chbGetMacros();
     }
 
-    async addCardToHand(cardId) {
-        let empty = this.macroMap.filter(function (card) {
-            return card === null;
-          });
+    async addToHand(cardId) {
         console.debug("Card Hotbar | Adding card to hand...");
         //generate macro for card
         //TODO: better consolidate with code in index.js in hotbarDrop hook (call hook? make function at least?)
         // Make a new macro for the Journal
+        const maxSlot = 10; 
         let journal = {};
-        let firstEmpty = this.macroMap.findIndex(null);
+        let firstEmpty = this.getNextSlot();
         //check for invalid input
-        if (!cardID.length) {
-            ui.notifications.notify.error("Please provide an array of cardIDs");
+        if (!cardId.length) {
+            ui.notifications.notify.error("Please provide an array of cardIds");
             return false;
         } 
-        for (let i = 0; i < cardID.length; i++) { 
-            if ( this.macroMap.length > i + firstEmpty ) {
+        if ( firstEmpty === -1 ) {
+            ui.notifications.notify.error("There is no room in your hand.");
+            return false;
+        }
+        for (let i = 0; i < cardId.length; i++) { 
+            if ( maxSlot >= i + firstEmpty ) {
                 journal = game.journal.get(cardId[i]);
                 Macro.create({
                     name: `Card: ${journal.name}`,
                     type: "script",
                     flags: {
                     "world": {
-                        "cardID": `${journal.id}`,
+                        "cardId": `${journal.id}`,
                     }
                     },
                     scope: "global",
                     //Change first argument to "text" to show the journal entry as default.
                     //NOTE: In order for this macro to work (0.6.5 anyway) there MUST be text (content attribute must not be null).
-                    command: `game.journal.get("${journal.id}").show("image", false);`,
-
+                    command: `game.journal.get("${journal.id}").sheet.render(true, {sheetMode: "image"} );`,
                     img: `${game.journal.get(journal.id).data.img}`
                 }).then(macro => {
                     window.cardHotbar.chbSetMacro(macro.id, firstEmpty+i);
                 });
             } else {
-                ui.notifications.notify.warn("Not enough space in hand, at least 1 card not added.");
+                ui.notifications.error("Not enough space in hand, at least 1 card not added.");
                 ui.cardHotbar.render();
                 return -1;
             }
@@ -47,15 +48,67 @@ export class cardHotbarPopulator {
         return ui.cardHotbar.render();
     }
     
+    async flipCard(slot) {
+        //delete and recreate instead of update?? hrrm.
+        let cardEntry = game.journal.get(  game.macros.get( this.macroMap[slot] ).getFlag("world", "cardId" ) );
+        let mm = ui.cardHotbar.macros[slot - 1].macro;
+        let newImg = "";
+        let sideUp = "";
+        console.debug(cardEntry);
+        console.debug(mm);
+
+        if(mm.data.img == cardEntry.data['img']){
+            // Card is front up, switch to back
+            newImg = cardEntry.getFlag("world", "cardBack");
+            sideUp = "back";            
+        } else if( mm.data.img == cardEntry.getFlag("world", "cardBack") ) {
+            // Card is back up
+            newImg = cardEntry.data['img']
+            sideUp = "front";
+        } else{ 
+            ui.notifications.error("What you doing m8? Stop breaking Spaceman's code that Norc stole...");
+            return sideUp;
+        }
+        //TO DO: combine with mm.update statement below
+        await mm.setFlag("world","sideUp",sideUp);
+        await mm.update({img: newImg});
+        return sideUp;
+    }
+
     compact() {
-        let filled = this.macroMap.filter(function (card) {
+        let filled = duplicate( this.macroMap.filter(function (card) {
             return card != null;
-          });
+          }) );
         filled.unshift(null);
         console.debug("Card Hotbar | Compacting... ");
         console.debug(filled);
         return filled;
     }
+
+    //checks to see if there is available space in the hand. Returns -1 if entirely full (this is an error code)
+    //or the last available slot number otherwise
+    getNextSlot() {
+        console.debug ("Card Hotbar | Checking macroMap for next available slot...");
+        //have to perform some trickery so that the null at slot 0 is not picked up incorrectly.
+        //functionally, this will return the actual slot number when 1 is added again at end.
+        let slotCheck = this.macroMap.slice(1);
+        const maxSlot = 10;
+        slotCheck.length = maxSlot;
+        const startSlot = this.macroMap.filter(slot => slot).length;
+        console.debug("Card Hotbar | Filling slotCheck...");
+        console.debug(startSlot, maxSlot);
+        slotCheck.fill(null,startSlot,maxSlot);
+        console.debug("Card Hotbar | slotCheck");
+        console.debug(slotCheck);
+        let result = slotCheck.findIndex(this.checkSlotNull) 
+        return result != -1 ? result + 1 : -1 ;  
+    } 
+
+    checkSlotNull(cardId) {
+        return cardId == null;     
+    }
+
+
 
     //TO DO: Create single chbGetMacro function for completeness and convenience.
     
@@ -76,7 +129,6 @@ export class cardHotbarPopulator {
     chbSetMacro(macroId, slot) {
         console.debug("card Hotbar |", "Setting macro", slot, macroId);
         this.macroMap[slot] = macroId;
-        this.macroMap = duplicate( this.compact() );
         ui.cardHotbar.getcardHotbarMacros();
         this._updateFlags().then(render => { 
             return ui.cardHotbar.render();
@@ -95,9 +147,8 @@ export class cardHotbarPopulator {
          * !
          */
         for (let slot = 1; slot < 11; slot++) {
-            this.macroMap[slot] = macros[slot];
+            this.macroMap[slot] = ui.cardHotbar.macros[slot];
         }
-        this.macroMap = duplicate( this.compact() );
         await this._updateFlags();
         return ui.cardHotbar.render();
     }
@@ -107,10 +158,13 @@ export class cardHotbarPopulator {
      * @param {number} slot
      * @return {Promise<unknown>} Promise indicating whether the macro was removed.
      */
-    chbUnsetMacro(slot) {
+    async chbUnsetMacro(slot) {
         this.macroMap[slot] = null;
-        this.macroMap = duplicate( this.compact() );
-        return this._updateFlags();
+        this.macroMap = duplicate( await this.compact() );
+        ui.cardHotbar.getcardHotbarMacros();
+        this._updateFlags().then(render => { 
+            return ui.cardHotbar.render();
+        });
     }
 
     /**
