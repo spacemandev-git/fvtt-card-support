@@ -77,11 +77,13 @@ export class cardHotbar extends Hotbar {
     for ( let [i, m] of macros.entries() ) {
       m.key = i<9 ? i+1 : 0;
       m.cssClass = m.macro ? "active" : "inactive";
+      /*
       //additional logic to mark the first empty slot as "next"
       if (m.cssClass == "inactive" && nextCard == false ) {
         m.cssClass = "next";
         nextCard = true;
       }
+      */
       m.icon = m.macro ? m.macro.data.img : null;
     }
 //    game.user.unsetFlag('cardsupport', 'chbMacroMap');
