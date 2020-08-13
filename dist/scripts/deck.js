@@ -103,6 +103,10 @@ export class Deck {
             return card;
         });
     }
+    infinteDraw() {
+        let card = this._state[Math.floor(Math.random() * this._state.length)];
+        return card;
+    }
     /**
      * Wraps the get JournalEntry and GetFlag calls
      * @param cardId the ID of the JournalEntry

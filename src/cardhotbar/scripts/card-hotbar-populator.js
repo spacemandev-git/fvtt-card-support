@@ -4,7 +4,7 @@ export class cardHotbarPopulator {
     }
 
     async addToHand(cardId) {
-        console.debug("Card Hotbar | Adding card to hand...");
+        //console.debug("Card Hotbar | Adding card to hand...");
         //generate macro for card
         //TODO: better consolidate with code in index.js in hotbarDrop hook (call hook? make function at least?)
         // Make a new macro for the Journal
@@ -54,8 +54,8 @@ export class cardHotbarPopulator {
         let mm = ui.cardHotbar.macros[slot - 1].macro;
         let newImg = "";
         let sideUp = "";
-        console.debug(cardEntry);
-        console.debug(mm);
+        //console.debug(cardEntry);
+        //console.debug(mm);
 
         if(mm.data.img == cardEntry.data['img']){
             // Card is front up, switch to back
@@ -80,26 +80,26 @@ export class cardHotbarPopulator {
             return card != null;
           }) );
         filled.unshift(null);
-        console.debug("Card Hotbar | Compacting... ");
-        console.debug(filled);
+        //console.debug("Card Hotbar | Compacting... ");
+        //console.debug(filled);
         return filled;
     }
 
     //checks to see if there is available space in the hand. Returns -1 if entirely full (this is an error code)
     //or the last available slot number otherwise
     getNextSlot() {
-        console.debug ("Card Hotbar | Checking macroMap for next available slot...");
+        //console.debug ("Card Hotbar | Checking macroMap for next available slot...");
         //have to perform some trickery so that the null at slot 0 is not picked up incorrectly.
         //functionally, this will return the actual slot number when 1 is added again at end.
         let slotCheck = this.macroMap.slice(1);
         const maxSlot = 10;
         slotCheck.length = maxSlot;
         const startSlot = this.macroMap.filter(slot => slot).length;
-        console.debug("Card Hotbar | Filling slotCheck...");
-        console.debug(startSlot, maxSlot);
+        //console.debug("Card Hotbar | Filling slotCheck...");
+        //console.debug(startSlot, maxSlot);
         slotCheck.fill(null,startSlot,maxSlot);
-        console.debug("Card Hotbar | slotCheck");
-        console.debug(slotCheck);
+        //console.debug("Card Hotbar | slotCheck");
+        //console.debug(slotCheck);
         let result = slotCheck.findIndex(this.checkSlotNull) 
         return result != -1 ? result + 1 : -1 ;  
     } 
@@ -127,7 +127,7 @@ export class cardHotbarPopulator {
      * @return {Promise<unknown>} Promise indicating whether the macro was set and the hotbar was rendered.
      */
     chbSetMacro(macroId, slot) {
-        console.debug("card Hotbar |", "Setting macro", slot, macroId);
+        //console.debug("card Hotbar |", "Setting macro", slot, macroId);
         this.macroMap[slot] = macroId;
         ui.cardHotbar.getcardHotbarMacros();
         this._updateFlags().then(render => { 
