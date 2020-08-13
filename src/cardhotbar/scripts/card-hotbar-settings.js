@@ -9,8 +9,8 @@ export class cardHotbarSettings {
     static register(){
     //Global, GM-only settings menus
         game.settings.registerMenu("cardsupport", 'chbSettingsMenu', {
-            name: '(𝗚𝗠 𝗢𝗻𝗹𝘆) Default card Hotbar Settings for All Users',
-            label: 'Global card Hotbar',
+            name: '(𝗚𝗠 𝗢𝗻𝗹𝘆) Default Player Hand Settings for All Users',
+            label: 'Global Player Hand',
             icon: 'fas fa-bars',
             type: cardHotbarSettingsForm,
             restricted: true
@@ -34,8 +34,8 @@ export class cardHotbarSettings {
 
         //User-only "settings" menu that uses flags instead
         game.settings.registerMenu("cardsupport", 'chbFlagsMenu', {
-            name: 'Your card Hotbar Settings',
-            label: 'Your card Hotbar',
+            name: 'Your Hand of Cards Settings',
+            label: 'Your Hand of Cards',
             icon: 'fas fa-bars',
             type: cardHotbarFlagsForm,
             restricted: false
@@ -43,7 +43,7 @@ export class cardHotbarSettings {
 
         //TO DO: add hotbarPageKeyEnabled and chbKeyEnabled
     
-    //card HOTBAR SETTINGS    
+    //CARD HOTBAR SETTINGS    
 
         //                                     module        key             options
         game.settings.register("cardsupport", "chbPrimaryColor", {
@@ -203,7 +203,7 @@ export class cardHotbarSettings {
     }
 
     //getters that determine whether to grab the user flag or the setting
-    //card Hotbar getters
+    //Card Hotbar getters
     //refactor into one function with variable for what you are getting when get chance?
     static getCHBPrimaryColor(){
         var flag = game.user.getFlag("cardsupport", "chbPrimaryColor");

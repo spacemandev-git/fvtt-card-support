@@ -2,66 +2,34 @@
     "cardHotbar": {
         
         "general": {
-            "modname": "card Hotbar",
-            "mod": "card-hotbar"
+            "modname": "Card Support (Unofficial)",
+            "mod": "cardsupport"
         },
 
         "config": {
-            "chbTitle": "card Hotbar Settings",
-            "chbCoreTitle": "Core Hotbar Modification Settings"
+            "chbTitle": "Player Hand Settings"
         },
 
         "settings": {
             
             "chbPrimaryColor": {
-                "name": "card Hotbar Color:",
-                "nameHint": "Background color for the extra hotbar added by this module."
+                "name": "Player Hand Color:",
+                "nameHint": "Background color for the player's hand."
             },
             "chbBorderColor": {
-                "name": "card Hotbar Border Color:",
-                "nameHint": "Border color of each macro on the card Hotbar."
+                "name": "Player Hand Border Color:",
+                "nameHint": "Border color of each card in hand."
             },
             "chbBorderColorActive": {
-                "name": "card Hotbar Highlight Color:",
-                "nameHint": "Border color of macro when hovered."
-            },
-            "chbBorderColorInactive": {
-                "name": "card Hotbar Highlight Color (Empty):",
-                "nameHint": "Border color of empty slot when hovered."
+                "name": "Player Hand Highlight Color:",
+                "nameHint": "Border color of card in hand when hovered."
             },
             "chbXPos":{
-                "name": "card Hotbar Horizontal Position",
+                "name": "Player Hand Horizontal Position",
                 "nameHint": "Higher values are further to the right of the screen horizontally."
             },
             "chbYPos":{
-                "name": "card Hotbar Vertical Position",
-                "nameHint": "Higher values are further up the screen vertically."
-            },
-
-
-
-            "corePrimaryColor": {
-                "name": "Core Foundry Hotbar Color:",
-                "nameHint": "Background color for the core Foundry hotbar."
-            },
-            "coreBorderColor": {
-                "name": "Core Foundry Border Color:",
-                "nameHint": "Border color of each macro on the core Foundry hotbar."
-            },
-            "coreBorderColorActive": {
-                "name": "Core Foundry Highlight Color:",
-                "nameHint": "Border color of macro when hovered."
-            },
-            "coreBorderColorInactive": {
-                "name": "Core Foundry Hotbar Highlight Color (Empty):",
-                "nameHint": "Border color of empty slot when hovered."
-            },
-            "coreXPos":{
-                "name": "Core Foundry Hotbar Horizontal Position",
-                "nameHint": "Higher values are further to the right of the screen horizontally."
-            },
-            "coreYPos":{
-                "name": "Core Foundry Hotbar Vertical Position",
+                "name": "Player Hand Vertical Position",
                 "nameHint": "Higher values are further up the screen vertically."
             }
         }

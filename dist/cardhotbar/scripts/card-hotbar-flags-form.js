@@ -13,7 +13,7 @@ export class cardHotbarFlagsForm extends FormApplication {
         return mergeObject(super.defaultOptions, {
             id: "card-hotbar-flags-form",
             title: "(Per User) Your card Hotbar Settings",
-            template: "./modules/card-hotbar/templates/cardHotbarFlags.html",
+            template: "./modules/cardsupport/cardhotbar/templates/cardHotbarFlags.html",
             classes: ["sheet"],
             width: 500,
             closeOnSubmit: true
@@ -67,33 +67,33 @@ export class cardHotbarFlagsForm extends FormApplication {
     }
 
     onReset() {
-        console.debug("card Hotbar | Attempting to reset card-hotbar-flags-form to defaults");
+        //console.debug("card Hotbar | Attempting to reset card-hotbar-flags-form to defaults");
         this.reset = true;
         this.render();
     }
 
     onChbPrimaryColorClick() {
-        console.debug("card Hotbar | chbPrimaryColor button click detected");
+        //console.debug("card Hotbar | chbPrimaryColor button click detected");
         $( event.target ).addClass("expanded");
     }
 
     onChbBorderColorClick() {
-        console.debug("card Hotbar | chbBorderColor button click detected");
+        //console.debug("card Hotbar | chbBorderColor button click detected");
         $( event.target ).addClass("expanded");
     }
 
     onChbBorderColorActiveClick() {
-        console.debug("card Hotbar | chbBorderColorActive button click detected");
+        //console.debug("card Hotbar | chbBorderColorActive button click detected");
         $( event.target ).addClass("expanded");
     }
 
     onChbBorderColorInactiveClick() {
-        console.debug("card Hotbar | chbBorderColorInactive button click detected");
+        //console.debug("card Hotbar | chbBorderColorInactive button click detected");
         $( event.target ).addClass("expanded");
     }
 
     activateListeners(html) {
-        console.debug("card Hotbar | Attempting to activate  CHB Flags Form listeners");
+        //console.debug("card Hotbar | Attempting to activate  CHB Flags Form listeners");
         super.activateListeners(html);
         //bind buttons and inputs 
         html.find('button[name="reset"]').on('click', this.onReset.bind(this));
@@ -106,7 +106,7 @@ export class cardHotbarFlagsForm extends FormApplication {
 }
 
 Hooks.on("rendercardHotbarFlagsForm", (a, b, c) => {
-    console.debug( "card Hotbar | Initializing current color values..." );
+    //console.debug( "card Hotbar | Initializing current color values..." );
     $( "#chbPrimaryColorSplash" ).css("background-color", c.chbPrimaryColor);
     $( "#chbBorderColorSplash" ).css("background-color", c.chbBorderColor);
     $( "#chbBorderColorActiveSplash" ).css("background-color", c.chbBorderColorActive);
@@ -114,7 +114,7 @@ Hooks.on("rendercardHotbarFlagsForm", (a, b, c) => {
 });
 
 Hooks.on("pickerDone", (parentDiv, hexColor) => {
-    console.debug("card Hotbar | pickerDone hook detected");
+    //console.debug("card Hotbar | pickerDone hook detected");
     $( parentDiv ).find("input").removeClass("expanded");
     $( parentDiv ).css("background-color", hexColor);
 });

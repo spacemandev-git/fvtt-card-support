@@ -11,7 +11,7 @@ export class cardHotbarSettingsForm extends FormApplication {
         return mergeObject(super.defaultOptions, {
             id: "card-hotbar-settings-form",
             title: "(𝗚𝗠 𝗢𝗻𝗹𝘆) Set Default Global Player Hand",
-            template: "./modules/card-hotbar/templates/cardHotbarSettings.html",
+            template: "./modules/cardsupport/cardhotbar/templates/cardHotbarSettings.html",
             classes: ["sheet"],
             width: 500,
             closeOnSubmit: true
@@ -54,7 +54,7 @@ export class cardHotbarSettingsForm extends FormApplication {
      *  'key':entry.metadata.package+'.'+entry.metadata.name
      */
     async _updateObject(e, d) {
-        console.debug("card Hotbar | Attempting to update settings with form values...");
+        //console.debug("card Hotbar | Attempting to update settings with form values...");
         game.settings.set("cardsupport", "chbPrimaryColor", d.chbPrimaryColor);
         game.settings.set("cardsupport", "chbBorderColor", d.chbBorderColor);
         game.settings.set("cardsupport", "chbBorderColorActive", d.chbBorderColorActive);
@@ -66,13 +66,13 @@ export class cardHotbarSettingsForm extends FormApplication {
     }
 
     onReset() {
-        console.debug("card Hotbar | Attempting to reset chbSettingsForm to defaults");
+        //console.debug("card Hotbar | Attempting to reset chbSettingsForm to defaults");
         this.reset = true;
         this.render();
     }
 
     onChbPrimaryColorClick() {
-        console.debug("card Hotbar | chbPrimaryColor button click detected");
+        //console.debug("card Hotbar | chbPrimaryColor button click detected");
         $( event.target ).addClass("expanded");
         //$( event.target ).prop( "disabled", true );
  
@@ -81,22 +81,22 @@ $( "#x" ).prop( "disabled", false );
     }
 
     onChbBorderColorClick() {
-        console.debug("card Hotbar | chbBorderColor button click detected");
+        //console.debug("card Hotbar | chbBorderColor button click detected");
         $( event.target ).addClass("expanded");
     }
 
     onChbBorderColorActiveClick() {
-        console.debug("card Hotbar | chbBorderColorActive button click detected");
+        //console.debug("card Hotbar | chbBorderColorActive button click detected");
         $( event.target ).addClass("expanded");
     }
 
     onChbBorderColorInactiveClick() {
-        console.debug("card Hotbar | chbBorderColorInactive button click detected");
+        //console.debug("card Hotbar | chbBorderColorInactive button click detected");
         $( event.target ).addClass("expanded");
     }
 
     activateListeners(html) {
-        console.debug("card Hotbar | Attempting to activate CHB Settings Form listeners");
+        //console.debug("card Hotbar | Attempting to activate CHB Settings Form listeners");
         super.activateListeners(html);
         //bind buttons and inputs 
         html.find('button[name="reset"]').on('click', this.onReset.bind(this));
@@ -109,7 +109,7 @@ $( "#x" ).prop( "disabled", false );
 }
 
 Hooks.on("rendercardHotbarSettingsForm", (a, b, c) => {
-    console.debug( "card Hotbar | Initializing current color values..." );
+    //console.debug( "card Hotbar | Initializing current color values..." );
     $( "#chbPrimaryColorSplash" ).css("background-color", c.chbPrimaryColor);
     $( "#chbBorderColorSplash" ).css("background-color", c.chbBorderColor);
     $( "#chbBorderColorActiveSplash" ).css("background-color", c.chbBorderColorActive);
@@ -117,7 +117,7 @@ Hooks.on("rendercardHotbarSettingsForm", (a, b, c) => {
 });
 
 Hooks.on("pickerDone", (parentDiv, hexColor) => {
-    console.debug("card Hotbar | pickerDone hook detected");
+    //console.debug("card Hotbar | pickerDone hook detected");
     $( parentDiv ).find("input").removeClass("expanded");
     //$( parentDiv ).find("input").prop( "disabled", true );
     $( parentDiv ).css("background-color", hexColor);
