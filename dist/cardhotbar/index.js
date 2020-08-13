@@ -3,7 +3,7 @@ import { cardHotbar }  from './card-hotbar.js';
 import { cardHotbarSettings } from './scripts/card-hotbar-settings.js';
 
 async function cardHotbarInit() {
-  console.debug("Card Hotbar | Initializing...");
+  //console.debug("Card Hotbar | Initializing...");
   window.cardHotbar = new cardHotbarPopulator();
   ui.cardHotbar = new cardHotbar(window.cardHotbar);
   //ui.cardHotbar = ui.cardHotbar.getData(options);
@@ -109,12 +109,12 @@ Hooks.once("init", async () => {
 });
 
 Hooks.once('ready', () => {
-  console.debug("Card Hotbar | Foundry setup...");
+  //console.debug("Card Hotbar | Foundry setup...");
 
   //Check to make sure that a hotbar rendered before initilizing so that PopOut module windows do not have unwanted card hotbars.
   let hotbarTest = ui.hotbar;
-  console.debug("Card Hotbar | Core Foundry Hotbar Present?");
-  console.debug(hotbarTest);
+  //console.debug("Card Hotbar | Core Foundry Hotbar Present?");
+  //console.debug(hotbarTest);
  
   if ( hotbarTest ) {
     cardHotbarInit();
@@ -126,29 +126,20 @@ Hooks.on("renderSettingsConfig", async () => {
   //add CSS ids and classes to cardHotbar settings section for styling
   let settingsDiv = document.getElementById("client-settings");
   
-  let chbSetDiv = $( `#${settingsDiv.id} div h2.module-header:contains("card Hotbar")` ).next();
+  let chbSetDiv = $( `#${settingsDiv.id} div h2.module-header:contains("Card Support (Unofficial)")` ).next();
   $(chbSetDiv).addClass('chb-setting');
   $(chbSetDiv).addClass('chb-global');
   $(chbSetDiv).attr('id', 'chbSetDiv');
-  
-  let coreSetDiv = $(chbSetDiv).next();
-  $(coreSetDiv).addClass('chb-setting');
-  $(coreSetDiv).addClass('chb-global');
-  $(coreSetDiv).attr('id', 'coreSetDiv');
 
   let chbFlagDiv = $(coreSetDiv).next();
   $(chbFlagDiv).addClass('chb-setting');
   $(chbFlagDiv).addClass('chb-user');
   $(chbFlagDiv).attr('id', 'chbFlagDiv');
-  
-  let coreFlagDiv = $(chbFlagDiv).next();
-  $(coreFlagDiv).addClass('chb-setting');
-  $(coreFlagDiv).addClass('chb-user');
-  $(coreFlagDiv).attr('id', 'coreFlagDiv');
+
 });
 
 Hooks.on("hotbarDrop", (hotbar, data, slot) => {
-  console.debug("Card Hotbar | Creating Macro")
+  //console.debug("Card Hotbar | Creating Macro")
   if (data.type !== "JournalEntry") return true;
   const journal = game.journal.get(data.id);
   if (!journal) return true;
@@ -198,11 +189,11 @@ Hooks.once("canvasReady", (_) => {
       if(data.type == "Folder"){return;}
       let m = game.macros.get(data.id);
       let je = game.journal.get( m.getFlag("world", "cardId") );  
-      console.debug("Card Hotbar | Canvas drop detected");
-      console.debug(event);
-      console.debug(data);
-      console.debug(m);
-      console.debug(je);
+      //console.debug("Card Hotbar | Canvas drop detected");
+      //console.debug(event);
+      //console.debug(data);
+      //console.debug(m);
+      //console.debug(je);
       await createTileFromItem(je.id, event.clientX, event.clientY, event.altKey);
       await ui.cardHotbar.populator.chbUnsetMacro(data.cardSlot);
       m.delete();
