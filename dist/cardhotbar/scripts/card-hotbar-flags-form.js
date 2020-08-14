@@ -28,7 +28,8 @@ export class cardHotbarFlagsForm extends FormApplication {
             chbBorderColorActive: cardHotbarSettings.getCHBBorderColorActive(),
 
             chbXPos: cardHotbarSettings.getCHBXPos(),
-            chbYPos: cardHotbarSettings.getCHBYPos(),        };
+            chbYPos: cardHotbarSettings.getCHBYPos(),        
+        };
         if (this.reset == true) {
             data = { 
                 chbDrawFaceUp: game.settings.settings.get("cardsupport.chbDrawFaceUp").default,                   

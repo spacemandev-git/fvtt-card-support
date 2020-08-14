@@ -111,7 +111,7 @@ export class cardHotbarSettings {
     static getCHBDrawFaceUp(){
         var flag = game.user.getFlag("cardsupport", "chbDrawFaceUp");
         var sett = game.settings.get("cardsupport","chbDrawFaceUp");
-        return (flag) ? flag : sett;
+        return (flag != undefined ? flag : sett );
     }
 
     static getCHBPrimaryColor(){
