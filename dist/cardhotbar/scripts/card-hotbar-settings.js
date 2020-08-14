@@ -117,31 +117,31 @@ export class cardHotbarSettings {
     static getCHBPrimaryColor(){
         var flag = game.user.getFlag("cardsupport", "chbPrimaryColor");
         var sett = game.settings.get("cardsupport","chbPrimaryColor");
-        return (flag) ? flag : sett;
+        return (flag != undefined ? flag : sett );
     }
 
     static getCHBBorderColor(){
         var flag = game.user.getFlag("cardsupport", "chbBorderColor");
         var sett = game.settings.get("cardsupport","chbBorderColor");
-        return (flag) ? flag : sett;
+        return (flag != undefined ? flag : sett );
     }
 
     static getCHBBorderColorActive(){
         var flag = game.user.getFlag("cardsupport", "chbBorderColorActive");
         var sett = game.settings.get("cardsupport","chbBorderColorActive");
-        return (flag) ? flag : sett;
+        return (flag != undefined ? flag : sett );
     }
 
     static getCHBXPos(){
         var flag = game.user.getFlag("cardsupport", "chbXPos");
         var sett = game.settings.get("cardsupport","chbXPos");
-        return (flag) ? flag : sett;
+        return (flag != undefined ? flag : sett );
     }
 
     static getCHBYPos(){
         var flag = game.user.getFlag("cardsupport", "chbYPos");
         var sett = game.settings.get("cardsupport","chbYPos");
-        return (flag) ? flag : sett;
+        return (flag != undefined ? flag : sett );
     }
 
 }
