@@ -3,11 +3,28 @@ export class cardHotbarPopulator {
         this.macroMap = this.chbGetMacros();
     }
 
-    async addToHand(cardId) {
+    async addToHand(cardId, sideUp) {
         //console.debug("Card Hotbar | Adding card to hand...");
         //generate macro for card
         //TODO: better consolidate with code in index.js in hotbarDrop hook (call hook? make function at least?)
         // Make a new macro for the Journal
+        
+        //will use the card facing if provided (1 = front, 0 = back). Otherwise default to User Flag for drawFaceUp, else setting for same.
+        let defaultSide = true;
+        if ( game.user.getFlag("cardsupport","chbDrawFaceUp") != undefined ) {
+            defaultSide = game.user.getFlag("cardsupport","chbDrawFaceUp");
+        } else {
+            defaultSide = game.settings.get("cardsupport","chbDrawFaceUp");
+        }
+        
+        console.debug(`Card Hotbar | defaultSide is: ${defaultSide}`);
+        if (sideUp === undefined) sideUp = defaultSide;
+        sideUp ? sideUp = "front" : sideUp ="back";
+        console.debug(sideUp);
+        if (sideUp == undefined) {
+            ui.notifications.error("Error: Cannot determine card facing.");
+            return;
+        }
         const maxSlot = 10; 
         let journal = {};
         let firstEmpty = this.getNextSlot();
@@ -17,7 +34,7 @@ export class cardHotbarPopulator {
             return false;
         } 
         if ( firstEmpty === -1 ) {
-            ui.notifications.notify.error("There is no room in your hand.");
+            ui.notifications.error("There is no room in your hand.");
             return false;
         }
         for (let i = 0; i < cardId.length; i++) { 
@@ -27,15 +44,15 @@ export class cardHotbarPopulator {
                     name: `Card: ${journal.name}`,
                     type: "script",
                     flags: {
-                    "world": {
-                        "cardId": `${journal.id}`,
-                    }
+                        "world": {
+                            "cardId": journal.id,
+                            "sideUp": sideUp
+                        }
                     },
                     scope: "global",
-                    //Change first argument to "text" to show the journal entry as default.
-                    //NOTE: In order for this macro to work (0.6.5 anyway) there MUST be text (content attribute must not be null).
                     command: `game.journal.get("${journal.id}").sheet.render(true, {sheetMode: "image"} );`,
-                    img: `${game.journal.get(journal.id).data.img}`
+//                  backup copy -   img: `${game.journal.get(journal.id).data.img}`
+                    img: sideUp == "front" ? journal.data.img : journal.getFlag("world","cardBack") 
                 }).then(macro => {
                     window.cardHotbar.chbSetMacro(macro.id, firstEmpty+i);
                 });

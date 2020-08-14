@@ -19,21 +19,21 @@ export class cardHotbarSettingsForm extends FormApplication {
     }
 
     getData() {
-        let data = {        
+        let data = {
+            chbDrawFaceUp: game.settings.get("cardsupport", "chbDrawFaceUp"),        
             chbPrimaryColor: game.settings.get("cardsupport", "chbPrimaryColor"), 
             chbBorderColor: game.settings.get("cardsupport", "chbBorderColor"),
             chbBorderColorActive: game.settings.get("cardsupport", "chbBorderColorActive"),
-            chbBorderColorInactive: game.settings.get("cardsupport", "chbBorderColorInactive"),
 
             chbXPos: game.settings.get("cardsupport", "chbXPos"),
             chbYPos: game.settings.get("cardsupport", "chbYPos")
         };
         if (this.reset == true) {
-            data = {    
+            data = {
+                chbDrawFaceUp: game.settings.settings.get("cardsupport.chbDrawFaceUp").default,    
                 chbPrimaryColor: game.settings.settings.get("cardsupport.chbPrimaryColor").default,
                 chbBorderColor: game.settings.settings.get("cardsupport.chbBorderColor").default,
                 chbBorderColorActive: game.settings.settings.get("cardsupport.chbBorderColorActive").default,
-                chbBorderColorInactive: game.settings.settings.get("cardsupport.chbBorderColorInactive").default,
 
                 chbXPos: game.settings.settings.get("cardsupport.chbXPos").default,
                 chbYPos: game.settings.settings.get("cardsupport.chbYPos").default
@@ -55,10 +55,11 @@ export class cardHotbarSettingsForm extends FormApplication {
      */
     async _updateObject(e, d) {
         //console.debug("card Hotbar | Attempting to update settings with form values...");
+        //console.debug(d.chbDrawFaceUp);
+        game.settings.set("cardsupport", "chbDrawFaceUp", d.chbDrawFaceUp);
         game.settings.set("cardsupport", "chbPrimaryColor", d.chbPrimaryColor);
         game.settings.set("cardsupport", "chbBorderColor", d.chbBorderColor);
         game.settings.set("cardsupport", "chbBorderColorActive", d.chbBorderColorActive);
-        game.settings.set("cardsupport", "chbBorderColorInactive", d.chbBorderColorInactive);
         game.settings.set("cardsupport","chbXPos", d.chbXPos);
         game.settings.set("cardsupport","chbYPos", d.chbYPos);
         this.render();
@@ -90,11 +91,6 @@ $( "#x" ).prop( "disabled", false );
         $( event.target ).addClass("expanded");
     }
 
-    onChbBorderColorInactiveClick() {
-        //console.debug("card Hotbar | chbBorderColorInactive button click detected");
-        $( event.target ).addClass("expanded");
-    }
-
     activateListeners(html) {
         //console.debug("card Hotbar | Attempting to activate CHB Settings Form listeners");
         super.activateListeners(html);
@@ -103,7 +99,6 @@ $( "#x" ).prop( "disabled", false );
         html.find('input[name="chbPrimaryColor"]').on('click',this.onChbPrimaryColorClick.bind(this));
         html.find('input[name="chbBorderColor"]').on('click',this.onChbBorderColorClick.bind(this));
         html.find('input[name="chbBorderColorActive"]').on('click',this.onChbBorderColorActiveClick.bind(this));
-        html.find('input[name="chbBorderColorInactive"]').on('click',this.onChbBorderColorInactiveClick.bind(this));
         this.reset = false;
     }
 }
@@ -113,7 +108,6 @@ Hooks.on("rendercardHotbarSettingsForm", (a, b, c) => {
     $( "#chbPrimaryColorSplash" ).css("background-color", c.chbPrimaryColor);
     $( "#chbBorderColorSplash" ).css("background-color", c.chbBorderColor);
     $( "#chbBorderColorActiveSplash" ).css("background-color", c.chbBorderColorActive);
-    $( "#chbBorderColorInactiveSplash" ).css("background-color", c.chbBorderColorInactive);
 });
 
 Hooks.on("pickerDone", (parentDiv, hexColor) => {

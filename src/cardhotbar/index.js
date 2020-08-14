@@ -51,11 +51,6 @@ async function cardHotbarInit() {
     + `     border: 1px solid ${cardHotbarSettings.getCHBBorderColorActive()};`
     + ' }'
 
-    + '#card-hotbar .macro.inactive:hover' 
-    + ' {' 
-    + `     border: 1px solid ${cardHotbarSettings.getCHBBorderColorInactive()};`
-    + ' }'
-
   , head = document.head || document.getElementsByTagName('head')[0]
   , style = document.createElement('style');
 

@@ -3,16 +3,11 @@
     <h1 class="module-header">Your Player Hand Settings</h1>
     <p>To discard your customizations and use the standard settings recommended by the GM instead, use the Reset button in the bottom left.</p>
     <h2>Draw Mode</h2>
-    <p>PLACE FACE UP OR FACE DOWN TOGGLE HERE</p>
-    <!-- TO DO: Implement MEEEEEE
     <div class = "formgroup">
-        <label>{{localize "CARD.drawMode.name"}}</label>
-        <div class = "" id="chbDrawMode">
-            <input type="text" value="{{chbDrawMode}}" name="chbDrawMode">
-        </div>
-            <p class="hint">{{localize "CARD.chbBorderColorInactive.nameHint"}}</p>
+        <label>{{localize "CARD.drawFaceUp.name"}}</label>
+            <input type="checkbox" value="drawFaceUp" name="chbDrawFaceUp" {{#if chbDrawFaceUp}} checked {{/if}}>
+            <p class="hint">{{localize "CARD.drawFaceUp.nameHint"}}</p>
     </div>
-    -->    
     <h2>Color Settings</h2>
     <div class = "formgroup">
         <label>{{localize "CARD.chbPrimaryColor.name"}}</label>
