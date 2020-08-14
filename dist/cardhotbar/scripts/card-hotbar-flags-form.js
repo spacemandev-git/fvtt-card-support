@@ -12,7 +12,7 @@ export class cardHotbarFlagsForm extends FormApplication {
     static get defaultOptions() {
         return mergeObject(super.defaultOptions, {
             id: "card-hotbar-flags-form",
-            title: "(Per User) Your card Hotbar Settings",
+            title: "(Per User) Your Hand of Cards Settings",
             template: "./modules/cardsupport/cardhotbar/templates/cardHotbarFlags.html",
             classes: ["sheet"],
             width: 500,
@@ -22,19 +22,19 @@ export class cardHotbarFlagsForm extends FormApplication {
 
     getData() {
         let data = {        
+            chbDrawFaceUp: cardHotbarSettings.getCHBDrawFaceUp(),
             chbPrimaryColor: cardHotbarSettings.getCHBPrimaryColor(), 
             chbBorderColor: cardHotbarSettings.getCHBBorderColor(),
             chbBorderColorActive: cardHotbarSettings.getCHBBorderColorActive(),
-            chbBorderColorInactive: cardHotbarSettings.getCHBBorderColorInactive(),
 
             chbXPos: cardHotbarSettings.getCHBXPos(),
             chbYPos: cardHotbarSettings.getCHBYPos(),        };
         if (this.reset == true) {
-            data = {    
+            data = { 
+                chbDrawFaceUp: game.settings.settings.get("cardsupport.chbDrawFaceUp").default,                   
                 chbPrimaryColor: game.settings.settings.get("cardsupport.chbPrimaryColor").default,
                 chbBorderColor: game.settings.settings.get("cardsupport.chbBorderColor").default,
                 chbBorderColorActive: game.settings.settings.get("cardsupport.chbBorderColorActive").default,
-                chbBorderColorInactive: game.settings.settings.get("cardsupport.chbBorderColorInactive").default,
 
                 chbXPos: game.settings.settings.get("cardsupport.chbXPos").default,
                 chbYPos: game.settings.settings.get("cardsupport.chbYPos").default
@@ -55,10 +55,12 @@ export class cardHotbarFlagsForm extends FormApplication {
      *  'key':entry.metadata.package+'.'+entry.metadata.name
      */
     async _updateObject(e, d) {
+        console.debug("card Hotbar | Attempting to update flags with form values...");
+        console.debug(d.chbDrawFaceUp);
+        await game.user.setFlag("cardsupport", "chbDrawFaceUp", d.chbDrawFaceUp);
         await game.user.setFlag("cardsupport", "chbPrimaryColor", d.chbPrimaryColor);
         await game.user.setFlag("cardsupport", "chbBorderColor", d.chbBorderColor);
         await game.user.setFlag("cardsupport", "chbBorderColorActive", d.chbBorderColorActive);
-        await game.user.setFlag("cardsupport", "chbBorderColorInactive", d.chbBorderColorInactive);
 
         await game.user.setFlag("cardsupport","chbXPos", d.chbXPos);
         await game.user.setFlag("cardsupport","chbYPos", d.chbYPos);
@@ -87,11 +89,6 @@ export class cardHotbarFlagsForm extends FormApplication {
         $( event.target ).addClass("expanded");
     }
 
-    onChbBorderColorInactiveClick() {
-        //console.debug("card Hotbar | chbBorderColorInactive button click detected");
-        $( event.target ).addClass("expanded");
-    }
-
     activateListeners(html) {
         //console.debug("card Hotbar | Attempting to activate  CHB Flags Form listeners");
         super.activateListeners(html);
@@ -100,7 +97,6 @@ export class cardHotbarFlagsForm extends FormApplication {
         html.find('input[name="chbPrimaryColor"]').on('click',this.onChbPrimaryColorClick.bind(this));
         html.find('input[name="chbBorderColor"]').on('click',this.onChbBorderColorClick.bind(this));
         html.find('input[name="chbBorderColorActive"]').on('click',this.onChbBorderColorActiveClick.bind(this));
-        html.find('input[name="chbBorderColorInactive"]').on('click',this.onChbBorderColorInactiveClick.bind(this));
         this.reset = false;
     }
 }
@@ -110,7 +106,6 @@ Hooks.on("rendercardHotbarFlagsForm", (a, b, c) => {
     $( "#chbPrimaryColorSplash" ).css("background-color", c.chbPrimaryColor);
     $( "#chbBorderColorSplash" ).css("background-color", c.chbBorderColor);
     $( "#chbBorderColorActiveSplash" ).css("background-color", c.chbBorderColorActive);
-    $( "#chbBorderColorInactiveSplash" ).css("background-color", c.chbBorderColorInactive);
 });
 
 Hooks.on("pickerDone", (parentDiv, hexColor) => {
