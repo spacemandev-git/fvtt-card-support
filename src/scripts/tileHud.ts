@@ -112,7 +112,9 @@ async function deckHUD(deckID:string, html) {
     let takeDialogTemplate = `
     <h2>How many cards?</h2>
     <input type="number" id="numCards" value=1 style="flex:1"/>
-    
+    `
+
+    let infDrawTemplate = `
     <h2>Draw With Replacement?</h2>
     <h3>If checked, card will be a duplicate and not impact deck state</h3>
     <input type="checkbox" id="infiniteDraw" />    
@@ -126,13 +128,13 @@ async function deckHUD(deckID:string, html) {
           callback: async (html:any) => {
             let numCards = html.find("#numCards")[0].value
             console.log("Num Cards: ", numCards)
-            if(html.find("#infiniteDraw")[0].checked){
+            if(html.find("#infiniteDraw")[0]?.checked){
               for(let i=0; i<numCards; i++){
                 if(ui['cardHotbar'].populator.getNextSlot() == -1){
                   ui.notifications.error("No more room in your hand")
                   return;
                 }
-                let card = deck.infinteDraw();
+                let card = deck.infinteDraw()
                 ui['cardHotbar'].populator.addToHand([card]);    
               }
             } else {

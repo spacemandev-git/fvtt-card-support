@@ -148,6 +148,7 @@ export class cardHotbar extends Hotbar {
     //console.debug("Card Hotbar |", slot);
     if ( macro ) await this.populator.chbSetMacro(macro.id,slot);
     else {
+
       //console.debug('Card Hotbar | Unsetting!');
       await this.populator.chbUnsetMacro(slot);
     }
@@ -405,7 +406,7 @@ export class cardHotbar extends Hotbar {
     //revert once assign card macro complete
     //console.debug("Card Hotbar | Dropped type:", data.type);
     if (data.type == "Tile" || data.type =="JournalEntry") {
-      //console.debug("Card Hotbar | Attempting monkey hotpatch!");
+      //console.debug("card Hotbar | Attempting monkey hotpatch!");
       let coreAssignHotbarMacro = game.user.assignHotbarMacro;
       game.user.assignHotbarMacro = this.assigncardHotbarMacro.bind(this); 
       Hooks.once("cardHotbarAssignComplete", () => game.user.assignHotbarMacro = coreAssignHotbarMacro);
@@ -417,7 +418,8 @@ export class cardHotbar extends Hotbar {
       game.user.assignHotbarMacro = coreAssignHotbarMacro; 
       return; 
     } else {
-      //console.debug("Card Hotbar | hotbarDrop true");
+      //console.debug("card Hotbar | hotbarDrop true");
+
     }
     
     //This should never be called because the journal entry should now be a macro due to hotbarDrop 
@@ -429,7 +431,9 @@ export class cardHotbar extends Hotbar {
     //console.debug ("Card Hotbar | je is:");
     //console.debug (je);
       if ( je ) {
+
         //console.debug("Card Hotbar | Journal Entry provided:", macro, "cardSlot", data.cardSlot);
+
         await this.assigncardHotbarJE(je, cardSlot, {fromSlot: data.cardSlot});
       }
     return;

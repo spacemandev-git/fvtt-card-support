@@ -105,6 +105,7 @@ export class Deck {
     }
     infinteDraw() {
         let card = this._state[Math.floor(Math.random() * this._state.length)];
+        console.log(card);
         return card;
     }
     /**

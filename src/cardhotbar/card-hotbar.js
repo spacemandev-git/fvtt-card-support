@@ -148,33 +148,12 @@ export class cardHotbar extends Hotbar {
     //console.debug("Card Hotbar |", slot);
     if ( macro ) await this.populator.chbSetMacro(macro.id,slot);
     else {
-<<<<<<< HEAD
-      //console.debug('card Hotbar | Unsetting!');
-=======
+
       //console.debug('Card Hotbar | Unsetting!');
->>>>>>> 3360131a8d1b8569919c3314364f4608c83d0b43
       await this.populator.chbUnsetMacro(slot);
     }
 
     //functional but needs cleanup
-<<<<<<< HEAD
-    //console.debug("card Hotbar | Finding move origin");
-    if ( fromSlot ) {
-      //console.debug("card Hotbar |", ui.cardHotbar.macros);
-      //console.debug("card Hotbar |", ui.cardHotbar.macros[fromSlot-1]?.macro, ui.cardHotbar.macros[fromSlot-1]?.macro === macro);
-     
-      if (ui.cardHotbar.macros[fromSlot-1]?.macro === macro) {
-        //console.debug("card Hotbar | internal move detected!");
-        if ( fromSlot != slot ) {
-          //console.debug(`card Hotbar | trying to delete slot ${fromSlot} in cardHotbar`);
-          await this.populator.chbUnsetMacro(fromSlot);
-        }
-      } else {
-        //console.debug("card Hotbar | drop from core macro hotbar detected!");
-      }
-    } else {
-      //console.debug("card Hotbar | non-hotbar drop detected!");
-=======
     //console.debug("Card Hotbar | Finding move origin");
     if ( fromSlot ) {
       //console.debug("Card Hotbar |", ui.cardHotbar.macros);
@@ -191,7 +170,6 @@ export class cardHotbar extends Hotbar {
       }
     } else {
       //console.debug("Card Hotbar | non-hotbar drop detected!");
->>>>>>> 3360131a8d1b8569919c3314364f4608c83d0b43
     }
  
     ui.cardHotbar.render();
@@ -428,11 +406,7 @@ export class cardHotbar extends Hotbar {
     //revert once assign card macro complete
     //console.debug("Card Hotbar | Dropped type:", data.type);
     if (data.type == "Tile" || data.type =="JournalEntry") {
-<<<<<<< HEAD
       //console.debug("card Hotbar | Attempting monkey hotpatch!");
-=======
-      //console.debug("Card Hotbar | Attempting monkey hotpatch!");
->>>>>>> 3360131a8d1b8569919c3314364f4608c83d0b43
       let coreAssignHotbarMacro = game.user.assignHotbarMacro;
       game.user.assignHotbarMacro = this.assigncardHotbarMacro.bind(this); 
       Hooks.once("cardHotbarAssignComplete", () => game.user.assignHotbarMacro = coreAssignHotbarMacro);
@@ -444,11 +418,8 @@ export class cardHotbar extends Hotbar {
       game.user.assignHotbarMacro = coreAssignHotbarMacro; 
       return; 
     } else {
-<<<<<<< HEAD
       //console.debug("card Hotbar | hotbarDrop true");
-=======
-      //console.debug("Card Hotbar | hotbarDrop true");
->>>>>>> 3360131a8d1b8569919c3314364f4608c83d0b43
+
     }
     
     //This should never be called because the journal entry should now be a macro due to hotbarDrop 
@@ -460,11 +431,9 @@ export class cardHotbar extends Hotbar {
     //console.debug ("Card Hotbar | je is:");
     //console.debug (je);
       if ( je ) {
-<<<<<<< HEAD
-        //console.debug("card Hotbar | Journal Entry provided:", macro, "cardSlot", data.cardSlot);
-=======
+
         //console.debug("Card Hotbar | Journal Entry provided:", macro, "cardSlot", data.cardSlot);
->>>>>>> 3360131a8d1b8569919c3314364f4608c83d0b43
+
         await this.assigncardHotbarJE(je, cardSlot, {fromSlot: data.cardSlot});
       }
     return;
