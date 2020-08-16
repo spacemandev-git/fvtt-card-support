@@ -86,17 +86,23 @@
 }
 
 #card-hotbar li.macro {
-    display: flex;
+    display: block;
     justify-content: center;
     align-items: center;
     position: relative;
-    flex: 0 0 100px;
+    max-width: 100px;
     height: 200px;
     border: 1px dashed #999999;
     border-radius: 10px;
     background: #99999980;
     box-shadow: 0 0 5px #000 inset;
     cursor: pointer;
+}
+
+#card-hotbar .macro:hover {
+    flex: 0 0 100px;
+    position: relative;
+    top: -10px;
 }
 
 /* Next functionality disabled

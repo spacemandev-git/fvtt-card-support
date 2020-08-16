@@ -172,14 +172,13 @@ Hooks.on('rendercardHotbar', async () => {
   //console.debug("Card Hotbar | The card hotbar just rendered!");
 });
 
-/* USE SPACEMAN'S VERSION? */
 // Add the listener to the board html element
 //remember to use new 0.70 hook to cancel harmless error about no slot available
 Hooks.once("canvasReady", (_) => {
   document.getElementById("board").addEventListener("drop", async (event) => {
     // Try to extract the data (type + src)
     let data;
-//    try {
+    try {
       data = JSON.parse(event.dataTransfer.getData("text/plain"));
       if(data.type == "Folder"){return;}
       let m = game.macros.get(data.id);
@@ -189,18 +188,20 @@ Hooks.once("canvasReady", (_) => {
       //console.debug(data);
       //console.debug(m);
       //console.debug(je);
-      await createTileFromItem(je.id, event.clientX, event.clientY, event.altKey);
+      await createTileFromItem(je.id, event.clientX, event.clientY, event.altKey, m.getFlag("world","sideUp") );
       await ui.cardHotbar.populator.chbUnsetMacro(data.cardSlot);
       m.delete();
-      //    } catch (err) {
-//      return;
-//    }
+    } catch (err) {
+      console.debug("Card Hotbar | Could not drop card to canvas");
+     return;
+    }
   });
 }); 
 
-async function createTileFromItem(objId, x, y, alt){
-  let imgPath = ""
-  if(alt){
+async function createTileFromItem(objId, x, y, alt, sideUp) {
+  let imgPath = "";
+  sideUp = ( sideUp ? sideUp : sideUp = "front" ); 
+  if(alt || ( sideUp == "back" ) ) {
     imgPath = game.journal.get(objId).getFlag("world", "cardBack")
   } else {
     imgPath = game.journal.get(objId).data.img
@@ -218,7 +219,7 @@ async function createTileFromItem(objId, x, y, alt){
   const _y = (y - t.ty) / canvas.stage.scale.y
   
   //cardScale is a value between 0 and 9, usually a decimal value between 0 and 1 representing a percentage.
-  //eventually will be replaced with a setting.
+  //eventually will be replaced with a setting. It would have to be set per deck or all cards could be forced to a specified grid size maybe.
 
   const cardScale = 0.25;
   await Tile.create({
@@ -236,7 +237,7 @@ async function createTileFromItem(objId, x, y, alt){
 }
 
 /* NOTE: ERRORS/ISSUES WITH CORE HOTBAR (LOL, SHRUG)
-0.6.4, DND 5E 0.93 (ALL MODS DISABLED)
+0.6.5, DND 5E 0.94 (ALL MODS DISABLED)
 
 1. file directory to canvas: 
 foundry.js:29725 Uncaught (in promise) Error: No available Hotbar slot exists
@@ -245,9 +246,9 @@ at Canvas._onDrop (foundry.js:11425)
 at DragDrop.callback (foundry.js:13785)
 at DragDrop._handleDrop (foundry.js:13836)
 
-2. Macro execute for spell, than cancel : uncaught in promise, 5e error?)
+2. Macro execute for spell, than cancel : uncaught in promise, 5e error?) (last tested in 0.9.3 an 0.6.4)
 
 3. Drag macro onto itself, it is removed
 
-4. Sometimes when you drag off of core, a ghost set of slots to left and right of core slot is grabbed also. Seems to happen if you click near a border between macro slots.
+4. Sometimes when you drag off of core, a ghost set of slots to left and right of core slot is grabbed also. Seems to happen if you click on the keyboard shortcut span.
 */
