@@ -125,10 +125,14 @@ export class cardHotbarPopulator {
         return cardId == null;     
     }
 
+    /**
+     * Returns a single cardHotbar macro
+     * @return {string[]} [slot]: macroId
+     */
+    chbGetMacro(slot) {
+        return game.user.getFlag('cardsupport', 'chbMacroMap')[slot] || [];
+    }
 
-
-    //TO DO: Create single chbGetMacro function for completeness and convenience.
-    
     /**
      * Returns all cardHotbar macros
      * @return {string[]} [slot]: macroId

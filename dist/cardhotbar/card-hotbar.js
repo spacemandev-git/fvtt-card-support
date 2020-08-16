@@ -440,7 +440,16 @@ export class cardHotbar extends Hotbar {
     if ( macro ) {
       //console.debug("Card Hotbar | macro provided:", macro, "fromSlot", data.cardSlot);
       //console.debug("Card Hotbar | monkey hotpatch?", game.user.assignHotbarMacro === this.assigncardHotbarMacro);
+        //set macro at destination
         await this.assigncardHotbarMacro(macro, cardSlot, {fromSlot: data.cardSlot});
+        //swap macros if needed
+        console.debug(`Card Hotbar | From ${data.cardSlot} (${Populator.getChbMacro(data.cardSlot)}) to ${cardSlot} (${Populator.getChbMacro(cardSlot)})`);
+        let dstMacro = chbGetMacro[data.cardSlot]
+        if ( dstMacro != []) {
+          await this.assigncardHotbarMacro(macro, cardSlot);
+          await this.assigncardHotbarMacro(dstMacro, data.cardSlot);
+        }
+        
     }
 
 
