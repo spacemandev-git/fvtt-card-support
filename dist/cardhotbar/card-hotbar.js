@@ -384,12 +384,14 @@ export class cardHotbar extends Hotbar {
     let data;
     try {
       data = JSON.parse(event.dataTransfer.getData('text/plain'));
+      console.debug("Card Hotbar | data"); 
+      console.debug(data);
     }
     catch (err) { return }
     //console.debug(data);
 
     // Get the drop target
-    //const li = event.target.closest(".macro");
+    const li = event.target.closest(".macro");
 
     // Allow for a Hook function to handle the event
     let cardSlot = li.dataset.slot;
@@ -438,16 +440,21 @@ export class cardHotbar extends Hotbar {
     // Only handles Macro drops
     const macro = await this._getDropMacro(data);
     if ( macro ) {
-      //console.debug("Card Hotbar | macro provided:", macro, "fromSlot", data.cardSlot);
-      //console.debug("Card Hotbar | monkey hotpatch?", game.user.assignHotbarMacro === this.assigncardHotbarMacro);
+      console.debug("Card Hotbar | macro provided:", macro, "fromSlot", data.cardSlot);
+      console.debug("Card Hotbar | monkey hotpatch?", game.user.assignHotbarMacro === this.assigncardHotbarMacro);
         //set macro at destination
-        await this.assigncardHotbarMacro(macro, cardSlot, {fromSlot: data.cardSlot});
+        //await this.assigncardHotbarMacro(macro, cardSlot, {fromSlot: data.cardSlot});
         //swap macros if needed
-        console.debug(`Card Hotbar | From ${data.cardSlot} (${Populator.getChbMacro(data.cardSlot)}) to ${cardSlot} (${Populator.getChbMacro(cardSlot)})`);
-        let dstMacro = chbGetMacro[data.cardSlot]
-        if ( dstMacro != []) {
+        console.debug(`Card Hotbar | From ${data.cardSlot} (${ui.cardHotbar.populator.chbGetMacro(data.cardSlot)}) to ${cardSlot} (${ui.cardHotbar.populator.chbGetMacro(cardSlot)})`);
+        let dstMacro = game.macros.get( ui.cardHotbar.populator.chbGetMacro(cardSlot) );
+        console.debug(dstMacro);
+        if ( dstMacro ) {
           await this.assigncardHotbarMacro(macro, cardSlot);
           await this.assigncardHotbarMacro(dstMacro, data.cardSlot);
+        } else {
+          //set macro at destination. technically this should never be called under current implementation
+          console.debug("Card Hotbar | Destination slot empty?");
+          await this.assigncardHotbarMacro(macro, cardSlot, {fromSlot: data.cardSlot});
         }
         
     }
@@ -490,13 +497,15 @@ export class cardHotbar extends Hotbar {
   /** @override */
   _onDragStart(event) {
     //hide tooltip so it doesn't get in the way
-    //onsole.debug("Card Hotbar | Attempting to hide tooltip.");
+    //console.debug("Card Hotbar | Attempting to hide tooltip.");
 
     const li = event.currentTarget.closest(".macro");
     if ( !li.dataset.macroId ) return false;
     document.getElementsByClassName("tooltip")[0].style.display = "none";
     const dragData = { type: "Macro", id: li.dataset.macroId, cardSlot: li.dataset.slot };
     event.dataTransfer.setData("text/plain", JSON.stringify(dragData));
+    console.debug("Card Hotbar | Source:"); 
+    console.debug(li);
   }
 
 
