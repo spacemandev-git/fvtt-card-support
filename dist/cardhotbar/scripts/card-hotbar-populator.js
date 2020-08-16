@@ -25,7 +25,7 @@ export class cardHotbarPopulator {
             ui.notifications.error("Error: Cannot determine card facing.");
             return;
         }
-        const maxSlot = 10; 
+        const maxSlot = 50; 
         let journal = {};
         let firstEmpty = this.getNextSlot();
         //check for invalid input
@@ -109,7 +109,7 @@ export class cardHotbarPopulator {
         //have to perform some trickery so that the null at slot 0 is not picked up incorrectly.
         //functionally, this will return the actual slot number when 1 is added again at end.
         let slotCheck = this.macroMap.slice(1);
-        const maxSlot = 10;
+        const maxSlot = 50;
         slotCheck.length = maxSlot;
         const startSlot = this.macroMap.filter(slot => slot).length;
         //console.debug("Card Hotbar | Filling slotCheck...");

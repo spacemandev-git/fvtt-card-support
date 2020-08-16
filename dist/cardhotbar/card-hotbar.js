@@ -75,7 +75,7 @@ export class cardHotbar extends Hotbar {
     let nextCard = false;
     const macros = this.getcardHotbarMacros(page);
     for ( let [i, m] of macros.entries() ) {
-      m.key = i<9 ? i+1 : 0;
+      m.key = i<49 ? i+1 : 0;
       m.cssClass = m.macro ? "active" : "inactive";
       /* commented out because card handling stuff is not needed. Will take different route for dragging and dropping also.
       //additional logic to mark the first empty slot as "next"
@@ -113,7 +113,7 @@ export class cardHotbar extends Hotbar {
       macros[parseInt(k)-1] = v
     }
     const start = (page-1) * 10;
-    return macros.slice(start, start+10).map((m, i) => {
+    return macros.slice(start, start+50).map((m, i) => {
       return {
         slot: start + i + 1,
         macro: m ? game.macros.get(m) : null
