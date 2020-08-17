@@ -101,20 +101,38 @@ export class cardHotbarPopulator {
     }
     
     discardHand() {
-        ui.notifications.notify("Discarding entire hand");
-        for (let mId of ui.cardHotbar.populator.macroMap) {
-            if (mId) {
-                const m = game.macros.get(mId);
-                const mCardId = m.getFlag("world","cardId");
-                const mDeck = game.decks.get( game.journal.get(mCardId).data.folder );    
-                //console.debug("Card Hotbar | Discarding card (macro, deck)...");
-                //console.debug(m);
-                //console.debug(mDeck);
-                mDeck.discardCard(mCardId);
-                m.delete();
-            }
-        }
-        ui.cardHotbar.populator.chbResetMacros();
+        new Dialog({
+            title: 'Please Confirm Enitre Hand Discard',
+            content: '<p>Are you sure you want to discard your entire hand?</p>',
+            buttons: {
+                Yes: {
+                    icon: '<i class="fa fa-check"></i>',
+                    label: 'Yes',
+                    callback: dlg => {
+                        ui.notifications.notify("Discarding entire hand");
+
+                        for (let mId of ui.cardHotbar.populator.macroMap) {
+                            if (mId) {
+                                const m = game.macros.get(mId);
+                                const mCardId = m.getFlag("world","cardId");
+                                const mDeck = game.decks.get( game.journal.get(mCardId).data.folder );    
+                                //console.debug("Card Hotbar | Discarding card (macro, deck)...");
+                                //console.debug(m);
+                                //console.debug(mDeck);
+                                mDeck.discardCard(mCardId);
+                                m.delete();
+                            }
+                        }
+                        ui.cardHotbar.populator.chbResetMacros();
+                    }
+                },
+                cancel: {
+                    icon: '<i class="fas fa-times"></i>',
+                    label: 'No'
+                },
+            },
+            default: 'cancel'
+        }).render(true);
     }
 
     /* in progress
