@@ -135,21 +135,21 @@ async function deckHUD(deckID:string, html) {
                   return;
                 }
                 let card = deck.infinteDraw()
-                ui['cardHotbar'].populator.addToHand([card]);    
-              }
-              else {
-                let card = [];
+                ui['cardHotbar'].populator.addToHand([card]);
+              }    
+            } else {
+                let cards = [];
                 for (let i = 0; i < numCards; i++) {
-                        //error checking done in populator
-                        yield card.push( yield deck.drawCard() );
+                  //error checking done in populator
+                  cards.push( await deck.drawCard() );
                 }
-                ui['cardHotbar'].populator.addToHand(card);
+                ui['cardHotbar'].populator.addToHand(cards);
             }
             }
           }
         }
       }
-    }).render(true)
+    ).render(true)
   }
 
   const showDiscard = async () => {
