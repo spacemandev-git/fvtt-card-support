@@ -139,12 +139,12 @@ function deckHUD(deckID, html) {
                                 }
                             }
                             else {
-                                let card = [];
+                                let cards = [];
                                 for (let i = 0; i < numCards; i++) {
-                                        //error checking done in populator
-                                        yield card.push( yield deck.drawCard() );
+                                    //error checking done in populator
+                                    cards.push(yield deck.drawCard());
                                 }
-                                ui['cardHotbar'].populator.addToHand(card);
+                                ui['cardHotbar'].populator.addToHand(cards);
                             }
                         })
                     }
