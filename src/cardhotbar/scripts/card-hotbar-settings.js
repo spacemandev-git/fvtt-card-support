@@ -39,6 +39,18 @@ export class cardHotbarSettings {
             onChange: (value) => {ui.cardHotbar.render();}        // A callback function which triggers when the setting is changed
         }); 
 
+        game.settings.register("cardsupport", "chbCardScale", {
+            name: "cardHotbar.settings.chbCardScale.name",
+            hint: "cardHotbar.settings.chbCardScale.nameHint",
+            scope: "world",
+            config: false,
+            default: "0.5",
+            type: Number,
+            onChange: value => {
+                ui.cardHotbar.render();
+            }
+        }); 
+
         //                                     module        key             options
         game.settings.register("cardsupport", "chbPrimaryColor", {
             name: "cardHotbar.settings.chbPrimaryColor.name",      // The name of the setting in the settings menu

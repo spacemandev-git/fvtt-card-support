@@ -12,7 +12,11 @@
   "CARD.drawFaceUp": {
     "name": "Draw Cards Face Up?",
     "nameHint": "Set to false to 'draw blind' (cards appear face down)."
-}, 
+  }, 
+  "CARD.scale": {
+    "name": "Card Scale Ratio",
+    "nameHint": "Adjust the size of card tiles in play. Values less than 1 make the cards smaller."
+  },
   "CARD.chbPrimaryColor": {
           "name": "Player Hand Color:",
           "nameHint": "Background color for the player's hand."
