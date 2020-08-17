@@ -1,3 +1,5 @@
+//import { Deck } from "../scripts/deck.js";
+
 export class cardHotbarPopulator {
     constructor() { 
         this.macroMap = this.chbGetMacros();
@@ -98,6 +100,40 @@ export class cardHotbarPopulator {
 
     }
     
+    discardHand() {
+        ui.notifications.notify("Discarding entire hand");
+        for (let mId of ui.cardHotbar.populator.macroMap) {
+            if (mId) {
+                const m = game.macros.get(mId);
+                const mCardId = m.getFlag("world","cardId");
+                const mDeck = game.decks.get( game.journal.get(mCardId).data.folder );    
+                //console.debug("Card Hotbar | Discarding card (macro, deck)...");
+                //console.debug(m);
+                //console.debug(mDeck);
+                mDeck.discardCard(mCardId);
+                m.delete();
+            }
+        }
+        ui.cardHotbar.populator.chbResetMacros();
+    }
+
+    /* in progress
+    async discardCards (deck, cards, slot=1, num=cards.length ) {
+        for (let c of cards) {
+            try {
+                deck.discardCards(c);
+                //console.debug("Card Hotbar | Discarding card (macro, slot, deck)...");
+                //console.debug(macro);
+                //console.debug(index);
+                //console.debug(mDeck);
+                await ui.cardHotbar.populator.chbUnsetMacro(index);
+                macro.delete();
+              } catch (e) {
+                //console.debug ("Card Hotbar | Could not properly discard card from hand");
+              }
+        }
+    }
+    */
     async flipCard(slot) {
         //delete and recreate instead of update?? hrrm.
         let cardEntry = game.journal.get(  game.macros.get( this.macroMap[slot] ).getFlag("world", "cardId" ) );
@@ -231,7 +267,10 @@ export class cardHotbarPopulator {
      */
     chbResetMacros() {
         this.macroMap = [];
-        return this._updateFlags();
+        ui.cardHotbar.getcardHotbarMacros();
+        this._updateFlags().then(render => { 
+            return ui.cardHotbar.render();
+        });
     }
 
     async _updateFlags() {
