@@ -5,7 +5,7 @@ export class cardHotbarPopulator {
         console.debug(this.macroMap);
     }
 
-   addToHand(cardId, sideUp) {
+   async addToHand(cardId, sideUp) {
         //console.debug("Card Hotbar | Adding card to hand...");
         //generate macro for card
         //TODO: better consolidate with code in index.js in hotbarDrop hook (call hook? make function at least?)
@@ -57,11 +57,11 @@ export class cardHotbarPopulator {
         */
         console.debug("tempCardMacros before:");
         console.debug(tempCardMacros);
-
+        let macro = {};
         for (let i = 0; i < cardId.length; i++) { 
             if ( maxSlot >= i + firstEmpty ) {
                 journal = game.journal.get(cardId[i]);
-                Macro.create({
+                macro = await Macro.create({
                     name: `Card: ${journal.name}`,
                     type: "script",
                     flags: {
@@ -73,10 +73,9 @@ export class cardHotbarPopulator {
                     scope: "global",
                     command: `game.journal.get("${journal.id}").sheet.render(true, {sheetMode: "image"} );`,
                     img: sideUp == "front" ? journal.data.img : journal.getFlag("world","cardBack") 
-                }).then(macro => {
-                    tempCardMacros[firstEmpty+i] = macro.id;
-                    console.debug("Prepping card to add...");
                 });
+                console.debug("Prepping new macro to add...");
+                tempCardMacros[firstEmpty+i] = macro.id;
             } else {
                 ui.notifications.error("Not enough space in hand, at least 1 card not added.");
                 ui.cardHotbar.render();
