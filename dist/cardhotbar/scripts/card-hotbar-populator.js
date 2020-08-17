@@ -44,23 +44,19 @@ export class cardHotbarPopulator {
         console.debug("Card Hotbar | MacroMap")
         console.debug(this.macroMap);
         console.debug(this.macroMap.length);
-        let tempCardMacros = [];
-        if (this.macroMap.length > 1) {
-            //preserve existing cards
-            tempCardMacros.length = this.macroMap.length;
-            for (let slot = 1; slot <= this.macroMap.length; slot++) {
-                tempCardMacros[slot] = this.macroMap[slot];
-            }
-        } else {
-            //prep the first blank 0 start for the addition of new cards
-            tempCardMacros.unshift("null");
+        let tempCardMacros = [null];
+        //preserve existing cards
+        tempCardMacros.length = this.macroMap.length;
+        for (let slot = 1; slot <= this.macroMap.length; slot++) {
+            tempCardMacros[slot] = this.macroMap[slot];
         }
-        let oldLen = tempCardMacros.length;
-        tempCardMacros.length = oldLen + cardId.length;
-        tempCardMacros.fill(null, oldLen+1, tempCardMacros.length);
+        /*
+        for (let i = 1; i < cardId.length; i++) {
+            tempCardMacros.push( null );
+        }
+        */
         console.debug("tempCardMacros before:");
         console.debug(tempCardMacros);
-        
 
         for (let i = 0; i < cardId.length; i++) { 
             if ( maxSlot >= i + firstEmpty ) {
@@ -90,13 +86,18 @@ export class cardHotbarPopulator {
         console.debug("Card Hotbar | tempCardMacros after:")
         console.debug(tempCardMacros);
         this.macroMap = tempCardMacros;
+ //       ui.cardHotbar.macros = tempCardMacros;
+//        ui.cardHotbar.macros = tempCardMacros;
         console.debug("Card Hotbar | this.macroMap after:");
         console.debug(this.macroMap);
         console.debug(tempCardMacros);
-        this._updateFlags().then(render => { 
-            ui.cardHotbar.getcardHotbarMacros();
-            return ui.cardHotbar.render();
+        ui.cardHotbar.getcardHotbarMacros();
+        this._updateFlags().then(set => { 
+//            this.chbSetMacros.then(render => { 
+                return ui.cardHotbar.render();
+//            });    
         });
+
     }
     
     async flipCard(slot) {
