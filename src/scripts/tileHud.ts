@@ -137,15 +137,14 @@ async function deckHUD(deckID:string, html) {
                 let card = deck.infinteDraw()
                 ui['cardHotbar'].populator.addToHand([card]);    
               }
-            } else {
-              for(let i=0; i<numCards; i++){
-                if(ui['cardHotbar'].populator.getNextSlot() == -1){
-                  ui.notifications.error("No more room in your hand")
-                  return;
+              else {
+                let card = [];
+                for (let i = 0; i < numCards; i++) {
+                        //error checking done in populator
+                        yield card.push( yield deck.drawCard() );
                 }
-                let card = await deck.drawCard();
-                ui['cardHotbar'].populator.addToHand([card]);    
-              }
+                ui['cardHotbar'].populator.addToHand(card);
+            }
             }
           }
         }
