@@ -72,27 +72,30 @@ export class cardHotbar extends Hotbar {
  * @private
  */
   _getcardMacrosByPage(page) { 
-    let nextCard = false;
+    let lastCard = false;
     const macros = this.getcardHotbarMacros(page);
     for ( let [i, m] of macros.entries() ) {
-      m.key = i<49 ? i+1 : 0;
+      m.key = i<53 ? i+1 : 0;
       m.cssClass = m.macro ? "active" : "inactive";
-      /* commented out because card handling stuff is not needed. Will take different route for dragging and dropping also.
-      //additional logic to mark the first empty slot as "next"
-      if (m.cssClass == "inactive" && nextCard == false ) {
-        m.cssClass = "next";
-        nextCard = true;
+      //additional logic to mark the last active slot as "last"
+      if (m.cssClass == "inactive" && lastCard == false) {
+        if(macros[i-1] && macros[i-1].macro) {
+          macros[i-1].cssClass = "last";
+          lastCard = true;
+        }
       }
-      */
+      if (lastCard == false && i == 53 && m.macro) {
+        m.cssClass = "last";
+        lastCard = true;
+      }
+    
       m.icon = m.macro ? m.macro.data.img : null;
       //additional logic to store card facing
-      //TO DO: improve to replace hard-coded value with the default draw-mode when added
+      //TO DO: improve to replace hard-coded value with the default draw-mode?
       let defaultSide = "front"
       let curSide = m.macro ? m.macro.getFlag("world","sideUp") || defaultSide : defaultSide;
       m.sideUp = curSide ? curSide : defaultSide;
     }
-//    game.user.unsetFlag('cardsupport', 'chbMacroMap');
-//    game.user.setFlag('cardsupport', 'chbMacroMap', this.populator);
     return macros;
   }
 
@@ -108,12 +111,12 @@ export class cardHotbar extends Hotbar {
    * @return {Array.<Object>}
    */
   getcardHotbarMacros(page=1) {
-    const macros = Array.fromRange(50).map(m => null);
+    const macros = Array.fromRange(54).map(m => null);
     for ( let [k, v] of Object.entries(this.populator.chbGetMacros())) {
       macros[parseInt(k)-1] = v
     }
     const start = (page-1) * 10;
-    return macros.slice(start, start+50).map((m, i) => {
+    return macros.slice(start, start+54).map((m, i) => {
       return {
         slot: start + i + 1,
         macro: m ? game.macros.get(m) : null
@@ -127,8 +130,8 @@ export class cardHotbar extends Hotbar {
 	/* -------------------------------------------- */
 
   /**
-   * Assign a Macro to a numbered card hotbar slot between 1 and 10
-   * eventually expand this to a full 50 later maybe
+   * Assign a Macro to a numbered card hotbar slot between 1 and x (currently 54)
+   * eventually expand this to an unlimited architecture
    * @param {Macro|null} macro  The Macro entity to assign
    * @param {number} slot       The integer Hotbar slot to fill
    * @param {number} [fromSlot] An optional origin slot from which the Macro is being shifted
@@ -139,9 +142,9 @@ export class cardHotbar extends Hotbar {
     if ( !(macro instanceof Macro) && (macro !== null) ) throw new Error("Invalid Macro provided");
 
     // If a slot was not provided, get the first available slot
-    slot = slot ? parseInt(slot) : Array.fromRange(50).find(i => !(i in ui.cardHotbar));
+    slot = slot ? parseInt(slot) : Array.fromRange(54).find(i => !(i in ui.cardHotbar));
     if ( !slot ) throw new Error("No available Hotbar slot exists");
-    if ( slot < 1 || slot > 50 ) throw new Error("Invalid Hotbar slot requested");
+    if ( slot < 1 || slot > 54 ) throw new Error("Invalid Hotbar slot requested");
 
     // Update the hotbar data
     const update = duplicate(ui.cardHotbar);
@@ -479,21 +482,21 @@ export class cardHotbar extends Hotbar {
     event.preventDefault();
     const li = event.currentTarget;
 
-    // Case 1 - draw a card
+    /* Case DEPRECATED - draw a card
     if ( li.classList.contains("next") ) {
       //console.debug("Card Hotbar | Drawing 1 card from current deck...");
       let deck = game.decks.get( game.user.getFlag("world", "sdf-deck-cur") );
       let card = await deck.drawCard();
       ui.cardHotbar.populator.addToHand([card]);
-    }
+    } */
 
-    // Case 2 - trigger a Macro
-    else {
-      //abort if card is face down
-      const macro = game.macros.get(li.dataset.macroId);
-      if (macro.getFlag("world","sideUp") == "back") return;
-      return macro.execute();
-    }
+    // Case 1 - trigger a Macro
+    //abort if card is face down
+    const macro = game.macros.get(li.dataset.macroId);
+    if (macro.getFlag("world","sideUp") == "back") return;
+    return macro.execute();
+
+    //TO DO: Add additional logic to run card macros stored in the card instead if present
   }
 
   /* -------------------------------------------- */
@@ -554,7 +557,7 @@ export class cardHotbar extends Hotbar {
   _onHoverMacro(event) {
     event.preventDefault();
     const li = event.currentTarget;
-    const hasAction = ( !li.classList.contains("inactive") && !li.classList.contains("next") );
+    const hasAction = ( !li.classList.contains("inactive") );
 
     // Remove any existing tooltip
     const tooltip = li.querySelector(".tooltip");
