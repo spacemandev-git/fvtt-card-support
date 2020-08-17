@@ -139,9 +139,9 @@ export class cardHotbar extends Hotbar {
     if ( !(macro instanceof Macro) && (macro !== null) ) throw new Error("Invalid Macro provided");
 
     // If a slot was not provided, get the first available slot
-    slot = slot ? parseInt(slot) : Array.fromRange(10).find(i => !(i in ui.cardHotbar));
+    slot = slot ? parseInt(slot) : Array.fromRange(50).find(i => !(i in ui.cardHotbar));
     if ( !slot ) throw new Error("No available Hotbar slot exists");
-    if ( slot < 1 || slot > 10 ) throw new Error("Invalid Hotbar slot requested");
+    if ( slot < 1 || slot > 50 ) throw new Error("Invalid Hotbar slot requested");
 
     // Update the hotbar data
     const update = duplicate(ui.cardHotbar);

@@ -80,6 +80,8 @@
     max-width: 100%;
     list-style: none;
     margin: 2px;
+    margin-top: auto;
+    margin-bottom: auto;
     padding: 0;
     border: 0px;
     border-radius: 10px;
@@ -91,15 +93,16 @@
     align-items: center;
     position: relative;
     max-width: 100px;
-    height: 200px;
     border: 1px dashed #999999;
     border-radius: 10px;
     background: #99999980;
     box-shadow: 0 0 5px #000 inset;
     cursor: pointer;
+    margin-top: auto;
+    margin-bottom: auto;
 }
 
-#card-hotbar .macro:hover {
+#card-hotbar li.macro:hover {
     flex: 0 0 100px;
     position: relative;
     top: -10px;
