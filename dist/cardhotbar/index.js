@@ -42,13 +42,7 @@ async function cardHotbarInit() {
     + ' }'
 
     + '#card-hotbar .macro' 
-    + ` { background: ${cardHotbarSettings.getCHBPrimaryColor()};` 
-    + `   border: 1px dashed ${cardHotbarSettings.getCHBBorderColor()};`
-    + ' }'
-
-    + '#card-hotbar .macro.active:hover' 
-    + ' {' 
-    + `     border: 1px solid ${cardHotbarSettings.getCHBBorderColorActive()};`
+    + ` { background: ${cardHotbarSettings.getCHBPrimaryColor()};`
     + ' }'
 
   , head = document.head || document.getElementsByTagName('head')[0]

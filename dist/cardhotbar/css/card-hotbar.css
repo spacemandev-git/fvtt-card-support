@@ -94,7 +94,7 @@
     justify-content: center;
     align-items: center;
     position: relative;
-    border: 1px dashed #999999;
+    /* border: 1px dashed #999999; */
     border-radius: 10px;
     background: #99999980;
     cursor: pointer;
@@ -103,7 +103,7 @@
     height: 100%;
     position: relative;
     top: 0px;
-    box-shadow: none;
+    box-shadow: 0px 0 4px black;
     transition: box-shadow .2s .1s, flex .2s, top .2s .1s;
     flex: 0 1 auto;
 }
@@ -140,9 +140,9 @@
     display: none;
 }
 
-#card-hotbar .macro.active:hover {
-    border: 1px solid white;
-}
+/*#card-hotbar .macro.active:hover {
+    
+}*/
 
 #card-hotbar .macro.inactive:hover {
     border: 1px solid gray;
