@@ -5,7 +5,7 @@ export class cardHotbarPopulator {
         console.debug(this.macroMap);
     }
 
-   async addToHand(cardId, sideUp) {
+   addToHand(cardId, sideUp) {
         //console.debug("Card Hotbar | Adding card to hand...");
         //generate macro for card
         //TODO: better consolidate with code in index.js in hotbarDrop hook (call hook? make function at least?)
@@ -86,12 +86,11 @@ export class cardHotbarPopulator {
         console.debug("Card Hotbar | tempCardMacros after:")
         console.debug(tempCardMacros);
         this.macroMap = tempCardMacros;
- //       ui.cardHotbar.macros = tempCardMacros;
-//        ui.cardHotbar.macros = tempCardMacros;
         console.debug("Card Hotbar | this.macroMap after:");
         console.debug(this.macroMap);
         console.debug(tempCardMacros);
-        ui.cardHotbar.getcardHotbarMacros();
+        ui.cardHotbar.macros = ui.cardHotbar.getcardHotbarMacros();
+//        ui.cardHotbar.getcardHotbarMacros();
         this._updateFlags().then(set => { 
 //            this.chbSetMacros.then(render => { 
                 return ui.cardHotbar.render();
