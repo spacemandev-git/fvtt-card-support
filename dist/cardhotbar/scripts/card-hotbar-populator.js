@@ -37,7 +37,7 @@ export class cardHotbarPopulator {
             ui.notifications.notify.error("Please provide an array of cardIds");
             return false;
         } 
-        if ( firstEmpty === -1 ) {
+        if ( firstEmpty === -1 || firstEmpty > maxSlot ) {
             ui.notifications.error("There is no room in your hand.");
             return false;
         }
@@ -46,15 +46,22 @@ export class cardHotbarPopulator {
         console.debug(this.macroMap.length);
         let tempCardMacros = [];
         if (this.macroMap.length > 1) {
+            //preserve existing cards
             tempCardMacros.length = this.macroMap.length;
             for (let slot = 1; slot <= this.macroMap.length; slot++) {
                 tempCardMacros[slot] = this.macroMap[slot];
             }
+        } else {
+            //prep the first blank 0 start for the addition of new cards
+            tempCardMacros.unshift("null");
         }
-        tempCardMacros.unshift("null");
+        let oldLen = tempCardMacros.length;
+        tempCardMacros.length = oldLen + cardId.length;
+        tempCardMacros.fill(null, oldLen+1, tempCardMacros.length);
         console.debug("tempCardMacros before:");
         console.debug(tempCardMacros);
         
+
         for (let i = 0; i < cardId.length; i++) { 
             if ( maxSlot >= i + firstEmpty ) {
                 journal = game.journal.get(cardId[i]);
@@ -71,10 +78,8 @@ export class cardHotbarPopulator {
                     command: `game.journal.get("${journal.id}").sheet.render(true, {sheetMode: "image"} );`,
                     img: sideUp == "front" ? journal.data.img : journal.getFlag("world","cardBack") 
                 }).then(macro => {
-//                    window.cardHotbar.chbSetMacro(macro.id, firstEmpty+i);
-                   const result = tempCardMacros.push(macro.id);
-                   console.debug("Result:");
-                   console.debug(result); 
+                    tempCardMacros[firstEmpty+i] = macro.id;
+                    console.debug("Prepping card to add...");
                 });
             } else {
                 ui.notifications.error("Not enough space in hand, at least 1 card not added.");
@@ -88,8 +93,8 @@ export class cardHotbarPopulator {
         console.debug("Card Hotbar | this.macroMap after:");
         console.debug(this.macroMap);
         console.debug(tempCardMacros);
-        ui.cardHotbar.getcardHotbarMacros();
         this._updateFlags().then(render => { 
+            ui.cardHotbar.getcardHotbarMacros();
             return ui.cardHotbar.render();
         });
     }
