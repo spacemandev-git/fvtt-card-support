@@ -84,6 +84,11 @@ export class cardHotbar extends Hotbar {
           lastCard = true;
         }
       }
+      if (lastCard == false && i == 53 && m.macro) {
+        m.cssClass = "last";
+        lastCard = true;
+      }
+    
       m.icon = m.macro ? m.macro.data.img : null;
       //additional logic to store card facing
       //TO DO: improve to replace hard-coded value with the default draw-mode?

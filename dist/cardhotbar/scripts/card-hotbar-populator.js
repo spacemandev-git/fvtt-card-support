@@ -1,9 +1,11 @@
 export class cardHotbarPopulator {
     constructor() { 
         this.macroMap = this.chbGetMacros();
+        console.debug("Card Hotbar | Initial state:");
+        console.debug(this.macroMap);
     }
 
-    async addToHand(cardId, sideUp) {
+   async addToHand(cardId, sideUp) {
         //console.debug("Card Hotbar | Adding card to hand...");
         //generate macro for card
         //TODO: better consolidate with code in index.js in hotbarDrop hook (call hook? make function at least?)
@@ -28,6 +30,8 @@ export class cardHotbarPopulator {
         const maxSlot = 54; 
         let journal = {};
         let firstEmpty = this.getNextSlot();
+        console.debug("First empty:");
+        console.debug(firstEmpty);
         //check for invalid input
         if (!cardId.length) {
             ui.notifications.notify.error("Please provide an array of cardIds");
@@ -37,6 +41,20 @@ export class cardHotbarPopulator {
             ui.notifications.error("There is no room in your hand.");
             return false;
         }
+        console.debug("Card Hotbar | MacroMap")
+        console.debug(this.macroMap);
+        console.debug(this.macroMap.length);
+        let tempCardMacros = [];
+        if (this.macroMap.length > 1) {
+            tempCardMacros.length = this.macroMap.length;
+            for (let slot = 1; slot <= this.macroMap.length; slot++) {
+                tempCardMacros[slot] = this.macroMap[slot];
+            }
+        }
+        tempCardMacros.unshift("null");
+        console.debug("tempCardMacros before:");
+        console.debug(tempCardMacros);
+        
         for (let i = 0; i < cardId.length; i++) { 
             if ( maxSlot >= i + firstEmpty ) {
                 journal = game.journal.get(cardId[i]);
@@ -51,10 +69,12 @@ export class cardHotbarPopulator {
                     },
                     scope: "global",
                     command: `game.journal.get("${journal.id}").sheet.render(true, {sheetMode: "image"} );`,
-//                  backup copy -   img: `${game.journal.get(journal.id).data.img}`
                     img: sideUp == "front" ? journal.data.img : journal.getFlag("world","cardBack") 
                 }).then(macro => {
-                    window.cardHotbar.chbSetMacro(macro.id, firstEmpty+i);
+//                    window.cardHotbar.chbSetMacro(macro.id, firstEmpty+i);
+                   const result = tempCardMacros.push(macro.id);
+                   console.debug("Result:");
+                   console.debug(result); 
                 });
             } else {
                 ui.notifications.error("Not enough space in hand, at least 1 card not added.");
@@ -62,7 +82,16 @@ export class cardHotbarPopulator {
                 return -1;
             }
         }
-        return ui.cardHotbar.render();
+        console.debug("Card Hotbar | tempCardMacros after:")
+        console.debug(tempCardMacros);
+        this.macroMap = tempCardMacros;
+        console.debug("Card Hotbar | this.macroMap after:");
+        console.debug(this.macroMap);
+        console.debug(tempCardMacros);
+        ui.cardHotbar.getcardHotbarMacros();
+        this._updateFlags().then(render => { 
+            return ui.cardHotbar.render();
+        });
     }
     
     async flipCard(slot) {
@@ -112,12 +141,14 @@ export class cardHotbarPopulator {
         const maxSlot = 54;
         slotCheck.length = maxSlot;
         const startSlot = this.macroMap.filter(slot => slot).length;
-        //console.debug("Card Hotbar | Filling slotCheck...");
-        //console.debug(startSlot, maxSlot);
+        console.debug("Card Hotbar | Filling slotCheck...");
+        console.debug(startSlot, maxSlot);
         slotCheck.fill(null,startSlot,maxSlot);
-        //console.debug("Card Hotbar | slotCheck");
-        //console.debug(slotCheck);
-        let result = slotCheck.findIndex(this.checkSlotNull) 
+        console.debug("Card Hotbar | slotCheck");
+        console.debug(slotCheck);
+        let result = slotCheck.findIndex(this.checkSlotNull);
+        console.debug("Card Hotbar | nextSlot is: ");
+        console.debug(result);
         return result != -1 ? result + 1 : -1 ;  
     } 
 
@@ -164,10 +195,12 @@ export class cardHotbarPopulator {
     async chbSetMacros(macros) {
         /**
          * !
-         * ! Assumes a single page card hotbar with slots 1-10
+         * ! Assumes a single page card hotbar with maxSlots
          * !
          */
-        for (let slot = 1; slot < 11; slot++) {
+
+        const maxSlot = 54
+        for (let slot = 1; slot <= maxSlot; slot++) {
             this.macroMap[slot] = ui.cardHotbar.macros[slot];
         }
         await this._updateFlags();
