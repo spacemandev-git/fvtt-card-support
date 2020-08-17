@@ -126,6 +126,12 @@ export class cardHotbarSettings {
         return (flag != undefined ? flag : sett );
     }
 
+    static getCHBCardScale(){
+        var flag = game.user.getFlag("cardsupport", "chbCardScale");
+        var sett = game.settings.get("cardsupport","chbCardScale");
+        return (flag != undefined ? flag : sett );
+    }
+
     static getCHBPrimaryColor(){
         var flag = game.user.getFlag("cardsupport", "chbPrimaryColor");
         var sett = game.settings.get("cardsupport","chbPrimaryColor");

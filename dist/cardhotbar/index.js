@@ -221,7 +221,8 @@ async function createTileFromItem(objId, x, y, alt, sideUp) {
   //cardScale is a value between 0 and 9, usually a decimal value between 0 and 1 representing a percentage.
   //eventually will be replaced with a setting. It would have to be set per deck or all cards could be forced to a specified grid size maybe.
 
-  const cardScale = 0.25;
+  const cardScale = cardHotbarSettings.getCHBCardScale();
+  console.debug(cardScale);
   await Tile.create({
     img: imgPath,
     x: _x,

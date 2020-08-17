@@ -19,8 +19,9 @@ export class cardHotbarSettingsForm extends FormApplication {
     }
 
     getData() {
-        let data = {
-            chbDrawFaceUp: game.settings.get("cardsupport", "chbDrawFaceUp"),        
+        let data = {   
+            chbDrawFaceUp: game.settings.get("cardsupport", "chbDrawFaceUp"),
+            chbCardScale: game.settings.get("cardsupport", "chbCardScale"),        
             chbPrimaryColor: game.settings.get("cardsupport", "chbPrimaryColor"), 
             chbBorderColor: game.settings.get("cardsupport", "chbBorderColor"),
             chbBorderColorActive: game.settings.get("cardsupport", "chbBorderColorActive"),
@@ -30,7 +31,8 @@ export class cardHotbarSettingsForm extends FormApplication {
         };
         if (this.reset == true) {
             data = {
-                chbDrawFaceUp: game.settings.settings.get("cardsupport.chbDrawFaceUp").default,    
+                chbDrawFaceUp: game.settings.settings.get("cardsupport.chbDrawFaceUp").default,
+                chbCardScale: game.settings.settings.get("cardsupport.chbCardScale").default,    
                 chbPrimaryColor: game.settings.settings.get("cardsupport.chbPrimaryColor").default,
                 chbBorderColor: game.settings.settings.get("cardsupport.chbBorderColor").default,
                 chbBorderColorActive: game.settings.settings.get("cardsupport.chbBorderColorActive").default,
@@ -57,6 +59,7 @@ export class cardHotbarSettingsForm extends FormApplication {
         //console.debug("card Hotbar | Attempting to update settings with form values...");
         //console.debug(d.chbDrawFaceUp);
         game.settings.set("cardsupport", "chbDrawFaceUp", d.chbDrawFaceUp);
+        game.settings.set("cardsupport", "chbCardScale", d.chbCardScale);
         game.settings.set("cardsupport", "chbPrimaryColor", d.chbPrimaryColor);
         game.settings.set("cardsupport", "chbBorderColor", d.chbBorderColor);
         game.settings.set("cardsupport", "chbBorderColorActive", d.chbBorderColorActive);

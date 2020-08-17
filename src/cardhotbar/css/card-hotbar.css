@@ -306,23 +306,6 @@ div#client-settings .chb-setting label {
     padding-top: 8px;
 }
 
-/* Settings Menu */
-div#card-hotbar-settings-form div.colorsplash input.expanded {
-    opacity:0;
-}
-
-div#card-hotbar-flags-form div.colorsplash input.expanded {
-    opacity:0;
-}
-
-div#core-hotbar-settings-form div.colorsplash input.expanded {
-    opacity:0;
-}
-
-div#core-hotbar-flags-form div.colorsplash input.expanded {
-    opacity:0;
-}
-
 
 /* hide extra button on color picker selection */
 

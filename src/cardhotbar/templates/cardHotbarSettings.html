@@ -8,6 +8,12 @@
             <input type="checkbox" value="drawFaceUp" name="chbDrawFaceUp" {{#if chbDrawFaceUp}} checked {{/if}}>
             <p class="hint">{{localize "CARD.drawFaceUp.nameHint"}}</p>
     </div>
+    <h2>Card Scale</h2>
+    <div class = "formgroup">
+        <label>{{localize "CARD.scale.name"}}</label>
+            <input type="number" value="{{chbCardScale}}" name="chbCardScale" step="0.01">
+            <p class="hint">{{localize "CARD.scale.nameHint"}}</p>
+    </div>
     <h2>Color Settings</h2>
     <div class = "formgroup">
         <label>{{localize "CARD.chbPrimaryColor.name"}}</label>

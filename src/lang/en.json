@@ -5,10 +5,18 @@
   "DECK.ERROR": "Something broke! Check Console for more information.",
 
 
-  
+
   "CARD.modname": "Card Support (Unofficial)",
   "CARD.mod": "cardsupport",
-  "CARD.chbTitle": "Player Hand Settings",  
+  "CARD.chbTitle": "Player Hand Settings", 
+  "CARD.drawFaceUp": {
+    "name": "Draw Cards Face Up?",
+    "nameHint": "Set to false to 'draw blind' (cards appear face down)."
+  }, 
+  "CARD.scale": {
+    "name": "Card Scale Ratio",
+    "nameHint": "Adjust the size of card tiles in play. Values less than 1 make the cards smaller."
+  },
   "CARD.chbPrimaryColor": {
           "name": "Player Hand Color:",
           "nameHint": "Background color for the player's hand."
