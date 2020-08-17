@@ -2,15 +2,15 @@ CARDHOTBAR:
 v1
 1. Playing card from hand should remove it from the hand (DONE)
 2. ALT+Dragging from hand should play the card hidden (DONE)
-3. Swapping cards in bar should not delete the cards.
+3. Swapping cards in bar should not delete the cards. (DONE)
 4. Remove / Hiding elements that aren't working  (DONE)
-5. Flipping cards in hand
-6. Compact Hand function and rework addToHand() accordingly
-7. Get Player Hand
+5. Flipping cards in hand (DONE)
+6. Compact Hand function and rework addToHand() accordingly (DONE)
+7. Get Player Hand 
 8. Mark Cards as done
 
 v2
-1. Paging/longer hotbar/support for more cards
+1. Paging/longer hotbar/support for more cards (DONE except styling)
 
 v3+
 1. Multiple Hands
