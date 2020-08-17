@@ -56,6 +56,7 @@
 
 #card-hotbar #card-action-bar {
     pointer-events: all;
+    height: 100%;
 }
 
 #card-hotbar .bar-controls {
@@ -75,9 +76,9 @@
 }
 
 #card-hotbar #card-macro-list {
+    flex-wrap: nowrap;
     flex: 0 0 1200px;
     height: 100%;
-    max-width: 100%;
     list-style: none;
     margin: 2px;
     margin-top: auto;
@@ -85,6 +86,7 @@
     padding: 0;
     border: 0px;
     border-radius: 10px;
+    justify-content: left;
 }
 
 #card-hotbar li.macro {
@@ -92,20 +94,29 @@
     justify-content: center;
     align-items: center;
     position: relative;
-    max-width: 100px;
     border: 1px dashed #999999;
     border-radius: 10px;
     background: #99999980;
-    box-shadow: 0 0 5px #000 inset;
     cursor: pointer;
     margin-top: auto;
     margin-bottom: auto;
+    height: 100%;
+    overflow: hidden;
+    position: relative;
+    top: 0px;
+    box-shadow: none;
+    transition: box-shadow .2s .1s, flex .2s, top .2s .1s;
+    flex: 0 1 auto;
 }
 
 #card-hotbar li.macro:hover {
-    flex: 0 0 100px;
-    position: relative;
     top: -10px;
+    flex: 0 0 138px;
+    box-shadow: 0px 5px 10px 2px #000000;
+    z-index: 1;
+}
+#card-macro-list li.last {
+	flex: 0 0 138px;
 }
 
 /* Next functionality disabled
@@ -119,16 +130,17 @@
     box-sizing: border-box;
     border-radius: 0px;
     border: 0px;
-    max-width: 100%;
+    margin-top: auto;
+    margin-bottom: auto;
+    /* width: 100px; */
+    height: 100%;
+    width: auto;
+    object-fit: cover;
+    object-position: left;
 }
 
 #card-hotbar li.macro.inactive {
     display: none;
-}
-
-
-#card-hotbar .macro:hover {
-    box-shadow: 0 0 10px #ff6400 inset;
 }
 
 #card-hotbar .macro.active:hover {
