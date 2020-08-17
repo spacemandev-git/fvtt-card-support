@@ -139,14 +139,12 @@ function deckHUD(deckID, html) {
                                 }
                             }
                             else {
+                                let card = [];
                                 for (let i = 0; i < numCards; i++) {
-                                    if (ui['cardHotbar'].populator.getNextSlot() == -1) {
-                                        ui.notifications.error("No more room in your hand");
-                                        return;
-                                    }
-                                    let card = yield deck.drawCard();
-                                    ui['cardHotbar'].populator.addToHand([card]);
+                                        //error checking done in populator
+                                        yield card.push( yield deck.drawCard() );
                                 }
+                                ui['cardHotbar'].populator.addToHand(card);
                             }
                         })
                     }
