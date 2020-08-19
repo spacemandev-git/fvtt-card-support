@@ -36,7 +36,7 @@ export class Deck{
   private async updateState(){
     await game.folders.get(this.deckID).setFlag(mod_scope, 'deckState', JSON.stringify({
       state: this._state,
-      cards: this._cards,
+      //cards: this._cards,
       discard: this._discard
     }))
   }

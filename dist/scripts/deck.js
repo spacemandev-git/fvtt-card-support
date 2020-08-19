@@ -38,7 +38,8 @@ export class Deck {
         return __awaiter(this, void 0, void 0, function* () {
             yield game.folders.get(this.deckID).setFlag(mod_scope, 'deckState', JSON.stringify({
                 state: this._state,
-                cards: this._cards,
+                //Norc commented this out, i think this is what is causing the discard failing and deck breaking.
+                //cards: this._cards,
                 discard: this._discard
             }));
         });

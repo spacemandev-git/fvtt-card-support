@@ -110,13 +110,16 @@ export class cardHotbarPopulator {
                     label: 'Yes',
                     callback: dlg => {
                         ui.notifications.notify("Discarding entire hand");
-
+                        console.debug("Card Hotbar | discarding entire hand");
                         for (let mId of ui.cardHotbar.populator.macroMap) {
                             const m = game.macros.get(mId);
+                            console.debug(m)
                             if ( m ) {
                                 const mCardId = m.getFlag("world","cardID");
+                                console.debug(cardID);
                                 if ( mCardId ) {
                                     const mDeck = game.decks.get( game.journal.get(mCardId).data.folder ); 
+                                    console.debug(mDeck);
                                     if (mDeck) {
                                         //console.debug("Card Hotbar | Discarding card (macro, deck)...");
                                         //console.debug(m);
@@ -158,7 +161,7 @@ export class cardHotbarPopulator {
     */
     async flipCard(slot) {
         //delete and recreate instead of update?? hrrm.
-        let cardEntry = game.journal.get(  game.macros.get( this.macroMap[slot] ).getFlag("world", "cardId" ) );
+        let cardEntry = game.journal.get(  game.macros.get( this.macroMap[slot] ).getFlag("world", "cardID" ) );
         let mm = ui.cardHotbar.macros[slot - 1].macro;
         let newImg = "";
         let sideUp = "";

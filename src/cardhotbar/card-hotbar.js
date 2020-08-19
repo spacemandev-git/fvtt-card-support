@@ -336,6 +336,7 @@ export class cardHotbar extends Hotbar {
           //code to switch decks here
         }
       },
+      /* not used currently
       {
         name: "Draw Multiple",
         icon: '<i class="fas fa-plus-square"></i>',
@@ -363,6 +364,7 @@ export class cardHotbar extends Hotbar {
           }
         }
       },
+      */
     ]);
   }
 
