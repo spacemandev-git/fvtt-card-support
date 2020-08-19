@@ -1,2 +1,4 @@
 cp.bat
 node_modules/
+macros/
+.gitignore
