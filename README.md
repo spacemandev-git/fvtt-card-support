@@ -1,9 +1,11 @@
 # Card Support for Foundry VTT
 
 ## Usage Instructions
-1. Click the "SDF Import" Button in the Journal Directory
-2. Select a valid SDF file (more on this below)
-3. Use the API to interact with it or some module that implements the API
+1. Click the "SDF Import" Button in the Journal tab of the Sidebar (see gif).
+2. Select a valid SDF zip file. Samples are located in "data/modules/cardsupport/samples" (more on SDF below)
+3. Drag the deck's FOLDER to the canvas to use the Tile API to interact with it directly:
+![Create New Deck Tile](https://media.giphy.com/media/dax0A0WNPhxlhfm36N/giphy.gif)
+4. Macros, systems, and modules can also interact with decks through the Card API
 
 ## API
 At a high level, this module abuses the setFlag() and getFlag() operators on folders and journal entries to store card objects. 
