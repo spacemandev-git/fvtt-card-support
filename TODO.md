@@ -21,10 +21,8 @@ v1
 1. Dragging a folder onto the table turns it into a tile object with a HUD that lets you draw cards from it like a deck (DONE)
 2. Add discard back to main deck without resetting deck (DONE)
 3. View Discard Pile (DONE)
-4. Draw to Table (Flipped)
-5. Append Cards to Deck
 6. Infinite Draw
-
+7. Take as Copy
 
 v2
 1. Burnt/Removed from Play Pile for decks 
@@ -32,3 +30,5 @@ v2
 3. Register and call hooks on deck initalization
 4. Deal to Players (requires Sockets)
 5. Card Add GUI
+4. Draw to Table (Flipped)
+5. Append Cards to Deck

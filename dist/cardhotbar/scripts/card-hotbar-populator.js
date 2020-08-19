@@ -68,7 +68,7 @@ export class cardHotbarPopulator {
                     type: "script",
                     flags: {
                         "world": {
-                            "cardId": journal.id,
+                            "cardID": journal.id,
                             "sideUp": sideUp
                         }
                     },
