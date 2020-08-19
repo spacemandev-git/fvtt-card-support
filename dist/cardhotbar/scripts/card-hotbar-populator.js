@@ -116,7 +116,7 @@ export class cardHotbarPopulator {
                             console.debug(m)
                             if ( m ) {
                                 const mCardId = m.getFlag("world","cardID");
-                                console.debug(cardID);
+                                console.debug(mCardId);
                                 if ( mCardId ) {
                                     const mDeck = game.decks.get( game.journal.get(mCardId).data.folder ); 
                                     console.debug(mDeck);

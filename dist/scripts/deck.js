@@ -18,9 +18,12 @@ export class Deck {
         let state = game.folders.get(folderID).getFlag(mod_scope, 'deckState');
         if (state == undefined) {
             console.log("State undefined");
+            //NORC NOTES: I think cards and state were always the same because they were both set to the reference of cardEntries, not the value. this seems to have fixed it.
+            //May be more elegant way of doing this though.
             let cardEntries = game.folders.get(folderID)['content'].map(el => el.id);
+            let stateEntries = game.folders.get(folderID)['content'].map(el => el.id);
             this._cards = cardEntries;
-            this._state = cardEntries;
+            this._state = stateEntries;
             this._discard = [];
             this.updateState().then(() => {
                 console.log(`${folderID} state created!`);
@@ -38,8 +41,7 @@ export class Deck {
         return __awaiter(this, void 0, void 0, function* () {
             yield game.folders.get(this.deckID).setFlag(mod_scope, 'deckState', JSON.stringify({
                 state: this._state,
-                //Norc commented this out, i think this is what is causing the discard failing and deck breaking.
-                //cards: this._cards,
+                cards: this._cards,
                 discard: this._discard
             }));
         });
