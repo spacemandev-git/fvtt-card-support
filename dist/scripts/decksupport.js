@@ -28,7 +28,7 @@ Hooks.on("ready", () => __awaiter(void 0, void 0, void 0, function* () {
     game.decks = new Decks();
     game.decks.init();
     // If 54CardDeck isn't already created, go ahead and create it
-    const sampledeckFolderID = game.folders.find(el => el == "54CardDeck");
+    const sampledeckFolderID = game.folders.find(el => el.name == "54CardDeck");
     if (!sampledeckFolderID) {
         console.log("Create Sample Deck");
         let sampleDeckBlob = yield (yield fetch('modules/cardsupport/sample/54CardDeck/54CardDeck.zip')).blob();

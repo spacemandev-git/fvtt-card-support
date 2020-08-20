@@ -323,7 +323,7 @@ class DiscardPile extends FormApplication {
       })
 
       //TAKE COPY
-      html.find(`#${card}-takecopy`).click(() => {
+      html.find(`#${card._id}-takecopy`).click(() => {
         if(ui['cardHotbar'].populator.getNextSlot() == -1){
           ui.notifications.error("No more room in your hand")
           return;
