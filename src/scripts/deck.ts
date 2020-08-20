@@ -18,11 +18,9 @@ export class Deck{
     if(state == undefined){
       console.log("State undefined")
       let cardEntries = game.folders.get(folderID)['content'].map(el=>el.id);
-      let stateEntries = game.folders.get(folderID)['content'].map(el => el.id);
-      //NORC NOTES: I think cards and state were always the same because they were both set to the reference of cardEntries, not the value. this seems to have fixed it.
-      //May be more elegant way of doing this though.      
-      this._cards = cardEntries;
-      this._state = stateEntries;
+
+      this._cards = duplicate(cardEntries);
+      this._state = duplicate(cardEntries);
       this._discard = [];
       this.updateState().then(()=>{
         console.log(`${folderID} state created!`)

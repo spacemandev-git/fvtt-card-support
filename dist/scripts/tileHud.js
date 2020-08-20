@@ -112,11 +112,10 @@ function deckHUD(deckID, html) {
             let takeDialogTemplate = `
     <h2>How many cards?</h2>
     <input type="number" id="numCards" value=1 style="flex:1"/>
-    `;
-            let infDrawTemplate = `
     <h2>Draw With Replacement?</h2>
-    <h3>If checked, card will be a duplicate and not impact deck state</h3>
-    <input type="checkbox" id="infiniteDraw" />    
+    <h4>
+    If checked, card will be a duplicate and not impact deck state <input type="checkbox" id="infiniteDraw" />
+    </h4>    
     `;
             new Dialog({
                 title: "Take Cards",
