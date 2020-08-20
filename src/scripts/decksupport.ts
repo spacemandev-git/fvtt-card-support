@@ -22,6 +22,15 @@ Hooks.on("ready", async () => {
   //Registers the Decks Object 
   game.decks = new Decks()
   game.decks.init();
+
+  // If 54CardDeck isn't already created, go ahead and create it
+  const sampledeckFolderID = game.folders.find(el => el == "54CardDeck")
+  if(!sampledeckFolderID){
+    console.log("Create Sample Deck")
+    let sampleDeckBlob = await (await fetch('modules/cardsupport/sample/54CardDeck/54CardDeck.zip')).blob()
+    let sampleDeckFile = new File([sampleDeckBlob], '54CardDeck.zip');
+    game.decks.create(sampleDeckFile);
+  }
 })
 
 

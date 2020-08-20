@@ -10,9 +10,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 import { mod_scope } from './constants.js';
 import { cardHotbarSettings } from '../cardhotbar/scripts/card-hotbar-settings.js';
 Hooks.on('renderTileHUD', (tileHUD, html, options) => {
+    //console.log(tileHUD);
+    //console.log(options.flags);
     var _a, _b, _c, _d, _e, _f;
-    console.log(tileHUD);
-    console.log(options.flags);
     if (((_b = (_a = options.flags) === null || _a === void 0 ? void 0 : _a[mod_scope]) === null || _b === void 0 ? void 0 : _b.cardID) != undefined) {
         cardHUD(tileHUD, html);
     }

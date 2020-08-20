@@ -38,8 +38,8 @@ v2
 ######################
 - Infinite Draw (DONE)
 - Take as Copy from View Deck (DONE)
-- Draw to Table
-- Auto Import Standard Deck on Load
+- Draw to Table (DONE)
+- Auto Import Standard Deck on Load (DONE)
 - Video Explanation
 
 - Folder Context Menu

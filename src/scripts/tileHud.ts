@@ -3,8 +3,8 @@ import { Deck } from './deck.js';
 import {cardHotbarSettings} from '../cardhotbar/scripts/card-hotbar-settings.js'
 
 Hooks.on('renderTileHUD', (tileHUD, html, options) => {
-  console.log(tileHUD);
-  console.log(options.flags);
+  //console.log(tileHUD);
+  //console.log(options.flags);
 
   if(options.flags?.[mod_scope]?.cardID != undefined){
     cardHUD(tileHUD, html);
