@@ -36,13 +36,13 @@ v2
 
 
 ######################
-- Infinite Draw
-- Take as Copy from View Deck
-- Folder Context Menu
+- Infinite Draw (DONE)
+- Take as Copy from View Deck (DONE)
 - Draw to Table
 - Auto Import Standard Deck on Load
 - Video Explanation
 
+- Folder Context Menu
 - Register and Call Hooks for Deck Init
 - Deal to Players (Requires Sockets)
 - Card Add GUI

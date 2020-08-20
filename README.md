@@ -30,12 +30,11 @@ Where most of the functions you want are.
 
 Stores three lists: allcards, deck, and discard.
 
+```deck._state``` Returns the current state of the deck. Could be shuffled, missing cards that have been moved to discard, etc
 
-```deck.deck``` Returns the current state of the deck. Could be shuffled, missing cards that have been moved to discard, etc
+```deck._cards``` Returns the list of cards as it was when it was originally created
 
-```deck.allcards``` Returns the list of cards as it was when it was originally created
-
-```deck.discard``` Returns the discard list
+```deck._discard``` Returns the discard list
 
 
 ```deck.drawCard()``` returns the top card on the deck and removes it from deck.deck
@@ -45,6 +44,16 @@ Stores three lists: allcards, deck, and discard.
 ```deck.discardCard(cardID:string)``` puts a card in the discard pile. The card must be part of it's original cards AND not in the current state
 
 ```deck.shuffle()``` Shuffles the current deck.deck 
+
+```deck.infiniteDraw()``` Returns a random card without removing it from the state. 
+
+```deck.getCardData(cardID)``` Returns the json object with the card data. 
+
+``` deck.removeFromState(cardIDs)``` Takes in a list of cardIDs to remove from the state. DOES NOT PLACE THEM IN DISCARD. It sends the cards to /dev/null  
+
+``` deck.removeFromDiscard(cardIDs)``` Takes in a list of cardIDs to remove from the discard. Effitively "burns" the cards
+
+``` deck.addToDeck(cardIDs) ``` TEMPORARILY adds certain cards to the state. These cards are LOST when the deck is reset. 
 
 ```new Deck(folderId)```
 Construstor builds a deck object from a folder full for Journal Entries
