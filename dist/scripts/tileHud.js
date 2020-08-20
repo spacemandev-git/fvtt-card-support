@@ -120,7 +120,7 @@ function deckHUD(deckID, html, td) {
 
       <div style="display:flex; flex-direction:row">
         <h2 style="flex:4"> Draw with Replacement? </h2>
-        <input type="checkbox" id="infinteDraw"  style="flex:1"/>
+        <input type="checkbox" id="infiniteDraw"  style="flex:1"/>
       </div>
       
       <div style="display:flex; flex-direction:row">
@@ -142,13 +142,9 @@ function deckHUD(deckID, html, td) {
                             var _a;
                             let numCards = html.find("#numCards")[0].value;
                             let drawTable = html.find("#drawTable")[0].checked;
-                            console.log("Num Cards: ", numCards);
                             if ((_a = html.find("#infiniteDraw")[0]) === null || _a === void 0 ? void 0 : _a.checked) {
                                 for (let i = 0; i < numCards; i++) {
-                                    if (ui['cardHotbar'].populator.getNextSlot() == -1) {
-                                        ui.notifications.error("No more room in your hand");
-                                        return;
-                                    }
+                                    console.log("I: ", i);
                                     let card = deck.infinteDraw();
                                     if (drawTable) {
                                         let tex = yield loadTexture(game.journal.get(card).data['img']);
@@ -167,7 +163,7 @@ function deckHUD(deckID, html, td) {
                                         });
                                     }
                                     else {
-                                        ui['cardHotbar'].populator.addToHand([card]);
+                                        yield ui['cardHotbar'].populator.addToHand([card]);
                                     }
                                 }
                             }
@@ -191,7 +187,7 @@ function deckHUD(deckID, html, td) {
                                         });
                                     }
                                     else {
-                                        ui['cardHotbar'].populator.addToHand([card]);
+                                        yield ui['cardHotbar'].populator.addToHand([card]);
                                     }
                                 }
                             }

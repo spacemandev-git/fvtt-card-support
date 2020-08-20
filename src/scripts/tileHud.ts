@@ -122,7 +122,7 @@ async function deckHUD(deckID:string, html, td:TileData) {
 
       <div style="display:flex; flex-direction:row">
         <h2 style="flex:4"> Draw with Replacement? </h2>
-        <input type="checkbox" id="infinteDraw"  style="flex:1"/>
+        <input type="checkbox" id="infiniteDraw"  style="flex:1"/>
       </div>
       
       <div style="display:flex; flex-direction:row">
@@ -143,13 +143,9 @@ async function deckHUD(deckID:string, html, td:TileData) {
           callback: async (html:any) => {
             let numCards = html.find("#numCards")[0].value
             let drawTable = html.find("#drawTable")[0].checked
-            console.log("Num Cards: ", numCards)
             if(html.find("#infiniteDraw")[0]?.checked){
-              for(let i=0; i<numCards; i++){
-                if(ui['cardHotbar'].populator.getNextSlot() == -1){
-                  ui.notifications.error("No more room in your hand")
-                  return;
-                }
+              for (let i = 0; i < numCards; i++) {
+                console.log("I: ", i)
                 let card = deck.infinteDraw()
                 if(drawTable){
                   let tex = await loadTexture(game.journal.get(card).data['img'])
@@ -167,7 +163,7 @@ async function deckHUD(deckID:string, html, td:TileData) {
                     }
                   })
                 } else {
-                  ui['cardHotbar'].populator.addToHand([card]);
+                  await ui['cardHotbar'].populator.addToHand([card]);
                 }
               }    
             } else {
@@ -189,7 +185,7 @@ async function deckHUD(deckID:string, html, td:TileData) {
                       }
                     })
                   } else {
-                    ui['cardHotbar'].populator.addToHand([card]);
+                    await ui['cardHotbar'].populator.addToHand([card]);
                   }
                 }
               }

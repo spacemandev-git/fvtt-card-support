@@ -68,7 +68,6 @@ Hooks.on('renderJournalDirectory', (_app, html, _data) => {
 Hooks.on("renderMacroDirectory", (macroDir, html, _options) => {
   macroDir.entities.forEach(el => {
     let flag = el.getFlag(mod_scope, 'cardID');
-    console.log("Flag: ", flag)
     if(flag){
       let id = el.data._id;
       html.find(`li[data-entity-id="${id}"]`).remove();

@@ -103,8 +103,7 @@ export class Deck{
 
   public infinteDraw():string{
     let card = this._state[Math.floor(Math.random() * this._state.length)]
-    console.log(card)
-    return card
+    return card;
   }
 
   /**
