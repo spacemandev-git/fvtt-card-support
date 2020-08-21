@@ -32,3 +32,20 @@ v2
 5. Card Add GUI
 4. Draw to Table (Flipped)
 5. Append Cards to Deck
+
+
+
+######################
+- Infinite Draw (DONE)
+- Take as Copy from View Deck (DONE)
+- Draw to Table (DONE)
+- Auto Import Standard Deck on Load (DONE)
+- Video Explanation
+
+- Folder Context Menu
+- Register and Call Hooks for Deck Init
+- Deal to Players (Requires Sockets)
+- Card Add GUI
+
+######################
+- Actor HUD
