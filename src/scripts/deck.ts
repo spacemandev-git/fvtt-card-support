@@ -100,6 +100,7 @@ export class Deck{
     for ( let c of tileCards ) {
         c.delete();
     }
+    /* Not ready for primetime, commented out for now.
     //delete all macros temporarily created for deck (also removes cards from all players hands)
     let cardMacros = game.macros.filter( macro => {
         let cardID = macro.getFlag("world","cardID");
@@ -112,6 +113,10 @@ export class Deck{
     for ( let m of cardMacros ) {
         m.delete();
     }
+    ui.cardHotbar.populator.compact();
+    //TODO: cleanup ui.cardHotbar.populator.macroMap... the deleted macros/cards are still there "under the hood". Sigh.
+    //write chbSynchWithHand maybe, that will force the c
+    */
       await this.updateState();
       resolve(this._state)
     })
