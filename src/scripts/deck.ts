@@ -7,6 +7,7 @@ export class Deck{
   public _discard: string[] // Discard Pile
   public _state: string[] // Current Cards
   public deckID: string
+  public deckName: string
 
   /**
    * Builds a Deck Object
@@ -90,33 +91,33 @@ export class Deck{
       this._discard = []
       //delete placed cards (swap to token when that change is made)
       let tileCards = canvas.tiles.placeables.filter( tile => {
-        let cardID = tile.getFlag("world","cardID");
+        let cardID = tile.getFlag(mod_scope,"cardID");
         if (cardID) {
-            return game.decks.deckCheck(cardID, this.deckID);
+          return game.decks.deckCheck(cardID, this.deckID);
         } else {
-            return false
+          return false
         }
-    });
-    for ( let c of tileCards ) {
+      });
+      for ( let c of tileCards ) {
         c.delete();
-    }
-    /* Not ready for primetime, commented out for now.
-    //delete all macros temporarily created for deck (also removes cards from all players hands)
-    let cardMacros = game.macros.filter( macro => {
-        let cardID = macro.getFlag("world","cardID");
-        if (cardID) {
-            return game.decks.deckCheck(cardID, this.deckID);
-        } else {
-            return false
-        }
-    });
-    for ( let m of cardMacros ) {
-        m.delete();
-    }
-    ui.cardHotbar.populator.compact();
-    //TODO: cleanup ui.cardHotbar.populator.macroMap... the deleted macros/cards are still there "under the hood". Sigh.
-    //write chbSynchWithHand maybe, that will force the c
-    */
+      }
+      /* Not ready for primetime, commented out for now.
+      //delete all macros temporarily created for deck (also removes cards from all players hands)
+      let cardMacros = game.macros.filter( macro => {
+          let cardID = macro.getFlag("world","cardID");
+          if (cardID) {
+              return game.decks.deckCheck(cardID, this.deckID);
+          } else {
+              return false
+          }
+      });
+      for ( let m of cardMacros ) {
+          m.delete();
+      }
+      ui.cardHotbar.populator.compact();
+      //TODO: cleanup ui.cardHotbar.populator.macroMap... the deleted macros/cards are still there "under the hood". Sigh.
+      //write chbSynchWithHand maybe, that will force the c
+      */
       await this.updateState();
       resolve(this._state)
     })
@@ -208,13 +209,13 @@ export class Decks{
       return Object.fromEntries(Object.entries(this.decks).filter(([key, value]) => dName == deckName 
   }*/
 
-  getByCard(cardId) {
-      //returns the Deck object of the provided cardId
-      return this.decks[ game.journal.get(cardId).folder.id ];
+  public getByCard(cardId) {
+    //returns the Deck object of the provided cardId
+    return this.decks[ game.journal.get(cardId).folder.id ];
   }
 
-  deckCheck(cardId,deckId) {
-      return this.getByCard(cardId).deckID == deckId;
+  public deckCheck(cardId,deckId) {
+    return this.getByCard(cardId).deckID == deckId;
   }
 
   /* Functions to add later deckState doesn't quite work)

@@ -90,17 +90,19 @@ export class Deck {
                 this._state = duplicate(this._cards);
                 this._discard = [];
                 //delete placed cards (swap to token when that change is made)
-                let tileCards = canvas.tiles.placeables.filter( tile => {
-                    let cardID = tile.getFlag("world","cardID");
+                let tileCards = canvas.tiles.placeables.filter(tile => {
+                    let cardID = tile.getFlag(mod_scope, "cardID");
                     if (cardID) {
                         return game.decks.deckCheck(cardID, this.deckID);
-                    } else {
-                        return false
+                    }
+                    else {
+                        return false;
                     }
                 });
-                for ( let c of tileCards ) {
+                for (let c of tileCards) {
                     c.delete();
                 }
+                /* Not ready for primetime, commented out for now.
                 //delete all macros temporarily created for deck (also removes cards from all players hands)
                 let cardMacros = game.macros.filter( macro => {
                     let cardID = macro.getFlag("world","cardID");
@@ -113,7 +115,10 @@ export class Deck {
                 for ( let m of cardMacros ) {
                     m.delete();
                 }
-                console.log ( cardMacros );
+                ui.cardHotbar.populator.compact();
+                //TODO: cleanup ui.cardHotbar.populator.macroMap... the deleted macros/cards are still there "under the hood". Sigh.
+                //write chbSynchWithHand maybe, that will force the c
+                */
                 yield this.updateState();
                 resolve(this._state);
             }));
@@ -195,39 +200,33 @@ export class Decks {
     get(deckId) {
         return this.decks[deckId];
     }
-
     /* want to add this function but I can't quite get there. Something like this maybe?
     getName(dName) {
-        return Object.fromEntries(Object.entries(this.decks).filter(([key, value]) => dName == deckName 
+        return Object.fromEntries(Object.entries(this.decks).filter(([key, value]) => dName == deckName
     }*/
-
     getByCard(cardId) {
         //returns the Deck object of the provided cardId
-        return this.decks[ game.journal.get(cardId).folder.id ];
+        return this.decks[game.journal.get(cardId).folder.id];
     }
-
-    deckCheck(cardId,deckId) {
+    deckCheck(cardId, deckId) {
         return this.getByCard(cardId).deckID == deckId;
     }
-
     /* Functions to add later deckState doesn't quite work)
     deckStateCheck(cardId,deckId) {
         return this.get(deckId)._state.filter(card => {
             card == cardId;
-        }); 
+        });
     }
-
+  
     deckDiscardCheck(cardId,deckId) {
         return this.get(deckId)._state.filter(card => {
             card == cardId;
-        }); 
+        });
     }
-
+  
     deckHandCheck(cardId,deckId) {
         //returns true if the specified card is in the player's hand
     } */
-
-//game.decks.get( game.journal.get("r3trN3L0H8En7ec0").folder.id )
     init() {
         var _a;
         //reads deck states into memory
