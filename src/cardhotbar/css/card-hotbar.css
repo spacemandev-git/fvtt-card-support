@@ -36,7 +36,7 @@
 }
 
 #card-hotbar #card-hotbar-directory-controls a#card-bar-toggle {
-    flex: 0.4;
+    flex: 0.0;
 }
 
 #card-hotbar #card-hotbar-directory-controls div.expanded {
@@ -44,12 +44,25 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-around;
+    justify-content: center;
 }
 
-#card-hotbar #card-hotbar-directory-controls a {
-    flex: 1;
+#card-hotbar #card-hotbar-directory-controls div.vertbar.expanded a {
+    flex: 0.0;
     width: 100%;
+    height: 100%;
+    display: block;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+#card-hotbar #card-hotbar-directory-controls div.expanded a {
+    margin-top: auto;
+    margin-bottom: auto;
 }
 
 #card-hotbar #card-action-bar {
@@ -100,7 +113,6 @@
     margin-top: auto;
     margin-bottom: auto;
     height: 100%;
-    position: relative;
     top: 0px;
     box-shadow: 0px 0 4px black;
     transition: box-shadow .2s .1s, flex .2s, top .2s .1s;

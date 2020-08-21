@@ -1,14 +1,15 @@
 import {mod_scope} from './constants.js';
 import { Deck } from './deck.js';
+import {cardHotbarSettings} from '../cardhotbar/scripts/card-hotbar-settings.js'
 
 Hooks.on('renderTileHUD', (tileHUD, html, options) => {
-  console.log(tileHUD);
-  console.log(options.flags);
+  //console.log(tileHUD);
+  //console.log(options.flags);
 
   if(options.flags?.[mod_scope]?.cardID != undefined){
     cardHUD(tileHUD, html);
   } else if(options.flags?.[mod_scope]?.deckID != undefined){
-    deckHUD(options.flags?.[mod_scope]?.deckID, html);
+    deckHUD(options.flags?.[mod_scope]?.deckID, html, tileHUD.object.data);
   }
 })
 
@@ -77,12 +78,14 @@ async function cardHUD(tileHUD, html) {
     canvas.tiles.get(td._id).delete()
   }
 }
-async function deckHUD(deckID:string, html) {
+
+async function deckHUD(deckID:string, html, td:TileData) {
   // Draw To Hand
     // Draw to Hand Flipped (?)
   const handDiv = $('<i class="control-icon fa fa-hand-paper" aria-hidden="true" title="Draw"></i>')
   html.find(".left").append(handDiv)
-  handDiv.click((ev) => draw())
+  handDiv.click((ev) => draw(td))
+
   // Show Discard
     // Add Discard Back to Deck
   const discardDiv = $('<i class="control-icon fa fa-trash" aria-hidden="true" title="Discard Pile"></i>')
@@ -105,19 +108,31 @@ async function deckHUD(deckID:string, html) {
   let deckName = game.folders.get(deckID).data.name
 
   //Embedded Functions
-  const draw = async () => {
+  const draw = async (td:TileData) => {
     // Ask How many cards they want to draw, default 1
     // Tick Box to Draw to Table
 
     let takeDialogTemplate = `
-    <h2>How many cards?</h2>
-    <input type="number" id="numCards" value=1 style="flex:1"/>
-    `
+    <div style="display:flex; flex-direction:column">
 
-    let infDrawTemplate = `
-    <h2>Draw With Replacement?</h2>
-    <h3>If checked, card will be a duplicate and not impact deck state</h3>
-    <input type="checkbox" id="infiniteDraw" />    
+      <div style="display:flex; flex-direction:row">
+        <h2 style="flex:4"> How many cards? </h2>
+        <input type="number" id="numCards" value=1 style="width:50px"/>
+      </div>
+
+      <div style="display:flex; flex-direction:row">
+        <h2 style="flex:4"> Draw with Replacement? </h2>
+        <input type="checkbox" id="infiniteDraw"  style="flex:1"/>
+      </div>
+      
+      <div style="display:flex; flex-direction:row">
+        <h2 style="flex:4"> Draw to Table? </h2>
+        <input type="checkbox" id="drawTable"  style="flex:1"/>
+      </div>    
+    
+      <input style="display:none" value="${td.x}" id="deckX">
+      <input style="display:none" value="${td.y}" id="deckY">
+    </div>     
     `
     new Dialog({
       title: "Take Cards",
@@ -127,24 +142,53 @@ async function deckHUD(deckID:string, html) {
           label: "Take Cards",
           callback: async (html:any) => {
             let numCards = html.find("#numCards")[0].value
-            console.log("Num Cards: ", numCards)
+            let drawTable = html.find("#drawTable")[0].checked
             if(html.find("#infiniteDraw")[0]?.checked){
-              for(let i=0; i<numCards; i++){
-                if(ui['cardHotbar'].populator.getNextSlot() == -1){
-                  ui.notifications.error("No more room in your hand")
-                  return;
-                }
+              for (let i = 0; i < numCards; i++) {
+                console.log("I: ", i)
                 let card = deck.infinteDraw()
-                ui['cardHotbar'].populator.addToHand([card]);
+                if(drawTable){
+                  let tex = await loadTexture(game.journal.get(card).data['img'])
+                  await Tile.create({
+                    img: game.journal.get(card).data['img'],
+                    x: html.find("#deckX")[0].value,
+                    y: html.find("#deckY")[0].value,
+                    z: 100+i,
+                    width: tex.width * cardHotbarSettings.getCHBCardScale(),
+                    height: tex.height * cardHotbarSettings.getCHBCardScale(),
+                    flags: {
+                      [mod_scope]: {
+                        "cardID": card
+                      }
+                    }
+                  })
+                } else {
+                  await ui['cardHotbar'].populator.addToHand([card]);
+                }
               }    
             } else {
-                let cards = [];
                 for (let i = 0; i < numCards; i++) {
-                  //error checking done in populator
-                  cards.push( await deck.drawCard() );
+                  let card = await deck.drawCard();
+                  if(drawTable){
+                    let tex = await loadTexture(game.journal.get(card).data['img'])
+                    await Tile.create({
+                      img: game.journal.get(card).data['img'],
+                      x: html.find("#deckX")[0].value,
+                      y: html.find("#deckY")[0].value,
+                      z: 100+i,
+                      width: tex.width * cardHotbarSettings.getCHBCardScale(),
+                      height: tex.height * cardHotbarSettings.getCHBCardScale(),
+                      flags: {
+                        [mod_scope]: {
+                          "cardID": card
+                        }
+                      }
+                    })
+                  } else {
+                    await ui['cardHotbar'].populator.addToHand([card]);
+                  }
                 }
-                ui['cardHotbar'].populator.addToHand(cards);
-            }
+              }
             }
           }
         }
@@ -262,6 +306,7 @@ class DiscardPile extends FormApplication {
 
     // Take
     for(let card of this.pile){
+      //TAKE
       html.find(`#${card._id}-take`).click(() => {
         if(ui['cardHotbar'].populator.getNextSlot() == -1){
           ui.notifications.error("No more room in your hand")
@@ -272,27 +317,33 @@ class DiscardPile extends FormApplication {
         this.pile = this.pile.filter(el=>{return el._id != card._id})
         this.render(true);
       })
-    }
 
-    // Burn
-    for(let card of this.pile){
+      //TAKE COPY
+      html.find(`#${card._id}-takecopy`).click(() => {
+        if(ui['cardHotbar'].populator.getNextSlot() == -1){
+          ui.notifications.error("No more room in your hand")
+          return;
+        }
+        ui['cardHotbar'].populator.addToHand([card]);
+        this.close();
+      })
+
+      //BURN
       html.find(`#${card._id}-burn`).click(() => {
         (<Deck>game.decks.get(this.deck.deckID)).removeFromDiscard([card._id]);
         ui.notifications.info(`${card._id} was removed from discard!`)
         this.pile = this.pile.filter(el=>{return el._id != card._id})
         this.render(true);
       })
-    }
 
-    // Top Of Deck
-    for(let card of this.pile){
+      //Return to Top of Deck
       html.find(`#${card._id}-topdeck`).click(() => {
         (<Deck>game.decks.get(this.deck.deckID)).addToDeck([card._id]);
         (<Deck>game.decks.get(this.deck.deckID)).removeFromDiscard([card._id]);
         this.pile = this.pile.filter(el=>{return el._id != card._id})
         this.render(true);
       })
-    }
+    }  
   }
 }
 
@@ -340,6 +391,15 @@ class ViewPile extends FormApplication {
         }
         ui['cardHotbar'].populator.addToHand([card]);
         (<Deck>game.decks.get(this.deckID)).removeFromState([card]);
+        this.close();
+      })
+
+      html.find(`#${card}-takecopy`).click(() => {
+        if(ui['cardHotbar'].populator.getNextSlot() == -1){
+          ui.notifications.error("No more room in your hand")
+          return;
+        }
+        ui['cardHotbar'].populator.addToHand([card]);
         this.close();
       })
     }

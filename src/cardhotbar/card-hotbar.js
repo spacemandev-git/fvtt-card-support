@@ -289,7 +289,7 @@ export class cardHotbar extends Hotbar {
           const macro = game.macros.get(li.data("macro-id"));
           const index = li.data("slot");
           try{
-            const mCardId = macro.getFlag("world","cardId");
+            const mCardId = macro.getFlag("world","cardID");
             const mDeck = game.decks.get( game.journal.get(mCardId).data.folder);
             //console.debug("Card Hotbar | Discarding card (macro, slot, deck)...");
             //console.debug(macro);
@@ -313,7 +313,7 @@ export class cardHotbar extends Hotbar {
           return macro ? macro.owner : false;
         },
         callback: li => {
-          const journal = game.journal.get ( game.macros.get( li.data("macro-id") ).getFlag("world","cardId") );
+          const journal = game.journal.get ( game.macros.get( li.data("macro-id") ).getFlag("world","cardID") );
           console.debug("Card Hotbar | Revealing card to all players...");
           //console.debug( game.macros.get( li.data("macro-id") ) );
           journal.show("image", true);
@@ -336,6 +336,7 @@ export class cardHotbar extends Hotbar {
           //code to switch decks here
         }
       },
+      /* not used currently
       {
         name: "Draw Multiple",
         icon: '<i class="fas fa-plus-square"></i>',
@@ -363,6 +364,7 @@ export class cardHotbar extends Hotbar {
           }
         }
       },
+      */
     ]);
   }
 
@@ -375,6 +377,7 @@ export class cardHotbar extends Hotbar {
   activateListeners(html) {
     super.activateListeners(html);
     html.find('#card-bar-toggle').click(this._onToggleBar.bind(this));
+    html.find('#chbDiscardAll').click(this.populator.discardHand.bind(this));
     //    Disable pages for now, will just work with first page.
     //    html.find(".page-control").click(this._onClickPageControl.bind(this));
   }
