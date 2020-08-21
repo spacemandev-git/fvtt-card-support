@@ -15,15 +15,13 @@ export class Deck {
      */
     constructor(folderID) {
         this.deckID = game.folders.get(folderID)._id;
+        this.deckName = game.folders.get(folderID).name;
         let state = game.folders.get(folderID).getFlag(mod_scope, 'deckState');
         if (state == undefined) {
             console.log("State undefined");
-            //NORC NOTES: I think cards and state were always the same because they were both set to the reference of cardEntries, not the value. this seems to have fixed it.
-            //May be more elegant way of doing this though.
             let cardEntries = game.folders.get(folderID)['content'].map(el => el.id);
-            let stateEntries = game.folders.get(folderID)['content'].map(el => el.id);
-            this._cards = cardEntries;
-            this._state = stateEntries;
+            this._cards = duplicate(cardEntries);
+            this._state = duplicate(cardEntries);
             this._discard = [];
             this.updateState().then(() => {
                 console.log(`${folderID} state created!`);
@@ -91,6 +89,31 @@ export class Deck {
             return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
                 this._state = duplicate(this._cards);
                 this._discard = [];
+                //delete placed cards (swap to token when that change is made)
+                let tileCards = canvas.tiles.placeables.filter( tile => {
+                    let cardID = tile.getFlag("world","cardID");
+                    if (cardID) {
+                        return game.decks.deckCheck(cardID, this.deckID);
+                    } else {
+                        return false
+                    }
+                });
+                for ( let c of tileCards ) {
+                    c.delete();
+                }
+                //delete all macros temporarily created for deck (also removes cards from all players hands)
+                let cardMacros = game.macros.filter( macro => {
+                    let cardID = macro.getFlag("world","cardID");
+                    if (cardID) {
+                        return game.decks.deckCheck(cardID, this.deckID);
+                    } else {
+                        return false
+                    }
+                });
+                for ( let m of cardMacros ) {
+                    m.delete();
+                }
+                console.log ( cardMacros );
                 yield this.updateState();
                 resolve(this._state);
             }));
@@ -108,7 +131,6 @@ export class Deck {
     }
     infinteDraw() {
         let card = this._state[Math.floor(Math.random() * this._state.length)];
-        console.log(card);
         return card;
     }
     /**
@@ -173,6 +195,39 @@ export class Decks {
     get(deckId) {
         return this.decks[deckId];
     }
+
+    /* want to add this function but I can't quite get there. Something like this maybe?
+    getName(dName) {
+        return Object.fromEntries(Object.entries(this.decks).filter(([key, value]) => dName == deckName 
+    }*/
+
+    getByCard(cardId) {
+        //returns the Deck object of the provided cardId
+        return this.decks[ game.journal.get(cardId).folder.id ];
+    }
+
+    deckCheck(cardId,deckId) {
+        return this.getByCard(cardId).deckID == deckId;
+    }
+
+    /* Functions to add later deckState doesn't quite work)
+    deckStateCheck(cardId,deckId) {
+        return this.get(deckId)._state.filter(card => {
+            card == cardId;
+        }); 
+    }
+
+    deckDiscardCheck(cardId,deckId) {
+        return this.get(deckId)._state.filter(card => {
+            card == cardId;
+        }); 
+    }
+
+    deckHandCheck(cardId,deckId) {
+        //returns true if the specified card is in the player's hand
+    } */
+
+//game.decks.get( game.journal.get("r3trN3L0H8En7ec0").folder.id )
     init() {
         var _a;
         //reads deck states into memory

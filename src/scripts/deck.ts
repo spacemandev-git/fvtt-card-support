@@ -14,6 +14,7 @@ export class Deck{
    */
   constructor(folderID:string){
     this.deckID = game.folders.get(folderID)._id
+    this.deckName = game.folders.get(folderID).name
     let state = game.folders.get(folderID).getFlag(mod_scope, 'deckState')
     if(state == undefined){
       console.log("State undefined")
@@ -89,6 +90,30 @@ export class Deck{
     return new Promise(async (resolve, reject)=>{
       this._state = duplicate(this._cards)
       this._discard = []
+      //delete placed cards (swap to token when that change is made)
+      let tileCards = canvas.tiles.placeables.filter( tile => {
+        let cardID = tile.getFlag("world","cardID");
+        if (cardID) {
+            return game.decks.deckCheck(cardID, this.deckID);
+        } else {
+            return false
+        }
+    });
+    for ( let c of tileCards ) {
+        c.delete();
+    }
+    //delete all macros temporarily created for deck (also removes cards from all players hands)
+    let cardMacros = game.macros.filter( macro => {
+        let cardID = macro.getFlag("world","cardID");
+        if (cardID) {
+            return game.decks.deckCheck(cardID, this.deckID);
+        } else {
+            return false
+        }
+    });
+    for ( let m of cardMacros ) {
+        m.delete();
+    }
       await this.updateState();
       resolve(this._state)
     })
@@ -175,6 +200,37 @@ export class Decks{
   public get(deckId:string){
     return this.decks[deckId]
   }
+
+  /* want to add this function but I can't quite get there. Something like this maybe?
+  getName(dName) {
+      return Object.fromEntries(Object.entries(this.decks).filter(([key, value]) => dName == deckName 
+  }*/
+
+  getByCard(cardId) {
+      //returns the Deck object of the provided cardId
+      return this.decks[ game.journal.get(cardId).folder.id ];
+  }
+
+  deckCheck(cardId,deckId) {
+      return this.getByCard(cardId).deckID == deckId;
+  }
+
+  /* Functions to add later deckState doesn't quite work)
+  deckStateCheck(cardId,deckId) {
+      return this.get(deckId)._state.filter(card => {
+          card == cardId;
+      }); 
+  }
+
+  deckDiscardCheck(cardId,deckId) {
+      return this.get(deckId)._state.filter(card => {
+          card == cardId;
+      }); 
+  }
+
+  deckHandCheck(cardId,deckId) {
+      //returns true if the specified card is in the player's hand
+  } */
 
   public init(){
     //reads deck states into memory
