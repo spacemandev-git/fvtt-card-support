@@ -188,9 +188,22 @@ export class Deck {
      * Adds Cards to the temporary deck state. Reset() will wipe them out
      * @param cardIDs
      */
-    addToDeck(cardIDs) {
+    addToDeckState(cardIDs) {
         return __awaiter(this, void 0, void 0, function* () {
             cardIDs.forEach(el => this._state.push(el));
+            yield this.updateState();
+        });
+    }
+    /**
+     * Adds Cards to the permanent deck state. Will also push it to the state
+     * @param cardIDs
+     */
+    addToDeckCards(cardIDs) {
+        return __awaiter(this, void 0, void 0, function* () {
+            cardIDs.forEach(el => {
+                this._state.push(el);
+                this._cards.push(el);
+            });
             yield this.updateState();
         });
     }
@@ -353,6 +366,38 @@ export class Decks {
             }
             this.decks[deckfolderId] = new Deck(deckfolderId);
             resolve();
+        }));
+    }
+    /**
+     * Creates and appends a card to the given deck
+     * @param deckID The ID of the deck
+     * @param cardFront The File representing the front of the card
+     * @param cardBack The File representing the back of the card
+     * @param cardData The yaml corresponding to the data for the card
+     */
+    createCard(deckID, cardFront, cardBack, cardData) {
+        return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
+            if (game.folders.get(deckID) == undefined ||
+                game.folders.get(deckID).getFlag(mod_scope, "deckState") == undefined) {
+                reject("Deck doesn't exist!");
+            }
+            let target = `Decks/${deckID}/`;
+            yield uploadFile(target, cardFront);
+            yield uploadFile(target, cardBack);
+            let cardEntry = yield JournalEntry.create({
+                name: cardFront.name.split(".")[0],
+                folder: deckID,
+                img: target + cardFront.name,
+                flags: {
+                    [mod_scope]: {
+                        cardData: jsyaml.safeLoad(cardData),
+                        cardBack: target + cardBack.name,
+                        cardMacros: {}
+                    }
+                }
+            });
+            yield game.decks.get(deckID).addToDeckCards([cardEntry._id]);
+            resolve(cardEntry.id);
         }));
     }
 }

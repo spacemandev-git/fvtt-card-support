@@ -210,7 +210,7 @@ class DiscardPile extends FormApplication {
             html.find("#shuffleBack").click(() => {
                 let cardIds = this.pile.map(el => el._id);
                 console.log(cardIds);
-                game.decks.get(this.deck.deckID).addToDeck(cardIds);
+                game.decks.get(this.deck.deckID).addToDeckState(cardIds);
                 game.decks.get(this.deck.deckID).removeFromDiscard(cardIds);
                 game.decks.get(this.deck.deckID).shuffle();
                 this.pile = [];
@@ -247,7 +247,7 @@ class DiscardPile extends FormApplication {
                 });
                 //Return to Top of Deck
                 html.find(`#${card._id}-topdeck`).click(() => {
-                    game.decks.get(this.deck.deckID).addToDeck([card._id]);
+                    game.decks.get(this.deck.deckID).addToDeckState([card._id]);
                     game.decks.get(this.deck.deckID).removeFromDiscard([card._id]);
                     this.pile = this.pile.filter(el => { return el._id != card._id; });
                     this.render(true);

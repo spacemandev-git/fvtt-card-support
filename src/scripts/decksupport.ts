@@ -103,11 +103,36 @@ Hooks.on('renderJournalDirectory', (_app, html, _data) => {
         },
         append: {
           label: game.i18n.localize("DECK.APPEND_CARD"),
-          callback: async () => {}
-        },
-        edit: {
-          label: game.i18n.localize("DECK.EDIT_CARD"),
-          callback: async () => {}
+          callback: async () => {
+            let deckList = ""
+            for(let key of Object.keys(game.decks.decks)){
+              deckList += `<option value=${key}>${game.folders.get(key).name}</option>`
+            }
+            const appendDialog = `
+              <h2>${game.i18n.localize("DECK.APPEND_CARD")}</h2>
+              <select id="deck">${deckList}</select>
+              <p>Card Img:  <input id="img"  type="file" /></p>
+              <p>Card Back: <input id="back" type="file" /></p>
+              <p>Data:      <textarea id="data" type="text" style="height:200px; overflow-y:scroll"></textarea></p>
+            `
+            new Dialog({
+              title: game.i18n.localize("DECK.APPEND_CARD"),
+              content: appendDialog,
+              buttons: {
+                append: {
+                  label: game.i18n.localize("DECK.APPEND_CARD"),
+                  callback: async (html:any) => {
+                    await game.decks.createCard(
+                      html.find("#deck")[0].value,
+                      html.find("#img")[0].files[0],
+                      html.find("#back")[0].files[0],
+                      html.find("#data")[0].value
+                    )
+                  }
+                }
+              }
+            }).render(true)
+          }
         }, 
         convertToRollTable: {
           label: game.i18n.localize("DECK.CONVERT_ROLLTABLE"),

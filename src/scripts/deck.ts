@@ -188,8 +188,20 @@ export class Deck{
    * Adds Cards to the temporary deck state. Reset() will wipe them out
    * @param cardIDs 
    */
-  public async addToDeck(cardIDs:string[]){
+  public async addToDeckState(cardIDs:string[]){
     cardIDs.forEach(el=>this._state.push(el))
+    await this.updateState()
+  }
+  
+  /**
+   * Adds Cards to the permanent deck state. Will also push it to the state
+   * @param cardIDs 
+   */
+  public async addToDeckCards(cardIDs:string[]){
+    cardIDs.forEach(el=> {
+      this._state.push(el)
+      this._cards.push(el)
+    })
     await this.updateState()
   }
 }
@@ -370,8 +382,44 @@ export class Decks{
       resolve();
     })
   }
-}
 
+  /**
+   * Creates and appends a card to the given deck
+   * @param deckID The ID of the deck
+   * @param cardFront The File representing the front of the card
+   * @param cardBack The File representing the back of the card
+   * @param cardData The yaml corresponding to the data for the card 
+   */
+  public createCard(deckID:string, cardFront:File, cardBack: File, cardData:string){
+    return new Promise( async (resolve, reject) => {
+      if(
+      game.folders.get(deckID) == undefined || 
+      game.folders.get(deckID).getFlag(mod_scope, "deckState") == undefined){
+        reject("Deck doesn't exist!")
+      }
+
+      let target = `Decks/${deckID}/`
+      await uploadFile(target, cardFront);
+      await uploadFile(target, cardBack);
+
+      let cardEntry = await JournalEntry.create({
+        name: cardFront.name.split(".")[0],
+        folder: deckID,
+        img: target+cardFront.name,
+        flags: {
+          [mod_scope]: {
+            cardData: jsyaml.safeLoad(cardData),
+            cardBack: target+cardBack.name,
+            cardMacros: {}
+          }
+        }
+      })
+
+      await game.decks.get(deckID).addToDeckCards([cardEntry._id])
+      resolve(cardEntry.id)
+    })
+  }
+}
 
 /**
  * 
