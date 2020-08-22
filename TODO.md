@@ -40,12 +40,14 @@ v2
 - Take as Copy from View Deck (DONE)
 - Draw to Table (DONE)
 - Auto Import Standard Deck on Load (DONE)
-- Video Explanation
+- Video Explanation (DONE)
 
-- Folder Context Menu
 - Register and Call Hooks for Deck Init
 - Deal to Players (Requires Sockets)
 - Card Add GUI
 
 ######################
-- Actor HUD
+- Change Decks &  Tiles to Actors instead of Tiles
+- Add a way to import cards from folder of images
+- Add a GUI to append to a Deck
+- Discard to bottom of Deck

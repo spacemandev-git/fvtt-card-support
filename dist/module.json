@@ -12,6 +12,7 @@
   "esmodules": [
     "./scripts/decksupport.js", 
     "./scripts/tileHud.js",
+    "./scripts/tokenHUD.js",
     "./scripts/drop.js",
     "./lib/js-yaml.js", 
     "./lib/jszip.js",
