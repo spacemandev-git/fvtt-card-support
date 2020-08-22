@@ -1,6 +1,7 @@
 /// <reference types="js-yaml" />
 import {Card} from './card'
 import {mod_scope} from './constants.js';
+import { file } from 'jszip';
 
 export class Deck{
   public _cards: string[] // All Cards
@@ -323,7 +324,54 @@ export class Decks{
       resolve(deckfolderId);      
     })
   }
+
+  /**
+   * #param files A list of img files
+   */
+  public createByImages(deckName:string, files:File[]):Promise<string>{
+    return new Promise(async (resolve, reject) => {
+      //If DeckFolder doesn't exist create it
+      let DecksFolderID = game.folders.find(el=>el.name == "Decks")?.id
+      if(!DecksFolderID){
+        DecksFolderID = await Folder.create({name: "Decks", type:"JournalEntry", parent: null})
+      }
+
+      //Create a JournalEntry Folder and File Upload Folder for the Deck
+      let deckfolderId = (await Folder.create({name: deckName, type:"JournalEntry", parent: DecksFolderID})).id
+      let src = "data";
+      //@ts-ignore
+      if(typeof ForgeVtt != "undefined" && ForgeVTT.usingTheForge){
+        src = "forgevtt"
+      }
+      let target = `Decks/${deckfolderId}/`
+      let result = await FilePicker.browse(src, target)
+      if(result.target != target){
+        await FilePicker.createDirectory(src, target, {});
+      }
+
+      //Make Cards
+      for(let cardFile of files){
+        await uploadFile(target, cardFile);
+        await JournalEntry.create({
+          name: cardFile.name.split(".")[0],
+          folder: deckfolderId,
+          img: target+cardFile.name,
+          flags: {
+            [mod_scope]: {
+              cardData: {},
+              cardBack: 'modules/cardsupport/assets/gray_back.png',
+              cardMacros: {}
+            }
+          }
+        })
+      }
+
+      this.decks[deckfolderId] = new Deck(deckfolderId);
+      resolve();
+    })
+  }
 }
+
 
 /**
  * 

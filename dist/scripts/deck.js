@@ -312,6 +312,49 @@ export class Decks {
             resolve(deckfolderId);
         }));
     }
+    /**
+     * #param files A list of img files
+     */
+    createByImages(deckName, files) {
+        return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
+            var _a;
+            //If DeckFolder doesn't exist create it
+            let DecksFolderID = (_a = game.folders.find(el => el.name == "Decks")) === null || _a === void 0 ? void 0 : _a.id;
+            if (!DecksFolderID) {
+                DecksFolderID = yield Folder.create({ name: "Decks", type: "JournalEntry", parent: null });
+            }
+            //Create a JournalEntry Folder and File Upload Folder for the Deck
+            let deckfolderId = (yield Folder.create({ name: deckName, type: "JournalEntry", parent: DecksFolderID })).id;
+            let src = "data";
+            //@ts-ignore
+            if (typeof ForgeVtt != "undefined" && ForgeVTT.usingTheForge) {
+                src = "forgevtt";
+            }
+            let target = `Decks/${deckfolderId}/`;
+            let result = yield FilePicker.browse(src, target);
+            if (result.target != target) {
+                yield FilePicker.createDirectory(src, target, {});
+            }
+            //Make Cards
+            for (let cardFile of files) {
+                yield uploadFile(target, cardFile);
+                yield JournalEntry.create({
+                    name: cardFile.name.split(".")[0],
+                    folder: deckfolderId,
+                    img: target + cardFile.name,
+                    flags: {
+                        [mod_scope]: {
+                            cardData: {},
+                            cardBack: 'modules/cardsupport/assets/gray_back.png',
+                            cardMacros: {}
+                        }
+                    }
+                });
+            }
+            this.decks[deckfolderId] = new Deck(deckfolderId);
+            resolve();
+        }));
+    }
 }
 /**
  *

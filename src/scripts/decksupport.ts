@@ -54,7 +54,7 @@ Hooks.on('renderJournalDirectory', (_app, html, _data) => {
       buttons: {
         sdf: {
           label: game.i18n.localize("DECK.IMPORT_SDF"),
-          callback: async (html) => {
+          callback: async () => {
             const sdfImportDialog = `
             <div class="form-group" style="display:flex; flex-direction:column">
               <h1 style="flex:2">${game.i18n.localize("DECK.IMPORT_SDF")}</1>
@@ -80,11 +80,38 @@ Hooks.on('renderJournalDirectory', (_app, html, _data) => {
         },
         images: {
           label: game.i18n.localize("DECK.IMPORT_IMAGES"),
-          callback: async (html) => {}
+          callback: async () => {
+            let imagesDialog = `
+              <h2> ${game.i18n.localize("DECK.IMPORT_IMAGES")} </h2>
+              <p> Deck Name:   <input id="deckName" type="text" value="Deck Name"/></p>
+              <p> Card Images: <input id="cardFiles" type="file" multiple="multiple" /> </p>
+            `
+            new Dialog({
+              title: game.i18n.localize("DECK.IMPORT_IMAGES"),
+              content: imagesDialog,
+              buttons: {
+                import: {
+                  label: game.i18n.localize("DECK.IMPORT_IMAGES"),
+                  callback: async (html:any) => {
+                    game.decks.createByImages(html.find("#deckName")[0].value, html.find("#cardFiles")[0].files)
+                  }
+                }
+              }
+            }).render(true)
+
+          }
         },
         append: {
           label: game.i18n.localize("DECK.APPEND_CARD"),
-          callback: async (html) => {}
+          callback: async () => {}
+        },
+        edit: {
+          label: game.i18n.localize("DECK.EDIT_CARD"),
+          callback: async () => {}
+        }, 
+        convertToRollTable: {
+          label: game.i18n.localize("DECK.CONVERT_ROLLTABLE"),
+          callback: async () => {}
         }
       }
     }).render(true)

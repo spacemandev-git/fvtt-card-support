@@ -6,7 +6,8 @@
   "DECK.IMPORT_SDF": "Import SDF",
   "DECK.IMPORT_IMAGES": "Import Images",
   "DECK.APPEND_CARD": "Append Card",
-
+  "DECK.EDIT_CARD": "Edit Card",
+  "DECK.CONVERT_ROLLTABLE": "Convert Deck to RollTable",
 
   "CARD.modname": "Card Support (Unofficial)",
   "CARD.mod": "cardsupport",

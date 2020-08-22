@@ -46,34 +46,6 @@ Hooks.on("renderMacroDirectory", (macroDir, html, _options) => {
     });
 });
 Hooks.on('renderJournalDirectory', (_app, html, _data) => {
-    return;
-    const deckImportButton = $(`<button class="importButton">${game.i18n.localize("DECK.Import_Button")}</button>`);
-    html.find(".directory-footer").append(deckImportButton);
-    const deckImportDialog = `
-  <div class="form-group" style="display:flex; flex-direction:column">
-    <h1 style="flex:2">${game.i18n.localize("DECK.Dialog_Title")}</1>
-    <input id="file" type="file" />  
-  </div>
-  `;
-    deckImportButton.click((ev) => {
-        new Dialog({
-            title: game.i18n.localize("DECK.Dialog_Title"),
-            content: deckImportDialog,
-            buttons: {
-                ok: {
-                    label: game.i18n.localize("DECK.Import_Button"),
-                    callback: (form) => __awaiter(void 0, void 0, void 0, function* () {
-                        game.decks.create($(form).find('#file')[0]['files'][0]);
-                    })
-                },
-                cancel: {
-                    label: game.i18n.localize("DECK.Cancel")
-                }
-            }
-        }).render(true);
-    });
-});
-Hooks.on('renderJournalDirectory', (_app, html, _data) => {
     const deckImportButton = $(`<button class="importButton">${game.i18n.localize("DECK.Import_Button")}</button>`);
     html.find(".directory-footer").append(deckImportButton);
     deckImportButton.click(ev => {
@@ -83,7 +55,7 @@ Hooks.on('renderJournalDirectory', (_app, html, _data) => {
             buttons: {
                 sdf: {
                     label: game.i18n.localize("DECK.IMPORT_SDF"),
-                    callback: (html) => __awaiter(void 0, void 0, void 0, function* () {
+                    callback: () => __awaiter(void 0, void 0, void 0, function* () {
                         const sdfImportDialog = `
             <div class="form-group" style="display:flex; flex-direction:column">
               <h1 style="flex:2">${game.i18n.localize("DECK.IMPORT_SDF")}</1>
@@ -109,11 +81,37 @@ Hooks.on('renderJournalDirectory', (_app, html, _data) => {
                 },
                 images: {
                     label: game.i18n.localize("DECK.IMPORT_IMAGES"),
-                    callback: (html) => __awaiter(void 0, void 0, void 0, function* () { })
+                    callback: () => __awaiter(void 0, void 0, void 0, function* () {
+                        let imagesDialog = `
+              <h2> ${game.i18n.localize("DECK.IMPORT_IMAGES")} </h2>
+              <p> Deck Name:   <input id="deckName" type="text" value="Deck Name"/></p>
+              <p> Card Images: <input id="cardFiles" type="file" multiple="multiple" /> </p>
+            `;
+                        new Dialog({
+                            title: game.i18n.localize("DECK.IMPORT_IMAGES"),
+                            content: imagesDialog,
+                            buttons: {
+                                import: {
+                                    label: game.i18n.localize("DECK.IMPORT_IMAGES"),
+                                    callback: (html) => __awaiter(void 0, void 0, void 0, function* () {
+                                        game.decks.createByImages(html.find("#deckName")[0].value, html.find("#cardFiles")[0].files);
+                                    })
+                                }
+                            }
+                        }).render(true);
+                    })
                 },
                 append: {
                     label: game.i18n.localize("DECK.APPEND_CARD"),
-                    callback: (html) => __awaiter(void 0, void 0, void 0, function* () { })
+                    callback: () => __awaiter(void 0, void 0, void 0, function* () { })
+                },
+                edit: {
+                    label: game.i18n.localize("DECK.EDIT_CARD"),
+                    callback: () => __awaiter(void 0, void 0, void 0, function* () { })
+                },
+                convertToRollTable: {
+                    label: game.i18n.localize("DECK.CONVERT_ROLLTABLE"),
+                    callback: () => __awaiter(void 0, void 0, void 0, function* () { })
                 }
             }
         }).render(true);
