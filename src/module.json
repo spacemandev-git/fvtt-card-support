@@ -14,6 +14,7 @@
     "./scripts/tileHud.js",
     "./scripts/tokenHUD.js",
     "./scripts/drop.js",
+    "./scripts/socketListener.js",
     "./lib/js-yaml.js", 
     "./lib/jszip.js",
     "./cardhotbar/index.js" 
@@ -29,5 +30,6 @@
       "name": "English",
       "path": "lang/en.json"
     }
-  ]
+  ],
+  "socket": true
 }

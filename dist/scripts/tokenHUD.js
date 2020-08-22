@@ -44,6 +44,9 @@ function deckHUD(td, html) {
         const viewDiv = $('<i class="control-icon fa fa-eye" aria-hidden="true" title="View Deck"></i>');
         html.find(".right").append(viewDiv);
         viewDiv.click(ev => viewDeck());
+        const dealDiv = $('<i class="control-icon icon-deal" title="Deal to players"></i>');
+        html.find(".left").append(dealDiv);
+        dealDiv.click(ev => dealCards());
         let deck = game.decks.get(deckID);
         let deckName = game.folders.get(deckID).data.name;
         //Embedded Functions
@@ -172,6 +175,62 @@ function deckHUD(td, html) {
                                 deckID: deck.deckID,
                                 viewNum: html.find("#cardNum")[0].value
                             }, {}).render(true);
+                        })
+                    }
+                }
+            }).render(true);
+        });
+        const dealCards = () => __awaiter(this, void 0, void 0, function* () {
+            let players = "";
+            //@ts-ignore
+            for (let user of game.users.entries) {
+                if (user.isSelf == false) {
+                    players += `<option value=${user.id}>${user.name}</option>`;
+                }
+            }
+            let dealCardsDialog = `
+    <h2> Deal Cards To Player </h2>
+    <div style="display:flex; flex-direction:column">
+      <p style="display:flex"> 
+       <span style="flex:2"> Player: </span> 
+       <select id="player" style="flex:1">${players}</select> 
+      <p>
+      <p  style="display:flex"> 
+        <span style="flex:2"> Cards: </span>
+        <input id="numCards" type="number" style="width:50px; flex:1" value=1 /> 
+      </p>
+      <p style="display:flex"> 
+        <span style="flex:2"> Deal with Replacement? </span> 
+        <input id="infinite" type="checkbox" style="flex:1"/> 
+      </p>
+    <div>
+      `;
+            new Dialog({
+                title: "Deal Cards to Player",
+                content: dealCardsDialog,
+                buttons: {
+                    deal: {
+                        label: "Deal",
+                        callback: (html) => __awaiter(this, void 0, void 0, function* () {
+                            let _cardIDs = [];
+                            for (let i = 0; i < html.find("#numCards")[0].value; i++) {
+                                if (html.find("#infinite")[0].checked) {
+                                    _cardIDs.push(deck.infinteDraw());
+                                }
+                                else {
+                                    _cardIDs.push(yield deck.drawCard());
+                                }
+                            }
+                            let socketMsg = {
+                                type: "DEAL",
+                                deck: deck.deckName,
+                                from: game.user.id,
+                                to: html.find("#player")[0].value,
+                                cardIDs: _cardIDs
+                            };
+                            //@ts-ignore
+                            game.socket.emit('module.cardsupport', socketMsg);
+                            console.log("emitting msg: ", socketMsg);
                         })
                     }
                 }
