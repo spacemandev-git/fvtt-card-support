@@ -1,10 +1,13 @@
 {
-  "DECK.Import_Button": "SDF Import",
-  "DECK.Dialog_Title": "Select a SDF Zip file",
+  "DECK.Import_Button": "Deck Import",
+  "DECK.Dialog_Title": "Deck Import",
   "DECK.Cancel": "Cancel",
   "DECK.ERROR": "Something broke! Check Console for more information.",
-
-
+  "DECK.IMPORT_SDF": "Import SDF",
+  "DECK.IMPORT_IMAGES": "Import Images",
+  "DECK.APPEND_CARD": "Append Card",
+  "DECK.EDIT_CARD": "Edit Card",
+  "DECK.CONVERT_ROLLTABLE": "Convert Deck to RollTable",
 
   "CARD.modname": "Card Support (Unofficial)",
   "CARD.mod": "cardsupport",

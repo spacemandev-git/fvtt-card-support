@@ -1,12 +1,14 @@
 /// <reference types="js-yaml" />
 import {Card} from './card'
 import {mod_scope} from './constants.js';
+import { file } from 'jszip';
 
 export class Deck{
   public _cards: string[] // All Cards
   public _discard: string[] // Discard Pile
   public _state: string[] // Current Cards
   public deckID: string
+  public deckName: string
 
   /**
    * Builds a Deck Object
@@ -90,33 +92,33 @@ export class Deck{
       this._discard = []
       //delete placed cards (swap to token when that change is made)
       let tileCards = canvas.tiles.placeables.filter( tile => {
-        let cardID = tile.getFlag("world","cardID");
+        let cardID = tile.getFlag(mod_scope,"cardID");
         if (cardID) {
-            return game.decks.deckCheck(cardID, this.deckID);
+          return game.decks.deckCheck(cardID, this.deckID);
         } else {
-            return false
+          return false
         }
-    });
-    for ( let c of tileCards ) {
+      });
+      for ( let c of tileCards ) {
         c.delete();
-    }
-    /* Not ready for primetime, commented out for now.
-    //delete all macros temporarily created for deck (also removes cards from all players hands)
-    let cardMacros = game.macros.filter( macro => {
-        let cardID = macro.getFlag("world","cardID");
-        if (cardID) {
-            return game.decks.deckCheck(cardID, this.deckID);
-        } else {
-            return false
-        }
-    });
-    for ( let m of cardMacros ) {
-        m.delete();
-    }
-    ui.cardHotbar.populator.compact();
-    //TODO: cleanup ui.cardHotbar.populator.macroMap... the deleted macros/cards are still there "under the hood". Sigh.
-    //write chbSynchWithHand maybe, that will force the c
-    */
+      }
+      /* Not ready for primetime, commented out for now.
+      //delete all macros temporarily created for deck (also removes cards from all players hands)
+      let cardMacros = game.macros.filter( macro => {
+          let cardID = macro.getFlag("world","cardID");
+          if (cardID) {
+              return game.decks.deckCheck(cardID, this.deckID);
+          } else {
+              return false
+          }
+      });
+      for ( let m of cardMacros ) {
+          m.delete();
+      }
+      ui.cardHotbar.populator.compact();
+      //TODO: cleanup ui.cardHotbar.populator.macroMap... the deleted macros/cards are still there "under the hood". Sigh.
+      //write chbSynchWithHand maybe, that will force the c
+      */
       await this.updateState();
       resolve(this._state)
     })
@@ -186,8 +188,20 @@ export class Deck{
    * Adds Cards to the temporary deck state. Reset() will wipe them out
    * @param cardIDs 
    */
-  public async addToDeck(cardIDs:string[]){
+  public async addToDeckState(cardIDs:string[]){
     cardIDs.forEach(el=>this._state.push(el))
+    await this.updateState()
+  }
+  
+  /**
+   * Adds Cards to the permanent deck state. Will also push it to the state
+   * @param cardIDs 
+   */
+  public async addToDeckCards(cardIDs:string[]){
+    cardIDs.forEach(el=> {
+      this._state.push(el)
+      this._cards.push(el)
+    })
     await this.updateState()
   }
 }
@@ -208,13 +222,13 @@ export class Decks{
       return Object.fromEntries(Object.entries(this.decks).filter(([key, value]) => dName == deckName 
   }*/
 
-  getByCard(cardId) {
-      //returns the Deck object of the provided cardId
-      return this.decks[ game.journal.get(cardId).folder.id ];
+  public getByCard(cardId) {
+    //returns the Deck object of the provided cardId
+    return this.decks[ game.journal.get(cardId).folder.id ];
   }
 
-  deckCheck(cardId,deckId) {
-      return this.getByCard(cardId).deckID == deckId;
+  public deckCheck(cardId,deckId) {
+    return this.getByCard(cardId).deckID == deckId;
   }
 
   /* Functions to add later deckState doesn't quite work)
@@ -320,6 +334,89 @@ export class Decks{
 
       this.decks[deckfolderId] = new Deck(deckfolderId)
       resolve(deckfolderId);      
+    })
+  }
+
+  /**
+   * #param files A list of img files
+   */
+  public createByImages(deckName:string, files:File[]):Promise<string>{
+    return new Promise(async (resolve, reject) => {
+      //If DeckFolder doesn't exist create it
+      let DecksFolderID = game.folders.find(el=>el.name == "Decks")?.id
+      if(!DecksFolderID){
+        DecksFolderID = await Folder.create({name: "Decks", type:"JournalEntry", parent: null})
+      }
+
+      //Create a JournalEntry Folder and File Upload Folder for the Deck
+      let deckfolderId = (await Folder.create({name: deckName, type:"JournalEntry", parent: DecksFolderID})).id
+      let src = "data";
+      //@ts-ignore
+      if(typeof ForgeVtt != "undefined" && ForgeVTT.usingTheForge){
+        src = "forgevtt"
+      }
+      let target = `Decks/${deckfolderId}/`
+      let result = await FilePicker.browse(src, target)
+      if(result.target != target){
+        await FilePicker.createDirectory(src, target, {});
+      }
+
+      //Make Cards
+      for(let cardFile of files){
+        await uploadFile(target, cardFile);
+        await JournalEntry.create({
+          name: cardFile.name.split(".")[0],
+          folder: deckfolderId,
+          img: target+cardFile.name,
+          flags: {
+            [mod_scope]: {
+              cardData: {},
+              cardBack: 'modules/cardsupport/assets/gray_back.png',
+              cardMacros: {}
+            }
+          }
+        })
+      }
+
+      this.decks[deckfolderId] = new Deck(deckfolderId);
+      resolve();
+    })
+  }
+
+  /**
+   * Creates and appends a card to the given deck
+   * @param deckID The ID of the deck
+   * @param cardFront The File representing the front of the card
+   * @param cardBack The File representing the back of the card
+   * @param cardData The yaml corresponding to the data for the card 
+   */
+  public createCard(deckID:string, cardFront:File, cardBack: File, cardData:string){
+    return new Promise( async (resolve, reject) => {
+      if(
+      game.folders.get(deckID) == undefined || 
+      game.folders.get(deckID).getFlag(mod_scope, "deckState") == undefined){
+        reject("Deck doesn't exist!")
+      }
+
+      let target = `Decks/${deckID}/`
+      await uploadFile(target, cardFront);
+      await uploadFile(target, cardBack);
+
+      let cardEntry = await JournalEntry.create({
+        name: cardFront.name.split(".")[0],
+        folder: deckID,
+        img: target+cardFront.name,
+        flags: {
+          [mod_scope]: {
+            cardData: jsyaml.safeLoad(cardData),
+            cardBack: target+cardBack.name,
+            cardMacros: {}
+          }
+        }
+      })
+
+      await game.decks.get(deckID).addToDeckCards([cardEntry._id])
+      resolve(cardEntry.id)
     })
   }
 }

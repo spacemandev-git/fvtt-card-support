@@ -90,17 +90,19 @@ export class Deck {
                 this._state = duplicate(this._cards);
                 this._discard = [];
                 //delete placed cards (swap to token when that change is made)
-                let tileCards = canvas.tiles.placeables.filter( tile => {
-                    let cardID = tile.getFlag("world","cardID");
+                let tileCards = canvas.tiles.placeables.filter(tile => {
+                    let cardID = tile.getFlag(mod_scope, "cardID");
                     if (cardID) {
                         return game.decks.deckCheck(cardID, this.deckID);
-                    } else {
-                        return false
+                    }
+                    else {
+                        return false;
                     }
                 });
-                for ( let c of tileCards ) {
+                for (let c of tileCards) {
                     c.delete();
                 }
+                /* Not ready for primetime, commented out for now.
                 //delete all macros temporarily created for deck (also removes cards from all players hands)
                 let cardMacros = game.macros.filter( macro => {
                     let cardID = macro.getFlag("world","cardID");
@@ -113,7 +115,10 @@ export class Deck {
                 for ( let m of cardMacros ) {
                     m.delete();
                 }
-                console.log ( cardMacros );
+                ui.cardHotbar.populator.compact();
+                //TODO: cleanup ui.cardHotbar.populator.macroMap... the deleted macros/cards are still there "under the hood". Sigh.
+                //write chbSynchWithHand maybe, that will force the c
+                */
                 yield this.updateState();
                 resolve(this._state);
             }));
@@ -183,9 +188,22 @@ export class Deck {
      * Adds Cards to the temporary deck state. Reset() will wipe them out
      * @param cardIDs
      */
-    addToDeck(cardIDs) {
+    addToDeckState(cardIDs) {
         return __awaiter(this, void 0, void 0, function* () {
             cardIDs.forEach(el => this._state.push(el));
+            yield this.updateState();
+        });
+    }
+    /**
+     * Adds Cards to the permanent deck state. Will also push it to the state
+     * @param cardIDs
+     */
+    addToDeckCards(cardIDs) {
+        return __awaiter(this, void 0, void 0, function* () {
+            cardIDs.forEach(el => {
+                this._state.push(el);
+                this._cards.push(el);
+            });
             yield this.updateState();
         });
     }
@@ -195,39 +213,33 @@ export class Decks {
     get(deckId) {
         return this.decks[deckId];
     }
-
     /* want to add this function but I can't quite get there. Something like this maybe?
     getName(dName) {
-        return Object.fromEntries(Object.entries(this.decks).filter(([key, value]) => dName == deckName 
+        return Object.fromEntries(Object.entries(this.decks).filter(([key, value]) => dName == deckName
     }*/
-
     getByCard(cardId) {
         //returns the Deck object of the provided cardId
-        return this.decks[ game.journal.get(cardId).folder.id ];
+        return this.decks[game.journal.get(cardId).folder.id];
     }
-
-    deckCheck(cardId,deckId) {
+    deckCheck(cardId, deckId) {
         return this.getByCard(cardId).deckID == deckId;
     }
-
     /* Functions to add later deckState doesn't quite work)
     deckStateCheck(cardId,deckId) {
         return this.get(deckId)._state.filter(card => {
             card == cardId;
-        }); 
+        });
     }
-
+  
     deckDiscardCheck(cardId,deckId) {
         return this.get(deckId)._state.filter(card => {
             card == cardId;
-        }); 
+        });
     }
-
+  
     deckHandCheck(cardId,deckId) {
         //returns true if the specified card is in the player's hand
     } */
-
-//game.decks.get( game.journal.get("r3trN3L0H8En7ec0").folder.id )
     init() {
         var _a;
         //reads deck states into memory
@@ -311,6 +323,81 @@ export class Decks {
             }
             this.decks[deckfolderId] = new Deck(deckfolderId);
             resolve(deckfolderId);
+        }));
+    }
+    /**
+     * #param files A list of img files
+     */
+    createByImages(deckName, files) {
+        return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
+            var _a;
+            //If DeckFolder doesn't exist create it
+            let DecksFolderID = (_a = game.folders.find(el => el.name == "Decks")) === null || _a === void 0 ? void 0 : _a.id;
+            if (!DecksFolderID) {
+                DecksFolderID = yield Folder.create({ name: "Decks", type: "JournalEntry", parent: null });
+            }
+            //Create a JournalEntry Folder and File Upload Folder for the Deck
+            let deckfolderId = (yield Folder.create({ name: deckName, type: "JournalEntry", parent: DecksFolderID })).id;
+            let src = "data";
+            //@ts-ignore
+            if (typeof ForgeVtt != "undefined" && ForgeVTT.usingTheForge) {
+                src = "forgevtt";
+            }
+            let target = `Decks/${deckfolderId}/`;
+            let result = yield FilePicker.browse(src, target);
+            if (result.target != target) {
+                yield FilePicker.createDirectory(src, target, {});
+            }
+            //Make Cards
+            for (let cardFile of files) {
+                yield uploadFile(target, cardFile);
+                yield JournalEntry.create({
+                    name: cardFile.name.split(".")[0],
+                    folder: deckfolderId,
+                    img: target + cardFile.name,
+                    flags: {
+                        [mod_scope]: {
+                            cardData: {},
+                            cardBack: 'modules/cardsupport/assets/gray_back.png',
+                            cardMacros: {}
+                        }
+                    }
+                });
+            }
+            this.decks[deckfolderId] = new Deck(deckfolderId);
+            resolve();
+        }));
+    }
+    /**
+     * Creates and appends a card to the given deck
+     * @param deckID The ID of the deck
+     * @param cardFront The File representing the front of the card
+     * @param cardBack The File representing the back of the card
+     * @param cardData The yaml corresponding to the data for the card
+     */
+    createCard(deckID, cardFront, cardBack, cardData) {
+        return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
+            if (game.folders.get(deckID) == undefined ||
+                game.folders.get(deckID).getFlag(mod_scope, "deckState") == undefined) {
+                reject("Deck doesn't exist!");
+            }
+            let target = `Decks/${deckID}/`;
+            yield uploadFile(target, cardFront);
+            yield uploadFile(target, cardBack);
+            let cardEntry = yield JournalEntry.create({
+                name: cardFront.name.split(".")[0],
+                folder: deckID,
+                img: target + cardFront.name,
+                flags: {
+                    [mod_scope]: {
+                        cardData: jsyaml.safeLoad(cardData),
+                        cardBack: target + cardBack.name,
+                        cardMacros: {}
+                    }
+                }
+            });
+            yield game.decks.get(deckID).addToDeckCards([cardEntry._id]);
+            resolve(cardEntry.id);
         }));
     }
 }
