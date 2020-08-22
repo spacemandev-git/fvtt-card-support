@@ -48,6 +48,6 @@ v2
 
 ######################
 - Change Decks &  Tiles to Actors instead of Tiles (DONE)
-- Add a way to import cards from folder of images
-- Add a GUI to append to a Deck
+- Add a way to import cards from folder of images (DONE)
+- Add a GUI to append to a Deck (DONE)
 - Discard to bottom of Deck

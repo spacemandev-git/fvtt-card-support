@@ -1,3 +1,6 @@
+1.2.1
+- Added the ability to pick a card back when importing a deck by images
+
 1.2.0
 - Changed the Deck Import button to allow for importing decks from a folder of images, appending a card to an existing deck, and for converting a deck into a rolltable
 - Changed the Deck to be a Token instead of a Tile so you can better configure permissions for players to interact with decks

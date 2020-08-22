@@ -328,7 +328,7 @@ export class Decks {
     /**
      * #param files A list of img files
      */
-    createByImages(deckName, files) {
+    createByImages(deckName, files, cardBack) {
         return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
             var _a;
             //If DeckFolder doesn't exist create it
@@ -348,6 +348,8 @@ export class Decks {
             if (result.target != target) {
                 yield FilePicker.createDirectory(src, target, {});
             }
+            //uplaod CardBack
+            yield uploadFile(target, cardBack);
             //Make Cards
             for (let cardFile of files) {
                 yield uploadFile(target, cardFile);
@@ -358,7 +360,7 @@ export class Decks {
                     flags: {
                         [mod_scope]: {
                             cardData: {},
-                            cardBack: 'modules/cardsupport/assets/gray_back.png',
+                            cardBack: target + cardBack.name,
                             cardMacros: {}
                         }
                     }

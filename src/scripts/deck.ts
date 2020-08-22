@@ -340,7 +340,7 @@ export class Decks{
   /**
    * #param files A list of img files
    */
-  public createByImages(deckName:string, files:File[]):Promise<string>{
+  public createByImages(deckName:string, files:File[], cardBack: File):Promise<string>{
     return new Promise(async (resolve, reject) => {
       //If DeckFolder doesn't exist create it
       let DecksFolderID = game.folders.find(el=>el.name == "Decks")?.id
@@ -361,6 +361,9 @@ export class Decks{
         await FilePicker.createDirectory(src, target, {});
       }
 
+      //uplaod CardBack
+      await uploadFile(target, cardBack)
+
       //Make Cards
       for(let cardFile of files){
         await uploadFile(target, cardFile);
@@ -371,7 +374,7 @@ export class Decks{
           flags: {
             [mod_scope]: {
               cardData: {},
-              cardBack: 'modules/cardsupport/assets/gray_back.png',
+              cardBack: target+cardBack.name,
               cardMacros: {}
             }
           }

@@ -85,6 +85,7 @@ Hooks.on('renderJournalDirectory', (_app, html, _data) => {
               <h2> ${game.i18n.localize("DECK.IMPORT_IMAGES")} </h2>
               <p> Deck Name:   <input id="deckName" type="text" value="Deck Name"/></p>
               <p> Card Images: <input id="cardFiles" type="file" multiple="multiple" /> </p>
+              <p> Card Back:   <input id="cardBack" type="file" /> </p>
             `
             new Dialog({
               title: game.i18n.localize("DECK.IMPORT_IMAGES"),
@@ -93,7 +94,7 @@ Hooks.on('renderJournalDirectory', (_app, html, _data) => {
                 import: {
                   label: game.i18n.localize("DECK.IMPORT_IMAGES"),
                   callback: async (html:any) => {
-                    game.decks.createByImages(html.find("#deckName")[0].value, html.find("#cardFiles")[0].files)
+                    game.decks.createByImages(html.find("#deckName")[0].value, html.find("#cardFiles")[0].files, html.find("#cardBack")[0].files[0])
                   }
                 }
               }
