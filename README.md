@@ -53,7 +53,10 @@ Stores three lists: allcards, deck, and discard.
 
 ``` deck.removeFromDiscard(cardIDs)``` Takes in a list of cardIDs to remove from the discard. Effitively "burns" the cards
 
-``` deck.addToDeck(cardIDs) ``` TEMPORARILY adds certain cards to the state. These cards are LOST when the deck is reset. 
+``` deck.addToDeckState(cardIDs) ``` TEMPORARILY adds certain cards to the state. These cards are LOST when the deck is reset. 
+
+``` deck.addToDeckCards(cardIDs) ``` Permanently adds cards to the deck. These remain after a reset. Used for appending cards. 
+
 
 ```new Deck(folderId)```
 Construstor builds a deck object from a folder full for Journal Entries
