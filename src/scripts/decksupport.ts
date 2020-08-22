@@ -33,38 +33,6 @@ Hooks.on("ready", async () => {
   }
 })
 
-
-Hooks.on('renderJournalDirectory', (_app, html, _data) => {
-  const deckImportButton = $(`<button class="importButton">${game.i18n.localize("DECK.Import_Button")}</button>`);
-  html.find(".directory-footer").append(deckImportButton);
-
-  const deckImportDialog = `
-  <div class="form-group" style="display:flex; flex-direction:column">
-    <h1 style="flex:2">${game.i18n.localize("DECK.Dialog_Title")}</1>
-    <input id="file" type="file" />  
-  </div>
-  `
-  
-  deckImportButton.click( (ev) => {
-    new Dialog({
-      title: game.i18n.localize("DECK.Dialog_Title"),
-      content: deckImportDialog,
-      buttons: {
-        ok: {
-          label: game.i18n.localize("DECK.Import_Button"),
-          callback: async (form) => {
-            game.decks.create($(form).find('#file')[0]['files'][0])
-          }
-        }, 
-        cancel: {
-          label: game.i18n.localize("DECK.Cancel")
-        }
-      }
-    }).render(true)
-  })
-})
-
-
 Hooks.on("renderMacroDirectory", (macroDir, html, _options) => {
   macroDir.entities.forEach(el => {
     let flag = el.getFlag(mod_scope, 'cardID');
@@ -73,4 +41,52 @@ Hooks.on("renderMacroDirectory", (macroDir, html, _options) => {
       html.find(`li[data-entity-id="${id}"]`).remove();
     }
   });
+})
+
+Hooks.on('renderJournalDirectory', (_app, html, _data) => {
+  const deckImportButton = $(`<button class="importButton">${game.i18n.localize("DECK.Import_Button")}</button>`);
+  html.find(".directory-footer").append(deckImportButton);
+
+  deckImportButton.click(ev => {
+    new Dialog({
+      title: game.i18n.localize("DECK.Dialog_Title"),
+      content: "",
+      buttons: {
+        sdf: {
+          label: game.i18n.localize("DECK.IMPORT_SDF"),
+          callback: async (html) => {
+            const sdfImportDialog = `
+            <div class="form-group" style="display:flex; flex-direction:column">
+              <h1 style="flex:2">${game.i18n.localize("DECK.IMPORT_SDF")}</1>
+              <input id="file" type="file" />  
+            </div>
+            `
+            new Dialog({
+              title: game.i18n.localize("DECK.Dialog_Title"),
+              content: sdfImportDialog,
+              buttons: {
+                ok: {
+                  label: game.i18n.localize("DECK.Import_Button"),
+                  callback: async (form) => {
+                    game.decks.create($(form).find('#file')[0]['files'][0])
+                  }
+                }, 
+                cancel: {
+                  label: game.i18n.localize("DECK.Cancel")
+                }
+              }
+            }).render(true)
+          }
+        },
+        images: {
+          label: game.i18n.localize("DECK.IMPORT_IMAGES"),
+          callback: async (html) => {}
+        },
+        append: {
+          label: game.i18n.localize("DECK.APPEND_CARD"),
+          callback: async (html) => {}
+        }
+      }
+    }).render(true)
+  })
 })

@@ -36,7 +36,17 @@ Hooks.on("ready", () => __awaiter(void 0, void 0, void 0, function* () {
         game.decks.create(sampleDeckFile);
     }
 }));
+Hooks.on("renderMacroDirectory", (macroDir, html, _options) => {
+    macroDir.entities.forEach(el => {
+        let flag = el.getFlag(mod_scope, 'cardID');
+        if (flag) {
+            let id = el.data._id;
+            html.find(`li[data-entity-id="${id}"]`).remove();
+        }
+    });
+});
 Hooks.on('renderJournalDirectory', (_app, html, _data) => {
+    return;
     const deckImportButton = $(`<button class="importButton">${game.i18n.localize("DECK.Import_Button")}</button>`);
     html.find(".directory-footer").append(deckImportButton);
     const deckImportDialog = `
@@ -63,12 +73,49 @@ Hooks.on('renderJournalDirectory', (_app, html, _data) => {
         }).render(true);
     });
 });
-Hooks.on("renderMacroDirectory", (macroDir, html, _options) => {
-    macroDir.entities.forEach(el => {
-        let flag = el.getFlag(mod_scope, 'cardID');
-        if (flag) {
-            let id = el.data._id;
-            html.find(`li[data-entity-id="${id}"]`).remove();
-        }
+Hooks.on('renderJournalDirectory', (_app, html, _data) => {
+    const deckImportButton = $(`<button class="importButton">${game.i18n.localize("DECK.Import_Button")}</button>`);
+    html.find(".directory-footer").append(deckImportButton);
+    deckImportButton.click(ev => {
+        new Dialog({
+            title: game.i18n.localize("DECK.Dialog_Title"),
+            content: "",
+            buttons: {
+                sdf: {
+                    label: game.i18n.localize("DECK.IMPORT_SDF"),
+                    callback: (html) => __awaiter(void 0, void 0, void 0, function* () {
+                        const sdfImportDialog = `
+            <div class="form-group" style="display:flex; flex-direction:column">
+              <h1 style="flex:2">${game.i18n.localize("DECK.IMPORT_SDF")}</1>
+              <input id="file" type="file" />  
+            </div>
+            `;
+                        new Dialog({
+                            title: game.i18n.localize("DECK.Dialog_Title"),
+                            content: sdfImportDialog,
+                            buttons: {
+                                ok: {
+                                    label: game.i18n.localize("DECK.Import_Button"),
+                                    callback: (form) => __awaiter(void 0, void 0, void 0, function* () {
+                                        game.decks.create($(form).find('#file')[0]['files'][0]);
+                                    })
+                                },
+                                cancel: {
+                                    label: game.i18n.localize("DECK.Cancel")
+                                }
+                            }
+                        }).render(true);
+                    })
+                },
+                images: {
+                    label: game.i18n.localize("DECK.IMPORT_IMAGES"),
+                    callback: (html) => __awaiter(void 0, void 0, void 0, function* () { })
+                },
+                append: {
+                    label: game.i18n.localize("DECK.APPEND_CARD"),
+                    callback: (html) => __awaiter(void 0, void 0, void 0, function* () { })
+                }
+            }
+        }).render(true);
     });
 });
