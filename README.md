@@ -7,6 +7,8 @@
 ![Create New Deck Tile](https://media.giphy.com/media/dax0A0WNPhxlhfm36N/giphy.gif)
 4. Macros, systems, and modules can also interact with decks through the Card API
 
+Video (version 1.1.0): https://youtu.be/qmxG8AaufXA
+
 ## API
 At a high level, this module abuses the setFlag() and getFlag() operators on folders and journal entries to store card objects. 
 
