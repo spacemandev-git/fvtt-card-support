@@ -111,9 +111,49 @@ Hooks.on('renderJournalDirectory', (_app, html, _data) => {
         }, 
         convertToRollTable: {
           label: game.i18n.localize("DECK.CONVERT_ROLLTABLE"),
-          callback: async () => {}
+          callback: async () => {
+            let deckList = ""
+            for(let key of Object.keys(game.decks.decks)){
+              deckList += `<option value=${key}>${game.folders.get(key).name}</option>`
+            }
+
+            let rollTableDialog = `
+            <h2>${game.i18n.localize('DECK.CONVERT_ROLLTABLE')}</h2>
+            <select id="deck">${deckList}</select>
+            `
+            new Dialog({
+              title: game.i18n.localize('DECK.CONVERT_ROLLTABLE'),
+              content: rollTableDialog,
+              buttons: {
+                convert: {
+                  label: game.i18n.localize("DECK.CONVERT_ROLLTABLE"),
+                  callback: async (html:any) => {
+                    let tableEntries = []
+                    let journalEntries = game.folders.get(html.find('#deck')[0].value)['content']
+                    for(let i = 0; i < journalEntries.length; i++){
+                      tableEntries[i] = {
+                        type: 1, // Entity
+                        collection: "JournalEntry",
+                        text: journalEntries[i].data.name,
+                        img: journalEntries[i].data.img,
+                        range: [i+1, i+1]                        
+                      }
+                    }
+
+                    let rTable = RollTable.create({
+                      name: game.folders.get(html.find('#deck')[0].value).name,
+                      results: tableEntries,
+                      formula: `1d${tableEntries.length}`
+                    })
+                  }
+                }
+              }
+            }).render(true)
+          }
         }
       }
+    }, {
+      id: "importDialog"
     }).render(true)
   })
 })
