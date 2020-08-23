@@ -239,22 +239,6 @@ async function deckHUD(td:TokenData, html) {
 }
 
 
-interface TokenData {
-  name: string,
-  flags: {
-    [scope:string]: any
-  }, 
-  height: number,
-  hidden: boolean,
-  img: string,
-  locaked: boolean,
-  rotation: number,
-  scale: number,
-  width: number,
-  x: number, 
-  y: number,
-  _id: string
-}
 
 
 class DiscardPile extends FormApplication {
@@ -401,4 +385,22 @@ class ViewPile extends FormApplication {
       })
     }
   }
+}
+
+
+interface TokenData {
+  name: string,
+  flags: {
+    [scope:string]: any
+  }, 
+  height: number,
+  hidden: boolean,
+  img: string,
+  locaked: boolean,
+  rotation: number,
+  scale: number,
+  width: number,
+  x: number, 
+  y: number,
+  _id: string
 }

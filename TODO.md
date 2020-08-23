@@ -52,6 +52,7 @@ v2
 - Add a GUI to append to a Deck (DONE)
 
 #######################
+- Deck as Tile
 - Deal to Players / Draw For Players
 - Give to Player
 - Folder Context Menu
