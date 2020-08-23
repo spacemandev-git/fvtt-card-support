@@ -100,7 +100,7 @@ export class Deck{
           return false;
         }
       }).map(t => t.data._id);
-      yield canvas.scene.deleteEmbeddedEntity("Tile", tileCards);
+      await canvas.scene.deleteEmbeddedEntity("Tile", tileCards);
       /* Not ready for primetime, commented out for now.
       //delete all macros temporarily created for deck (also removes cards from all players hands)
       let cardMacros = game.macros.filter( macro => {
