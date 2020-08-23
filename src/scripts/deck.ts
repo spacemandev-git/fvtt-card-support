@@ -90,18 +90,17 @@ export class Deck{
     return new Promise(async (resolve, reject)=>{
       this._state = duplicate(this._cards)
       this._discard = []
-      //delete placed cards (swap to token when that change is made)
-      let tileCards = canvas.tiles.placeables.filter( tile => {
-        let cardID = tile.getFlag(mod_scope,"cardID");
-        if (cardID) {
-          return game.decks.deckCheck(cardID, this.deckID);
-        } else {
-          return false
+      //delete placed cards
+      let tileCards = canvas.tiles.placeables.filter(tile => {
+        let cardId = tile.getFlag(mod_scope, "cardID");
+        if (cardId) {
+          return game.decks.deckCheck(cardId, this.deckID);
         }
-      });
-      for ( let c of tileCards ) {
-        c.delete();
-      }
+        else {
+          return false;
+        }
+      }).map(t => t.data._id);
+      yield canvas.scene.deleteEmbeddedEntity("Tile", tileCards);
       /* Not ready for primetime, commented out for now.
       //delete all macros temporarily created for deck (also removes cards from all players hands)
       let cardMacros = game.macros.filter( macro => {

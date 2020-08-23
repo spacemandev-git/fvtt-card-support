@@ -111,16 +111,16 @@ export class cardHotbarPopulator {
                     callback: dlg => {
                         ui.notifications.notify("Discarding entire hand");
                         console.debug("Card Hotbar | discarding entire hand");
-                        try {
+                        ///try {
                             for (let mId of ui.cardHotbar.populator.macroMap) {
                                 const m = game.macros.get(mId);
-                                console.debug(m)
+                                console.debug(+m)
                                 if ( m ) {
                                     const mCardId = m.getFlag("world","cardID");
                                     console.debug(mCardId);
                                     if ( mCardId ) {
                                         const mDeck = game.decks.getByCard( mCardId );
-                                        ui.console.debug(mDeck);
+                                        console.debug(mDeck);
                                         if (mDeck) {
                                             //console.debug("Card Hotbar | Discarding card (macro, deck)...");
                                             //console.debug(m);
@@ -131,11 +131,11 @@ export class cardHotbarPopulator {
                                     m.delete();
                                 }
                             }  
-                        } catch (error) {
-                            const msg = "Issue found with hand data, resetting hand to solve it...";                           
-                            console.debug("Card Hotbar | " + msg);
-                            ui.notifications.notify(msg);
-                        }
+                        //} catch (error) {
+                            //const msg = "Issue found with hand data, resetting hand to try solve it...";                           
+                            //console.debug("Card Hotbar | " + msg);
+                            //ui.notifications.notify(msg);
+                        //}
                         ui.cardHotbar.populator.chbResetMacros();
                     }
                 },
