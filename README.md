@@ -7,6 +7,8 @@
 ![Create New Deck Tile](https://media.giphy.com/media/dax0A0WNPhxlhfm36N/giphy.gif)
 4. Macros, systems, and modules can also interact with decks through the Card API
 
+Video (version 1.1.0): https://youtu.be/qmxG8AaufXA
+
 ## API
 At a high level, this module abuses the setFlag() and getFlag() operators on folders and journal entries to store card objects. 
 
@@ -53,7 +55,10 @@ Stores three lists: allcards, deck, and discard.
 
 ``` deck.removeFromDiscard(cardIDs)``` Takes in a list of cardIDs to remove from the discard. Effitively "burns" the cards
 
-``` deck.addToDeck(cardIDs) ``` TEMPORARILY adds certain cards to the state. These cards are LOST when the deck is reset. 
+``` deck.addToDeckState(cardIDs) ``` TEMPORARILY adds certain cards to the state. These cards are LOST when the deck is reset. 
+
+``` deck.addToDeckCards(cardIDs) ``` Permanently adds cards to the deck. These remain after a reset. Used for appending cards. 
+
 
 ```new Deck(folderId)```
 Construstor builds a deck object from a folder full for Journal Entries

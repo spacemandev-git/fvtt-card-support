@@ -41,3 +41,7 @@
 #discardfooter button{
   height: max(50px);
 }
+
+#importDialog .dialog-buttons{ 
+  flex-direction: column;
+}
