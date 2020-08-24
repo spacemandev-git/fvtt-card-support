@@ -1,10 +1,20 @@
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 Hooks.on("ready", () => {
     //@ts-ignore
-    game.socket.on('module.cardsupport', data => {
-        let msg = data;
-        if (msg.type == "DEAL") {
-            ui.notifications.info(`${game.users.get(msg.from).name} delt you ${msg.cardIDs.length} from ${msg.deck} deck.`);
-            ui['cardHotbar'].populator.addToHand(msg.cardIDs);
+    game.socket.on('module.cardsupport', (data) => __awaiter(void 0, void 0, void 0, function* () {
+        if (data.playerID != game.user.id) {
+            return;
         }
-    });
+        if ((data === null || data === void 0 ? void 0 : data.type) == "DEAL") {
+            ui['cardHotbar'].populator.addToPlayerHand(data.cards);
+        }
+    }));
 });

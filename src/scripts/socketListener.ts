@@ -1,12 +1,16 @@
-import {SocketMessage} from './constants.js';
-
 Hooks.on("ready", () => {
   //@ts-ignore
-  game.socket.on('module.cardsupport', data => {
-    let msg:SocketMessage = data;
-    if(msg.type == "DEAL"){
-      ui.notifications.info(`${game.users.get(msg.from).name} delt you ${msg.cardIDs.length} from ${msg.deck} deck.`)
-      ui['cardHotbar'].populator.addToHand(msg.cardIDs)
+  game.socket.on('module.cardsupport', async (data:any) => {
+    if(data.playerID != game.user.id){return;}
+    if(data?.type == "DEAL"){
+      ui['cardHotbar'].populator.addToPlayerHand(data.cards);
     }
   })  
 })
+
+
+export interface MSG_DEAL {
+  type: "DEAL", 
+  cards: JournalEntry[],
+  playerID: string
+}
