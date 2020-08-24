@@ -14,6 +14,24 @@ Hooks.on('renderTokenHUD', (tokenHUD, html, options) => {
   } 
 })
 
+
+interface TokenData {
+  name: string,
+  flags: {
+    [scope:string]: any
+  }, 
+  height: number,
+  hidden: boolean,
+  img: string,
+  locaked: boolean,
+  rotation: number,
+  scale: number,
+  width: number,
+  x: number, 
+  y: number,
+  _id: string
+}
+
 async function deckHUD(td:TokenData, html) {
   const deckID = td.flags[mod_scope]['deckID'];
 
@@ -236,24 +254,6 @@ async function deckHUD(td:TokenData, html) {
       }
     }).render(true)
   }
-}
-
-
-interface TokenData {
-  name: string,
-  flags: {
-    [scope:string]: any
-  }, 
-  height: number,
-  hidden: boolean,
-  img: string,
-  locaked: boolean,
-  rotation: number,
-  scale: number,
-  width: number,
-  x: number, 
-  y: number,
-  _id: string
 }
 
 

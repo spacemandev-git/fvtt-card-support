@@ -1,7 +1,7 @@
 /// <reference types="js-yaml" />
 import {Card} from './card'
 import {mod_scope} from './constants.js';
-import { file } from 'jszip';
+import * as MSGTYPES from './socketListener.js';
 
 export class Deck{
   public _cards: string[] // All Cards
@@ -202,6 +202,40 @@ export class Deck{
       this._cards.push(el)
     })
     await this.updateState()
+  }
+
+  /**
+   * Deals cards to players. GM only.
+   * @param playerID the player ID to deal cards too
+   * @param numCards number of cards to deal
+   * @param replacement if you want to deal with replacement or not
+   */
+  public async dealToPlayer(playerID:string, numCards:number, replacement:boolean = false){
+    return new Promise(async (resolve, reject) => {
+      if(game.users.get(playerID) == undefined){reject("Player not found.")}
+      if(!game.user.isGM){reject("Only GMs can deal to players");}
+
+      let cards:JournalEntry[] = [];
+      for(let i=0; i<numCards; i++){
+        if(replacement){
+          cards.push(game.journal.get(this.infinteDraw()))
+        } else {
+          cards.push(game.journal.get(await this.drawCard()))
+        }
+      }
+
+      if(game.user.id == playerID){
+        ui['cardHotbar'].populator.addToPlayerHand(cards)
+      } else {
+        let msg:MSGTYPES.MSG_DEAL = {
+          type: "DEAL",
+          playerID: playerID,
+          cards: cards
+        }
+        //@ts-ignore
+        game.socket.emit('module.cardsupport', msg)
+      }
+    })
   }
 }
 

@@ -205,6 +205,45 @@ export class Deck {
             yield this.updateState();
         });
     }
+    /**
+     * Deals cards to players. GM only.
+     * @param playerID the player ID to deal cards too
+     * @param numCards number of cards to deal
+     * @param replacement if you want to deal with replacement or not
+     */
+    dealToPlayer(playerID, numCards, replacement = false) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
+                if (game.users.get(playerID) == undefined) {
+                    reject("Player not found.");
+                }
+                if (!game.user.isGM) {
+                    reject("Only GMs can deal to players");
+                }
+                let cards = [];
+                for (let i = 0; i < numCards; i++) {
+                    if (replacement) {
+                        cards.push(game.journal.get(this.infinteDraw()));
+                    }
+                    else {
+                        cards.push(game.journal.get(yield this.drawCard()));
+                    }
+                }
+                if (game.user.id == playerID) {
+                    ui['cardHotbar'].populator.addToPlayerHand(cards);
+                }
+                else {
+                    let msg = {
+                        type: "DEAL",
+                        playerID: playerID,
+                        cards: cards
+                    };
+                    //@ts-ignore
+                    game.socket.emit('module.cardsupport', msg);
+                }
+            }));
+        });
+    }
 }
 export class Decks {
     constructor() { }

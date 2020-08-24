@@ -7,6 +7,79 @@ export class cardHotbarPopulator {
         console.debug(this.macroMap);
     }
 
+    
+    /**
+     * 
+     * @param card type: JournalEntry[]
+     * 
+     */
+    async addToPlayerHand(cards){
+        return new Promise(async (resolve, reject) => {
+            let sideUp = "front";
+            if(game.user.getFlag('cardsupport', 'chbDrawFaceUp')){
+                sideUp = game.user.getFlag('cardsupport', 'chbDrawFaceUp') == true ? "front" : "back"
+            } else {
+                sideUp = game.settings.get("cardsupport", "chbDrawFaceUp") == true ? "front" : "back"
+            }
+
+            
+            const maxSlot = 54;
+            let firstEmpty = this.getNextSlot();
+            if(firstEmpty === -1 || firstEmpty > maxSlot){
+                ui.notifications.error("There is no room in your hand!");
+                reject("No more room in hand!")
+            }
+    
+            //preserve existing cards
+            let hand = [];
+            for(let slot = 0; slot < this.macroMap.length; slot++){
+                hand.push(this.macroMap[slot])
+            }
+    
+            for(let i=0; i<cards.length; i++){
+                if(maxSlot >= i+firstEmpty){
+                    console.log("Side: ", sideUp)
+                    let img = sideUp == "front" ? cards[i].img : cards[i].flags.world.cardBack
+                    let imgTex = await loadTexture(img);
+                    let imgHeight = imgTex.height;
+                    let imgWidth = imgTex.width;
+
+                    let macro = await Macro.create({
+                        name: `Card`,
+                        type: 'script',
+                        flags: {
+                            "world": {
+                                "cardID": cards[i].id,
+                                "img": cards[i].img, 
+                                "cardBack": cards[i].flags.world.cardBack
+                            }
+                        }, 
+                        scope: "global",
+                        command: `
+                        new Dialog({
+                            title: "Card",
+                            content: '<img src="${img}" />'
+                            ,
+                            buttons: {}
+                        }, {height:${imgHeight}, width:${imgWidth}}).render(true)
+                        `,
+                        img: img
+                    })
+                    hand.push(macro.id);
+                } else {
+                    ui.notifications.error("Not enough space in your hand. ");
+                    ui.notifications.render();
+                    reject("No more room in hand!")
+                }
+            }
+            this.macroMap = hand;
+            ui.cardHotbar.macros = ui.cardHotbar.getcardHotbarMacros();
+            await this._updateFlags();
+            ui.cardHotbar.render();
+            resolve();
+        })
+    }
+
    async addToHand(cardId, sideUp) {
         //console.debug("Card Hotbar | Adding card to hand...");
         //generate macro for card
@@ -111,16 +184,16 @@ export class cardHotbarPopulator {
                     callback: dlg => {
                         ui.notifications.notify("Discarding entire hand");
                         console.debug("Card Hotbar | discarding entire hand");
-                        try {
+                        ///try {
                             for (let mId of ui.cardHotbar.populator.macroMap) {
                                 const m = game.macros.get(mId);
-                                console.debug(m)
+                                console.debug(+m)
                                 if ( m ) {
                                     const mCardId = m.getFlag("world","cardID");
                                     console.debug(mCardId);
                                     if ( mCardId ) {
                                         const mDeck = game.decks.getByCard( mCardId );
-                                        ui.console.debug(mDeck);
+                                        console.debug(mDeck);
                                         if (mDeck) {
                                             //console.debug("Card Hotbar | Discarding card (macro, deck)...");
                                             //console.debug(m);
@@ -131,11 +204,11 @@ export class cardHotbarPopulator {
                                     m.delete();
                                 }
                             }  
-                        } catch (error) {
-                            const msg = "Issue found with hand data, resetting hand to solve it...";                           
-                            console.debug("Card Hotbar | " + msg);
-                            ui.notifications.notify(msg);
-                        }
+                        //} catch (error) {
+                            //const msg = "Issue found with hand data, resetting hand to try solve it...";                           
+                            //console.debug("Card Hotbar | " + msg);
+                            //ui.notifications.notify(msg);
+                        //}
                         ui.cardHotbar.populator.chbResetMacros();
                     }
                 },
