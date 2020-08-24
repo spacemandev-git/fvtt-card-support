@@ -361,7 +361,7 @@ export class Decks{
       if(typeof ForgeVtt != "undefined" && ForgeVTT.usingTheForge){
         src = "forgevtt"
       }
-      let target = `worlds/${game.world.name}/{Decks/${deckfolderId}/`
+      let target = `worlds/${game.world.name}/Decks/${deckfolderId}/`
       let result = await FilePicker.browse(src, target)
       if(result.target != target){
         await FilePicker.createDirectory(src, target, {});
