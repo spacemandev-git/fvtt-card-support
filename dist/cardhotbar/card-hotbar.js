@@ -328,16 +328,21 @@ export class cardHotbar extends Hotbar {
           const macro = game.macros.get(li.data("macro-id"));
           const index = li.data("slot");
           try{
-            const mCardId = macro.getFlag("world","cardID");
-            const mDeck = game.decks.get( game.journal.get(mCardId).data.folder);
-            //console.debug("Card Hotbar | Discarding card (macro, slot, deck)...");
-            //console.debug(macro);
-            //console.debug(index);
-            //console.debug(mDeck);
-            mDeck.discardCard(mCardId);
+            //const mCardId = macro.data.flags.world.cardID
+            //game.decks.getByCard(mCardId).discardCard(mCardId);
+            let socketMsg = {
+              type: "DISCARD",
+              playerID: game.users.find(el => el.isGM && el.data.active).id,
+              cardID: macro.data.flags.world.cardID
+            }
+            console.log("Sending MSG: ", socketMsg);
+
+            await game.socket.emit('module.cardsupport', socketMsg);
+            
             await ui.cardHotbar.populator.chbUnsetMacro(index);
             macro.delete();
           } catch (e) {
+            console.error(e)
             //console.debug ("Card Hotbar | Could not properly discard card from hand");
           }
         }

@@ -19,7 +19,6 @@ export class Deck{
     this.deckName = game.folders.get(folderID).name
     let state = game.folders.get(folderID).getFlag(mod_scope, 'deckState')
     if(state == undefined){
-      console.log("State undefined")
       let cardEntries = game.folders.get(folderID)['content'].map(el=>el.id);
 
       this._cards = duplicate(cardEntries);
@@ -29,7 +28,6 @@ export class Deck{
         console.log(`${folderID} state created!`)
       })
     } else {
-      console.log("DeckState Loaded: ", state);
       let stateObj = JSON.parse(state); 
       this._state = stateObj['state']
       this._cards = stateObj['cards']
@@ -37,12 +35,37 @@ export class Deck{
     }
   }
 
+  /**
+   * Used to update the flags with the current state of the deck
+   */
   private async updateState(){
-    await game.folders.get(this.deckID).setFlag(mod_scope, 'deckState', JSON.stringify({
-      state: this._state,
-      cards: this._cards,
-      discard: this._discard
-    }))
+    if(game.user.isGM){
+      await game.folders.get(this.deckID).setFlag(mod_scope, 'deckState', JSON.stringify({
+        state: this._state,
+        cards: this._cards,
+        discard: this._discard
+      }))
+
+      await game.settings.set("cardsupport", "decks", JSON.stringify(game.decks.decks))
+      
+      //@ts-ignore
+      for(let user of game.users.entries){
+        if(user.isSelf){continue;}
+        //@ts-ignore
+        game.socket.emit('module.cardsupport', {
+          type: "SETDECKS",
+          playerID: user.id,
+        })
+      }   
+    } else {
+      let msg:MSGTYPES.MSG_UPDATESTATE = {
+        type: "UPDATESTATE",
+        playerID: game.users.find(el => el.isGM && el.data.active).id,
+        deckID: this.deckID
+      }
+      //@ts-ignore
+      game.socket.emit('module.cardsupport', msg);
+    }
   }
 
   
@@ -255,9 +278,19 @@ export class Decks{
       return Object.fromEntries(Object.entries(this.decks).filter(([key, value]) => dName == deckName 
   }*/
 
+  /**
+   * Returns the Deck ID given a CardID. To get around journal permissions, it doesn't use journal, just runs through the deck array
+   * @param cardId 
+   */
   public getByCard(cardId) {
     //returns the Deck object of the provided cardId
-    return this.decks[ game.journal.get(cardId).folder.id ];
+    //return this.decks[ game.journal.get(cardId).folder.id ];
+
+    for(let deck of Object.values(this.decks)){
+      let card = deck._cards.find(el => el == cardId)
+      if(card){ return deck }
+    }
+    return undefined;
   }
 
   public deckCheck(cardId,deckId) {
@@ -284,11 +317,16 @@ export class Decks{
   public init(){
     //reads deck states into memory
     this.decks = {}
-    let decksFolders = game.folders.find(el=>el.name=="Decks")?.children.map(el=>el.id);
-    if(decksFolders != null){
-      for(let id of decksFolders){
-        this.decks[id] = new Deck(id);
+    if(game.user.isGM){
+      let decksFolders = game.folders.find(el=>el.name=="Decks")?.children.map(el=>el.id);
+      if(decksFolders != null){
+        for(let id of decksFolders){
+          this.decks[id] = new Deck(id);
+        }  
       }  
+      game.settings.set("cardsupport", "decks", JSON.stringify(this.decks));
+    } else {
+      this.decks = JSON.parse(game.settings.get("cardsupport", "decks"))
     }
   }
 
@@ -454,6 +492,13 @@ export class Decks{
       await game.decks.get(deckID).addToDeckCards([cardEntry._id])
       resolve(cardEntry.id)
     })
+  }
+
+  /**
+   * Don't look at this code, it makes me cry it's dumb and hacky and I hate everything
+   */
+  public setDecks(decks){
+    this.decks = decks;
   }
 }
 

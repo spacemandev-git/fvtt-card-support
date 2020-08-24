@@ -6,8 +6,14 @@ export const log = (...args: any[]) => {
 };
 
 Hooks.on("ready", async () => {
-  //Creates A "Decks" folder where to unzip SDF Files
+  game.settings.register("cardsupport", "decks", {
+    scope: "world",
+    config: false,
+    type: String,
+    default: "{}"
+  })
 
+  //Creates A "Decks" folder where to unzip SDF Files
   let src = "data";
   //@ts-ignore
   if(typeof ForgeVtt != "undefined" && ForgeVTT.usingTheForge){
