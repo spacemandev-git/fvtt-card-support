@@ -34,5 +34,8 @@ Hooks.on("ready", () => {
                 yield ui['cardHotbar'].populator.addToHand([data.cardID]);
             }
         }
+        else if ((data === null || data === void 0 ? void 0 : data.type) == "RESETDECK") {
+            ui['cardHotbar'].populator.resetDeck(data.deckID);
+        }
     }));
 });

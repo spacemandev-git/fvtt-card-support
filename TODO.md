@@ -53,7 +53,8 @@ v2
 
 #######################
 - Deal to Players / Draw For Players (DONE)
-- Give to Player 
+- Give to Player (DONE)
+- Reset Deck should delete all copies of cards in players hands
 - Create a Button To Browse Decks and do things to them so you don't need to interact with a tile 
 - Discard to bottom of Deck
 

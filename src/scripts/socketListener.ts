@@ -17,6 +17,8 @@ Hooks.on("ready", () => {
       } else {
         await ui['cardHotbar'].populator.addToHand([data.cardID])
       }
+    } else if (data?.type == "RESETDECK"){
+      ui['cardHotbar'].populator.resetDeck(data.deckID);
     }
   })  
 })
@@ -50,4 +52,10 @@ export interface GIVE {
   playerID: string,
   to:string, 
   cardID: string
+}
+
+export interface MSG_RESETDECK {
+  type: "RESETDECK",
+  playerID: string,
+  deckID: string
 }

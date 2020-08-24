@@ -189,6 +189,17 @@ export class cardHotbarPopulator {
 
     }
     
+
+    resetDeck(deckID){
+        for(let mId of ui.cardHotbar.populator.macroMap){
+            const macro = game.macros.get(mId);
+            const cardID = macro?.getFlag("world", "cardID");
+            if(game.decks.decks[deckID]._cards.includes(cardID)){
+                macro.delete();
+            }
+        }
+    }
+
     discardHand() {
         new Dialog({
             title: 'Please Confirm Enitre Hand Discard',

@@ -124,23 +124,23 @@ export class Deck{
         }
       }).map(t => t.data._id);
       await canvas.scene.deleteEmbeddedEntity("Tile", tileCards);
-      /* Not ready for primetime, commented out for now.
-      //delete all macros temporarily created for deck (also removes cards from all players hands)
-      let cardMacros = game.macros.filter( macro => {
-          let cardID = macro.getFlag("world","cardID");
-          if (cardID) {
-              return game.decks.deckCheck(cardID, this.deckID);
-          } else {
-              return false
+      
+      //@ts-ignore
+      for(let user of game.users.entries){
+        if(user.isSelf){
+          ui['cardHotbar'].populator.resetDeck(this.deckID);
+        } else {
+          let resetMsg: MSGTYPES.MSG_RESETDECK = {
+            type: "RESETDECK",
+            playerID: user.id,
+            deckID: this.deckID
           }
-      });
-      for ( let m of cardMacros ) {
-          m.delete();
+          //@ts-ignore
+          game.socket.emit('module.cardsupport', resetMsg);
+        }
       }
-      ui.cardHotbar.populator.compact();
-      //TODO: cleanup ui.cardHotbar.populator.macroMap... the deleted macros/cards are still there "under the hood". Sigh.
-      //write chbSynchWithHand maybe, that will force the c
-      */
+
+
       await this.updateState();
       resolve(this._state)
     })
