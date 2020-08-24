@@ -140,7 +140,6 @@ export class Deck{
         }
       }
 
-
       await this.updateState();
       resolve(this._state)
     })
