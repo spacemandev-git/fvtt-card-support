@@ -7,6 +7,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+import { handleDroppedCard } from './drop.js';
 Hooks.on("ready", () => {
     //@ts-ignore
     game.socket.on('module.cardsupport', (data) => __awaiter(void 0, void 0, void 0, function* () {
@@ -36,6 +37,12 @@ Hooks.on("ready", () => {
         }
         else if ((data === null || data === void 0 ? void 0 : data.type) == "RESETDECK") {
             ui['cardHotbar'].populator.resetDeck(data.deckID);
+        }
+        else if ((data === null || data === void 0 ? void 0 : data.type) == "REVEALCARD") {
+            game.journal.get(data.cardID).show("image", true);
+        }
+        else if ((data === null || data === void 0 ? void 0 : data.type) == "DROP") {
+            handleDroppedCard(data.cardID, data.x, data.y, data.alt);
         }
     }));
 });

@@ -3,7 +3,7 @@
   "title": "Card Support (Unofficial)",
   "description": "Unofficial deck support for foundry that allows you to have cards and player hands and the like.",
   "author": "Spacemandev, Norc",
-  "version": "1.2.1",
+  "version": "1.3.0",
   "minimumCoreVersion": "0.6.0",
   "compatibleCoreVersion": "0.7.0",
   "url": "https://github.com/Brownie79/fvtt-card-support",

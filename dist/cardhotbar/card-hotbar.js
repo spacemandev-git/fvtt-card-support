@@ -281,7 +281,13 @@ export class cardHotbar extends Hotbar {
             journal.show("image", true);
             ui.notifications.notify("Card now revealed to all players...");            
           } else {
-            ui.notifications.error("Only GMs can use this feature.")
+            //ui.notifications.error("Only GMs can use this feature.")
+            const macro = game.macros.get(li.data("macro-id"));
+            game.socket.emit('module.cardsupport', {
+              type: "REVEALCARD", 
+              playerID: game.users.find(el=> el.isGM && el.active).id,
+              cardID: macro.getFlag("world", "cardID")
+            })
           }
         }
       },

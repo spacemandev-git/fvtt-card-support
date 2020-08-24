@@ -1,3 +1,5 @@
+import {handleDroppedCard} from './drop.js';
+
 Hooks.on("ready", () => {
   //@ts-ignore
   game.socket.on('module.cardsupport', async (data:any) => {
@@ -19,6 +21,10 @@ Hooks.on("ready", () => {
       }
     } else if (data?.type == "RESETDECK"){
       ui['cardHotbar'].populator.resetDeck(data.deckID);
+    } else if (data?.type == "REVEALCARD"){
+      game.journal.get(data.cardID).show("image", true);
+    } else if (data?.type == "DROP"){
+      handleDroppedCard(data.cardID, data.x, data.y, data.alt)
     }
   })  
 })
@@ -58,4 +64,19 @@ export interface MSG_RESETDECK {
   type: "RESETDECK",
   playerID: string,
   deckID: string
+}
+
+export interface MSG_REVEALCARD {
+  type: "REVEALCARD",
+  playerID:string,
+  cardID: string
+}
+
+export interface MSG_DROPTILE {
+  type: "DROP",
+  playerID: string,
+  cardID: string,
+  x: number, 
+  y: number,
+  alt: boolean
 }
