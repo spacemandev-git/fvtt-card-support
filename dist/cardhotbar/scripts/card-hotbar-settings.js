@@ -79,12 +79,12 @@ export class cardHotbarSettings {
         })
 
         //                                     module        key             options
-        game.settings.register("cardsupport", "chbBorderColorActive", {
-            name: "cardHotbar.settings.chbBorderColorActive.name",      // The name of the setting in the settings menu
-            hint: "cardHotbar.settings.chbBorderColorActive.nameHint",   // A description of the registered setting and its behavior
+        game.settings.register("cardsupport", "chbMarkedColor", {
+            name: "cardHotbar.settings.chbMarkedColor.name",      // The name of the setting in the settings menu
+            hint: "cardHotbar.settings.chbMarkedColor.nameHint",   // A description of the registered setting and its behavior
             label: "Color Picker",         // The text label used in the button
             restricted: false,             // Restrict this setting to gamemaster only?
-            default: "#ffffffff",     // The default color of the setting
+            default: "#ff000080",     // The default color of the setting
             type: String,
             scope: "world",               // The scope of the setting
             config: false,                 // Disable display on the standard Foundry settings menu
@@ -144,9 +144,9 @@ export class cardHotbarSettings {
         return (flag != undefined ? flag : sett );
     }
 
-    static getCHBBorderColorActive(){
-        var flag = game.user.getFlag("cardsupport", "chbBorderColorActive");
-        var sett = game.settings.get("cardsupport","chbBorderColorActive");
+    static getCHBMarkedColor(){
+        var flag = game.user.getFlag("cardsupport", "chbMarkedColor");
+        var sett = game.settings.get("cardsupport","chbMarkedColor");
         return (flag != undefined ? flag : sett );
     }
 

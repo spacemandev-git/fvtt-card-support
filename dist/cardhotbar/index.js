@@ -45,6 +45,23 @@ async function cardHotbarInit() {
     + ` { background: ${cardHotbarSettings.getCHBPrimaryColor()};`
     + ' }'
 
+    + '#card-macro-list li.macro.active.marked' 
+    + ' { '  	
+    + '   position: relative;'
+    + ' } '
+
+    + '#card-macro-list li.macro.marked:after' 
+    + ' { '  	
+    + '   position: absolute;'
+    + '   height: 100%;'
+    + '   width: 100%;'
+    + `   background-color: ${cardHotbarSettings.getCHBMarkedColor()};`
+    + '   top: 0;'
+    + '   left: 0;'
+    + '   display: block;'
+    + '   content: "";'
+    + ' } '
+
   , head = document.head || document.getElementsByTagName('head')[0]
   , style = document.createElement('style');
 
