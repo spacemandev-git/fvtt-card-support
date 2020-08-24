@@ -1,2 +1,4 @@
 node_modules/
-macros/
+dist/
+gitignore
+package-lock
