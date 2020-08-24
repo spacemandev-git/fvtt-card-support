@@ -26,7 +26,7 @@ export class cardHotbarFlagsForm extends FormApplication {
             chbCardScale: cardHotbarSettings.getCHBCardScale(),
             chbPrimaryColor: cardHotbarSettings.getCHBPrimaryColor(), 
             chbBorderColor: cardHotbarSettings.getCHBBorderColor(),
-            chbBorderColorActive: cardHotbarSettings.getCHBBorderColorActive(),
+            chbMarkedColor: cardHotbarSettings.getCHBMarkedColor(),
 
             chbXPos: cardHotbarSettings.getCHBXPos(),
             chbYPos: cardHotbarSettings.getCHBYPos(),        
@@ -37,7 +37,7 @@ export class cardHotbarFlagsForm extends FormApplication {
                 chbCardScale: game.settings.get("cardsupport","chbCardScale"),                   
                 chbPrimaryColor: game.settings.get("cardsupport","chbPrimaryColor"),
                 chbBorderColor: game.settings.get("cardsupport","chbBorderColor"),
-                chbBorderColorActive: game.settings.get("cardsupport","chbBorderColorActive"),
+                chbMarkedColor: game.settings.get("cardsupport","chbMarkedColor"),
 
                 chbXPos: game.settings.get("cardsupport","chbXPos"),
                 chbYPos: game.settings.get("cardsupport","chbYPos")
@@ -64,7 +64,7 @@ export class cardHotbarFlagsForm extends FormApplication {
         await game.user.setFlag("cardsupport", "chbCardScale", d.chbCardScale);
         await game.user.setFlag("cardsupport", "chbPrimaryColor", d.chbPrimaryColor);
         await game.user.setFlag("cardsupport", "chbBorderColor", d.chbBorderColor);
-        await game.user.setFlag("cardsupport", "chbBorderColorActive", d.chbBorderColorActive);
+        await game.user.setFlag("cardsupport", "chbMarkedColor", d.chbMarkedColor);
 
         await game.user.setFlag("cardsupport","chbXPos", d.chbXPos);
         await game.user.setFlag("cardsupport","chbYPos", d.chbYPos);
@@ -88,8 +88,8 @@ export class cardHotbarFlagsForm extends FormApplication {
         $( event.target ).addClass("expanded");
     }
 
-    onChbBorderColorActiveClick() {
-        //console.debug("card Hotbar | chbBorderColorActive button click detected");
+    onChbMarkedColorClick() {
+        //console.debug("card Hotbar | chbMarkedColor button click detected");
         $( event.target ).addClass("expanded");
     }
 
@@ -100,7 +100,7 @@ export class cardHotbarFlagsForm extends FormApplication {
         html.find('button[name="reset"]').on('click', this.onReset.bind(this));
         html.find('input[name="chbPrimaryColor"]').on('click',this.onChbPrimaryColorClick.bind(this));
         html.find('input[name="chbBorderColor"]').on('click',this.onChbBorderColorClick.bind(this));
-        html.find('input[name="chbBorderColorActive"]').on('click',this.onChbBorderColorActiveClick.bind(this));
+        html.find('input[name="chbMarkedColor"]').on('click',this.onChbMarkedColorClick.bind(this));
         this.reset = false;
     }
 }
@@ -109,7 +109,7 @@ Hooks.on("rendercardHotbarFlagsForm", (a, b, c) => {
     //console.debug( "card Hotbar | Initializing current color values..." );
     $( "#chbPrimaryColorSplash" ).css("background-color", c.chbPrimaryColor);
     $( "#chbBorderColorSplash" ).css("background-color", c.chbBorderColor);
-    $( "#chbBorderColorActiveSplash" ).css("background-color", c.chbBorderColorActive);
+    $( "#chbMarkedColorSplash" ).css("background-color", c.chbMarkedColor);
 });
 
 Hooks.on("pickerDone", (parentDiv, hexColor) => {

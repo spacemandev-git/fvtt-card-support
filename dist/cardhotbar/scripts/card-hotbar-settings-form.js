@@ -24,7 +24,7 @@ export class cardHotbarSettingsForm extends FormApplication {
             chbCardScale: game.settings.get("cardsupport", "chbCardScale"),        
             chbPrimaryColor: game.settings.get("cardsupport", "chbPrimaryColor"), 
             chbBorderColor: game.settings.get("cardsupport", "chbBorderColor"),
-            chbBorderColorActive: game.settings.get("cardsupport", "chbBorderColorActive"),
+            chbMarkedColor: game.settings.get("cardsupport", "chbMarkedColor"),
 
             chbXPos: game.settings.get("cardsupport", "chbXPos"),
             chbYPos: game.settings.get("cardsupport", "chbYPos")
@@ -35,7 +35,7 @@ export class cardHotbarSettingsForm extends FormApplication {
                 chbCardScale: game.settings.settings.get("cardsupport.chbCardScale").default,    
                 chbPrimaryColor: game.settings.settings.get("cardsupport.chbPrimaryColor").default,
                 chbBorderColor: game.settings.settings.get("cardsupport.chbBorderColor").default,
-                chbBorderColorActive: game.settings.settings.get("cardsupport.chbBorderColorActive").default,
+                chbMarkedColor: game.settings.settings.get("cardsupport.chbMarkedColor").default,
 
                 chbXPos: game.settings.settings.get("cardsupport.chbXPos").default,
                 chbYPos: game.settings.settings.get("cardsupport.chbYPos").default
@@ -62,7 +62,7 @@ export class cardHotbarSettingsForm extends FormApplication {
         game.settings.set("cardsupport", "chbCardScale", d.chbCardScale);
         game.settings.set("cardsupport", "chbPrimaryColor", d.chbPrimaryColor);
         game.settings.set("cardsupport", "chbBorderColor", d.chbBorderColor);
-        game.settings.set("cardsupport", "chbBorderColorActive", d.chbBorderColorActive);
+        game.settings.set("cardsupport", "chbMarkedColor", d.chbMarkedColor);
         game.settings.set("cardsupport","chbXPos", d.chbXPos);
         game.settings.set("cardsupport","chbYPos", d.chbYPos);
         this.render();
@@ -89,8 +89,8 @@ $( "#x" ).prop( "disabled", false );
         $( event.target ).addClass("expanded");
     }
 
-    onChbBorderColorActiveClick() {
-        //console.debug("card Hotbar | chbBorderColorActive button click detected");
+    onChbMarkedColorClick() {
+        //console.debug("card Hotbar | chbMarkedColor button click detected");
         $( event.target ).addClass("expanded");
     }
 
@@ -101,7 +101,7 @@ $( "#x" ).prop( "disabled", false );
         html.find('button[name="reset"]').on('click', this.onReset.bind(this));
         html.find('input[name="chbPrimaryColor"]').on('click',this.onChbPrimaryColorClick.bind(this));
         html.find('input[name="chbBorderColor"]').on('click',this.onChbBorderColorClick.bind(this));
-        html.find('input[name="chbBorderColorActive"]').on('click',this.onChbBorderColorActiveClick.bind(this));
+        html.find('input[name="chbMarkedColor"]').on('click',this.onChbMarkedColorClick.bind(this));
         this.reset = false;
     }
 }
@@ -110,7 +110,7 @@ Hooks.on("rendercardHotbarSettingsForm", (a, b, c) => {
     //console.debug( "card Hotbar | Initializing current color values..." );
     $( "#chbPrimaryColorSplash" ).css("background-color", c.chbPrimaryColor);
     $( "#chbBorderColorSplash" ).css("background-color", c.chbBorderColor);
-    $( "#chbBorderColorActiveSplash" ).css("background-color", c.chbBorderColorActive);
+    $( "#chbMarkedColorSplash" ).css("background-color", c.chbMarkedColor);
 });
 
 Hooks.on("pickerDone", (parentDiv, hexColor) => {
