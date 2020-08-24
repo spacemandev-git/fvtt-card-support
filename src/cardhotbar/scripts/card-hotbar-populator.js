@@ -239,21 +239,21 @@ export class cardHotbarPopulator {
     }
     */
     async flipCard(slot) {
-        //delete and recreate instead of update?? hrrm.
-        let cardEntry = game.journal.get(  game.macros.get( this.macroMap[slot] ).getFlag("world", "cardID" ) );
-        let mm = ui.cardHotbar.macros[slot - 1].macro;
+        let mm = game.macros.get( this.macroMap[slot] );
+        let frontImg = mm.getFlag("world","img");
+        let backImg = mm.getFlag("world", "cardBack");
         let newImg = "";
         let sideUp = "";
         //console.debug(cardEntry);
-        //console.debug(mm);
+        console.debug(mm);
 
-        if(mm.data.img == cardEntry.data['img']){
+        if(mm.data.img == frontImg) {
             // Card is front up, switch to back
-            newImg = cardEntry.getFlag("world", "cardBack");
+            newImg = backImg;
             sideUp = "back";            
-        } else if( mm.data.img == cardEntry.getFlag("world", "cardBack") ) {
+        } else if( mm.data.img == backImg ) {
             // Card is back up
-            newImg = cardEntry.data['img']
+            newImg = frontImg;
             sideUp = "front";
         } else{ 
             ui.notifications.error("What you doing m8? Stop breaking Spaceman's code that Norc stole...");
