@@ -52,7 +52,7 @@ v2
 - Add a GUI to append to a Deck (DONE)
 
 #######################
-- Deal to Players / Draw For Players
+- Deal to Players / Draw For Players (DONE)
 - Give to Player 
 - Create a Button To Browse Decks and do things to them so you don't need to interact with a tile 
 - Discard to bottom of Deck

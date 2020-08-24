@@ -494,11 +494,16 @@ export class Decks{
     })
   }
 
-  /**
-   * Don't look at this code, it makes me cry it's dumb and hacky and I hate everything
-   */
-  public setDecks(decks){
-    this.decks = decks;
+  public giveToPlayer(playerID:string, cardID:string){
+    if(!game.user.isGM){console.error("This function can only be called by the GM");return;}
+    let msg:MSGTYPES.MSG_DEAL = {
+      type: "DEAL",
+      playerID: playerID,
+      cards: [game.journal.get(cardID)]
+    }
+    
+    //@ts-ignore
+    game.socket.emit('module.cardsupport', msg)
   }
 }
 

@@ -9,12 +9,12 @@ export class cardHotbarPopulator {
 
     // Backwards compatibilty
     async addToHand(cardIDs){
-        console.log("Add to Hand CardIDs", cardIDs);
+        //console.log("Add to Hand CardIDs", cardIDs);
         let journalEntries = []
         for(let id of cardIDs){
             journalEntries.push(game.journal.get(id))
         }
-        console.log("JEs", journalEntries)
+        //console.log("JEs", journalEntries)
         await this.addToPlayerHand(journalEntries);
     }
 
@@ -25,7 +25,7 @@ export class cardHotbarPopulator {
      * 
      */
     async addToPlayerHand(cards){
-        console.log("Player Hand Add Cards", cards)
+        //console.log("Player Hand Add Cards", cards)
         return new Promise(async (resolve, reject) => {
             let sideUp = "front";
             if(game.user.getFlag('cardsupport', 'chbDrawFaceUp')){
@@ -44,14 +44,19 @@ export class cardHotbarPopulator {
     
             //preserve existing cards
             let hand = [];
-            for(let slot = 0; slot < this.macroMap.length; slot++){
+            for(let slot = 0; slot <= this.macroMap.length; slot++){
                 hand.push(this.macroMap[slot])
             }
     
             for(let i=0; i<cards.length; i++){
                 if(maxSlot >= i+firstEmpty){
                     console.log("Card In Hand: ", cards[i])
-                    let img = sideUp == "front" ? cards[i].data.img : cards[i].data.flags.world.cardBack
+                    let img = ""
+                    if(cards[i]?.data != undefined){
+                        img = sideUp == "front" ? cards[i].data.img : cards[i].data.flags.world.cardBack
+                    } else {
+                        img = sideUp == "front" ? cards[i].img : cards[i].flags.world.cardBack
+                    }
                     let imgTex = await loadTexture(img);
                     let imgHeight = imgTex.height;
                     let imgWidth = imgTex.width;
@@ -61,8 +66,8 @@ export class cardHotbarPopulator {
                         flags: {
                             "world": {
                                 "cardID": cards[i]._id,
-                                "img": cards[i].data.img, 
-                                "cardBack": cards[i].data.flags.world.cardBack
+                                "img": cards[i]?.data != undefined ? cards[i].data.img : cards[i].img, 
+                                "cardBack": cards[i]?.data != undefined ? cards[i].data.flags.world.cardBack : cards[i].flags.world.cardBack
                             }
                         }, 
                         scope: "global",
@@ -192,7 +197,7 @@ export class cardHotbarPopulator {
                 Yes: {
                     icon: '<i class="fa fa-check"></i>',
                     label: 'Yes',
-                    callback: dlg => {
+                    callback: (dlg) => {
                         ui.notifications.notify("Discarding entire hand");
                         console.debug("Card Hotbar | discarding entire hand");
                         ///try {
@@ -209,7 +214,17 @@ export class cardHotbarPopulator {
                                             //console.debug("Card Hotbar | Discarding card (macro, deck)...");
                                             //console.debug(m);
                                             //console.debug(mDeck);
-                                            mDeck.discardCard(mCardId);
+                                            //mDeck.discardCard(mCardId);
+                                            if(!game.user.isGM){
+                                                let socketMsg = {
+                                                  type: "DISCARD",
+                                                  playerID: game.users.find(el => el.isGM && el.data.active).id,
+                                                  cardID: mCardId
+                                                }
+                                                game.socket.emit('module.cardsupport', socketMsg);
+                                            } else {
+                                                game.decks.getByCard(mCardId).discardCard(mCardId)
+                                            }
                                         }   
                                     }
                                     m.delete();

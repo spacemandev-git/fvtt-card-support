@@ -7,6 +7,11 @@ Hooks.once("canvasReady", () => {
     // Try to extract the data (type + src)
     let data;
     try {
+      if(!game.user.isGM) {
+        ui.notifications.error("Only GMs can create Tiles, sorry :(");
+        return;
+      }
+
       data = JSON.parse(event.dataTransfer.getData("text/plain"));
       console.log(data);
       if(data.type == "Folder" && game.decks.get(data.id) != undefined){

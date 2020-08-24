@@ -269,7 +269,7 @@ async function deckHUD(td:TileData, html) {
     let players = "";
     //@ts-ignore
     for(let user of game.users.entries){
-      if(user.isSelf == false && user.data.active){
+      if(user.isSelf == false && user.active){
         players += `<option value=${user.id}>${user.name}</option>`
       }
     }

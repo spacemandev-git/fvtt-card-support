@@ -274,11 +274,60 @@ export class cardHotbar extends Hotbar {
           return macro ? macro.owner : false;
         },
         callback: li => {
-          const journal = game.journal.get ( game.macros.get( li.data("macro-id") ).getFlag("world","cardID") );
-          console.debug("Card Hotbar | Revealing card to all players...");
-          //console.debug( game.macros.get( li.data("macro-id") ) );
-          journal.show("image", true);
-          ui.notifications.notify("Card now revealed to all players...");          
+          if(game.user.isGM){
+            const journal = game.journal.get ( game.macros.get( li.data("macro-id") ).getFlag("world","cardID") );
+            console.debug("Card Hotbar | Revealing card to all players...");
+            //console.debug( game.macros.get( li.data("macro-id") ) );
+            journal.show("image", true);
+            ui.notifications.notify("Card now revealed to all players...");            
+          } else {
+            ui.notifications.error("Only GMs can use this feature.")
+          }
+        }
+      },
+      {
+        name: "Give to Player",
+        icon: '<i class="fas fa-exchange-alt"></i>',
+        condition: li => {
+          const macro = game.macros.get(li.data("macro-id"));
+          return macro ? macro.owner : false
+        }, 
+        callback: li => {
+          const macro = game.macros.get(li.data("macro-id"));
+          let players = "";
+          //@ts-ignore
+          for(let user of game.users.entries){
+            if(user.isSelf == false && user.active){
+              players += `<option value=${user.id}>${user.name}</option>`
+            }
+          }
+          let dialogHTML = `
+          <p> Player <select id="player">${players}</select> </p>
+          `
+          new Dialog({
+            title: "Give Card to Player",
+            content: dialogHTML,
+            buttons: {
+              give: {
+                label: "Give",
+                callback: (html) => {
+                  let _to = html.find("#player")[0].value
+                  if(game.user.isGM){
+                    game.decks.giveToPlayer(_to,  macro.getFlag("world", "cardID"));
+                  } else {
+                    let msg = {
+                      type: "GIVE",
+                      playerID: game.users.find(el => el.isGM && el.active).id, //Send to GM for processing
+                      to: _to,
+                      cardID: game.macros.get(li.data("macro-id")).getFlag("world", "cardID")
+                    }
+                    game.socket.emit('module.cardsupport', msg);
+                  }
+                  macro.delete();
+                }
+              }
+            }
+          }).render(true);
         }
       },
       {
@@ -336,7 +385,7 @@ export class cardHotbar extends Hotbar {
                 playerID: game.users.find(el => el.isGM && el.data.active).id,
                 cardID: macro.data.flags.world.cardID
               }
-              await game.socket.emit('module.cardsupport', socketMsg);
+              game.socket.emit('module.cardsupport', socketMsg);
             } else {
               game.decks.getByCard(macro.data.flags.world.cardID).discardCard(macro.data.flags.world.cardID)
             }

@@ -10,11 +10,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Hooks.on("ready", () => {
     //@ts-ignore
     game.socket.on('module.cardsupport', (data) => __awaiter(void 0, void 0, void 0, function* () {
+        console.log("Socket Recieved: ", data);
         if (data.playerID != game.user.id) {
             return;
         }
         if ((data === null || data === void 0 ? void 0 : data.type) == "DEAL") {
-            ui['cardHotbar'].populator.addToPlayerHand(data.cards);
+            yield ui['cardHotbar'].populator.addToPlayerHand(data.cards);
         }
         else if ((data === null || data === void 0 ? void 0 : data.type) == "UPDATESTATE") {
             game.decks.get(data.deckID);
@@ -24,6 +25,14 @@ Hooks.on("ready", () => {
         }
         else if ((data === null || data === void 0 ? void 0 : data.type) == "DISCARD") {
             game.decks.getByCard(data.cardID).discardCard(data.cardID);
+        }
+        else if ((data === null || data === void 0 ? void 0 : data.type) == "GIVE") {
+            if (data.to != game.user.id) {
+                game.decks.giveToPlayer(data.to, data.cardID);
+            }
+            else {
+                yield ui['cardHotbar'].populator.addToHand([data.cardID]);
+            }
         }
     }));
 });

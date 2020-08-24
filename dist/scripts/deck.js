@@ -480,11 +480,18 @@ export class Decks {
             resolve(cardEntry.id);
         }));
     }
-    /**
-     * Don't look at this code, it makes me cry it's dumb and hacky and I hate everything
-     */
-    setDecks(decks) {
-        this.decks = decks;
+    giveToPlayer(playerID, cardID) {
+        if (!game.user.isGM) {
+            console.error("This function can only be called by the GM");
+            return;
+        }
+        let msg = {
+            type: "DEAL",
+            playerID: playerID,
+            cards: [game.journal.get(cardID)]
+        };
+        //@ts-ignore
+        game.socket.emit('module.cardsupport', msg);
     }
 }
 /**
