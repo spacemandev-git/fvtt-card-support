@@ -3,10 +3,9 @@
 export class cardHotbarPopulator {
     constructor() { 
         this.macroMap = this.chbGetMacros();
-        this.imgScale = getComputedStyle(document.documentElement).getPropertyValue('--width');    
+        getComputedStyle(document.documentElement).getPropertyValue('--width');    
         console.debug("Card Hotbar | Initial state:");
         console.debug(this.macroMap);
-        console.debug(this.imgScale);
     }
 
     // Backwards compatibilty
@@ -63,6 +62,7 @@ export class cardHotbarPopulator {
                     let imgTex = await loadTexture(img);
                     let imgHeight = imgTex.height;
                     let imgWidth = imgTex.width;
+                    let scaledWidth = (200 / imgHeight ) * imgWidth;
                     let macro = await Macro.create({
                         name: `Card`,
                         type: 'script',
@@ -71,7 +71,8 @@ export class cardHotbarPopulator {
                                 "cardID": cards[i]._id,
                                 "img": cards[i]?.data != undefined ? cards[i].data.img : cards[i].img, 
                                 "cardBack": cards[i]?.data != undefined ? cards[i].data.flags.world.cardBack : cards[i].flags.world.cardBack,
-                                "sideUp": defaultSideUp
+                                "sideUp": defaultSideUp,
+                                "scaledWidth": scaledWidth
                             }
                         }, 
                         scope: "global",
@@ -420,25 +421,12 @@ export class cardHotbarPopulator {
     }
 
     async _updateFlags() {
-        // THIS IS GOING TO FAIL A LOT BECAUSE
             await game.user.unsetFlag('cardsupport', 'chbMacroMap');
             const result = await game.user.setFlag('cardsupport', 'chbMacroMap', this.macroMap);
             //quick solution to set css width for all slots based on first slot image
             //TODO: improve to set individual slot width eventually?
             console.debug("updating flags");
             console.debug(this.macroMap[1]);
-            /*
-            if (this.macroMap[1]) {
-                console.debug("in")
-                const imgPath = ( game.macros.get( this.macroMap[1] )?.data.img );
-                const img = await loadTexture(imgPath);
-                const imgScale = ( 200 / img?.height );
-                //console.debug(imgScale * img.width);
-                document.documentElement.style.setProperty('--width', (imgScale * img?.width) + 'px');
-            }
-            */
-
             return result;
-    
     }
 }
