@@ -16,7 +16,7 @@ Hooks.on("ready", async () => {
   //Creates A "Decks" folder where to unzip SDF Files
   let src = "data";
   //@ts-ignore
-  if(typeof ForgeVtt != "undefined" && ForgeVTT.usingTheForge){
+  if(typeof ForgeVTT != "undefined" && ForgeVTT.usingTheForge){
     src = "forgevtt"
   }
   let target = `worlds/${game.world.name}/Decks`

@@ -358,7 +358,7 @@ export class Decks{
       let deckfolderId = (await Folder.create({name: deckfile.name.split(".")[0], type:"JournalEntry", parent: DecksFolderID})).id
       let src = "data";
       //@ts-ignore
-      if(typeof ForgeVtt != "undefined" && ForgeVTT.usingTheForge){
+      if(typeof ForgeVTT != "undefined" && ForgeVTT.usingTheForge){
         src = "forgevtt"
       }
       let target = `worlds/${game.world.name}/Decks/${deckfolderId}/`
@@ -402,6 +402,7 @@ export class Decks{
       }
 
       this.decks[deckfolderId] = new Deck(deckfolderId)
+      ui.notifications.info("Finished Uploading Deck!")
       resolve(deckfolderId);      
     })
   }
@@ -421,7 +422,7 @@ export class Decks{
       let deckfolderId = (await Folder.create({name: deckName, type:"JournalEntry", parent: DecksFolderID})).id
       let src = "data";
       //@ts-ignore
-      if(typeof ForgeVtt != "undefined" && ForgeVTT.usingTheForge){
+      if(typeof ForgeVTT != "undefined" && ForgeVTT.usingTheForge){
         src = "forgevtt"
       }
       let target = `worlds/${game.world.name}/Decks/${deckfolderId}/`
@@ -451,6 +452,7 @@ export class Decks{
       }
 
       this.decks[deckfolderId] = new Deck(deckfolderId);
+      ui.notifications.info("Finished Uploading Deck!")
       resolve();
     })
   }
@@ -515,7 +517,7 @@ async function uploadFile(path:string, file:File){
   
   
   //@ts-ignore
-  if(typeof ForgeVtt != "undefined" && ForgeVTT.usingTheForge){
+  if(typeof ForgeVTT != "undefined" && ForgeVTT.usingTheForge){
     src = "forgevtt"
   }
   
