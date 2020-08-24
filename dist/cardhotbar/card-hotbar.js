@@ -254,14 +254,14 @@ export class cardHotbar extends Hotbar {
       {
         name: "Mark Card",
         icon: '<i class="fas fa-highlighter"></i>',
-        condition: async li => {
+        condition: li => {
           const macro = game.macros.get(li.data("macro-id"));
           return macro ? macro.owner : false;
         },
-        callback: li => {
+        callback: async li => {
           const macro = game.macros.get(li.data("macro-id"));
           let curMark = macro.getFlag("world","marked",1);  
-          curMark ? macro.setFlag("world","marked",0) : macro.setFlag("world","marked",1);
+          curMark ? await macro.setFlag("world","marked",0) : await macro.setFlag("world","marked",1);
         }
       },
 
