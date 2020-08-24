@@ -124,23 +124,21 @@ export class Deck {
                     }
                 }).map(t => t.data._id);
                 yield canvas.scene.deleteEmbeddedEntity("Tile", tileCards);
-                /* Not ready for primetime, commented out for now.
-                //delete all macros temporarily created for deck (also removes cards from all players hands)
-                let cardMacros = game.macros.filter( macro => {
-                    let cardID = macro.getFlag("world","cardID");
-                    if (cardID) {
-                        return game.decks.deckCheck(cardID, this.deckID);
-                    } else {
-                        return false
+                //@ts-ignore
+                for (let user of game.users.entries) {
+                    if (user.isSelf) {
+                        ui['cardHotbar'].populator.resetDeck(this.deckID);
                     }
-                });
-                for ( let m of cardMacros ) {
-                    m.delete();
+                    else {
+                        let resetMsg = {
+                            type: "RESETDECK",
+                            playerID: user.id,
+                            deckID: this.deckID
+                        };
+                        //@ts-ignore
+                        game.socket.emit('module.cardsupport', resetMsg);
+                    }
                 }
-                ui.cardHotbar.populator.compact();
-                //TODO: cleanup ui.cardHotbar.populator.macroMap... the deleted macros/cards are still there "under the hood". Sigh.
-                //write chbSynchWithHand maybe, that will force the c
-                */
                 yield this.updateState();
                 resolve(this._state);
             }));
@@ -254,7 +252,7 @@ export class Deck {
                     }
                 }
                 if (game.user.id == playerID) {
-                    ui['cardHotbar'].populator.addToPlayerHand(cards);
+                    ui['cardHotbar'].populator.addToHand(cards);
                 }
                 else {
                     let msg = {
@@ -480,11 +478,18 @@ export class Decks {
             resolve(cardEntry.id);
         }));
     }
-    /**
-     * Don't look at this code, it makes me cry it's dumb and hacky and I hate everything
-     */
-    setDecks(decks) {
-        this.decks = decks;
+    giveToPlayer(playerID, cardID) {
+        if (!game.user.isGM) {
+            console.error("This function can only be called by the GM");
+            return;
+        }
+        let msg = {
+            type: "DEAL",
+            playerID: playerID,
+            cards: [game.journal.get(cardID)]
+        };
+        //@ts-ignore
+        game.socket.emit('module.cardsupport', msg);
     }
 }
 /**

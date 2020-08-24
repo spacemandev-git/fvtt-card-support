@@ -247,7 +247,7 @@ function deckHUD(td, html) {
             let players = "";
             //@ts-ignore
             for (let user of game.users.entries) {
-                if (user.isSelf == false && user.data.active) {
+                if (user.isSelf == false && user.active) {
                     players += `<option value=${user.id}>${user.name}</option>`;
                 }
             }
@@ -340,7 +340,7 @@ class DiscardPile extends FormApplication {
                         ui.notifications.error("No more room in your hand");
                         return;
                     }
-                    ui['cardHotbar'].populator.addToHand([card]);
+                    ui['cardHotbar'].populator.addToHand([card._id]);
                     this.close();
                 });
                 //BURN

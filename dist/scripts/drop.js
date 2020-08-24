@@ -17,16 +17,46 @@ Hooks.once("canvasReady", () => {
         try {
             data = JSON.parse(event.dataTransfer.getData("text/plain"));
             console.log(data);
-            if (data.type == "Folder" && game.decks.get(data.id) != undefined) {
+            if (data.type == "Folder" && game.decks.get(data.id) != undefined && game.user.isGM) {
                 handleDroppedFolder(data.id, event.x, event.y);
             }
             else if (data.type == "JournalEntry" && game.decks.getByCard(data.id) != undefined) {
-                handleDroppedCard(data.id, event.clientX, event.clientY, event.altKey);
+                if (game.user.isGM) {
+                    handleDroppedCard(data.id, event.clientX, event.clientY, event.altKey);
+                }
+                else {
+                    let msg = {
+                        type: "DROP",
+                        playerID: game.users.find(el => el.isGM && el.active).id,
+                        cardID: data.id,
+                        x: event.clientX,
+                        y: event.clientY,
+                        alt: event.altKey
+                    };
+                    //@ts-ignore
+                    game.socket.emit('module.cardsupport', msg);
+                }
             }
             else if (data.type == "Macro" && game.decks.getByCard(game.macros.get(data.id).getFlag(mod_scope, "cardID")) != undefined) {
-                handleDroppedCard(game.macros.get(data.id).getFlag(mod_scope, "cardID"), event.clientX, event.clientY, event.altKey, game.macros.get(data.id).getFlag(mod_scope, "sideUp"));
-                yield ui['cardHotbar'].populator.chbUnsetMacro(data.cardSlot);
-                game.macros.get(data.id).delete();
+                if (game.user.isGM) {
+                    handleDroppedCard(game.macros.get(data.id).getFlag(mod_scope, "cardID"), event.clientX, event.clientY, event.altKey, game.macros.get(data.id).getFlag(mod_scope, "sideUp"));
+                    yield ui['cardHotbar'].populator.chbUnsetMacro(data.cardSlot);
+                    game.macros.get(data.id).delete();
+                }
+                else {
+                    let msg = {
+                        type: "DROP",
+                        playerID: game.users.find(el => el.isGM && el.active).id,
+                        cardID: game.macros.get(data.id).getFlag(mod_scope, "cardID"),
+                        x: event.clientX,
+                        y: event.clientY,
+                        alt: event.altKey
+                    };
+                    //@ts-ignore
+                    game.socket.emit('module.cardsupport', msg);
+                    yield ui['cardHotbar'].populator.chbUnsetMacro(data.cardSlot);
+                    game.macros.get(data.id).delete();
+                }
             }
         }
         catch (err) {
@@ -58,7 +88,7 @@ function handleDroppedFolder(folderId, x, y) {
         });
     });
 }
-function handleDroppedCard(cardID, x, y, alt, sideUp = "front") {
+export function handleDroppedCard(cardID, x, y, alt, sideUp = "front") {
     return __awaiter(this, void 0, void 0, function* () {
         let imgPath = "";
         if (alt || sideUp == "back") {

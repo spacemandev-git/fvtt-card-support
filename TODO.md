@@ -52,13 +52,8 @@ v2
 - Add a GUI to append to a Deck (DONE)
 
 #######################
-- Deal to Players / Draw For Players
-- Give to Player 
+- Deal to Players / Draw For Players (DONE)
+- Give to Player (DONE)
+- Reset Deck should delete all copies of cards in players hands (DONE)
 - Create a Button To Browse Decks and do things to them so you don't need to interact with a tile 
 - Discard to bottom of Deck
-
-######## Sockets
-1. Deal To Players
-2. Discard Cards
-3. Reveal Cards
-4. Reset Deck
