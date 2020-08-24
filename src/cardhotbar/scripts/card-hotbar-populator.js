@@ -46,8 +46,10 @@ export class cardHotbarPopulator {
     
             //preserve existing cards
             let hand = [];
+            hand.length = this.macroMap.length
             for(let slot = 0; slot <= this.macroMap.length; slot++){
-                hand.push(this.macroMap[slot])
+                //hand.push(this.macroMap[slot])
+                hand[slot] = this.macroMap[slot]
             }
     
             for(let i=0; i<cards.length; i++){
@@ -83,7 +85,8 @@ export class cardHotbarPopulator {
                         `,
                         img: img
                     })
-                    hand.push(macro.id);
+                    hand[firstEmpty+i] = macro.id;
+                    //hand.push(macro.id);
                 } else {
                     ui.notifications.error("Not enough space in your hand. ");
                     ui.notifications.render();
@@ -417,20 +420,25 @@ export class cardHotbarPopulator {
     }
 
     async _updateFlags() {
-        await game.user.unsetFlag('cardsupport', 'chbMacroMap');
-        const result = await game.user.setFlag('cardsupport', 'chbMacroMap', this.macroMap);
-        //quick solution to set css width for all slots based on first slot image
-        //TODO: improve to set individual slot width eventually?
-        console.debug("updating flags");
-        console.debug(this.macroMap[1]);
-        if (this.macroMap[1]) {
-            console.debug("in")
-            const imgPath = ( game.macros.get( this.macroMap[1] ).data.img );
-            const img = await loadTexture(imgPath);
-            const imgScale = ( 200 / img.height );
-            console.debug(imgScale * img.width);
-            document.documentElement.style.setProperty('--width', (imgScale * img.width) + 'px');
-        }
-        return result;
+        // THIS IS GOING TO FAIL A LOT BECAUSE
+            await game.user.unsetFlag('cardsupport', 'chbMacroMap');
+            const result = await game.user.setFlag('cardsupport', 'chbMacroMap', this.macroMap);
+            //quick solution to set css width for all slots based on first slot image
+            //TODO: improve to set individual slot width eventually?
+            console.debug("updating flags");
+            console.debug(this.macroMap[1]);
+            /*
+            if (this.macroMap[1]) {
+                console.debug("in")
+                const imgPath = ( game.macros.get( this.macroMap[1] )?.data.img );
+                const img = await loadTexture(imgPath);
+                const imgScale = ( 200 / img?.height );
+                //console.debug(imgScale * img.width);
+                document.documentElement.style.setProperty('--width', (imgScale * img?.width) + 'px');
+            }
+            */
+
+            return result;
+    
     }
 }
