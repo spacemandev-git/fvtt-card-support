@@ -13,8 +13,18 @@ Hooks.on("ready", () => {
         if (data.playerID != game.user.id) {
             return;
         }
+        console.log("CARD SUPPORT | Socket MSG Recieved: ", data);
         if ((data === null || data === void 0 ? void 0 : data.type) == "DEAL") {
             ui['cardHotbar'].populator.addToPlayerHand(data.cards);
+        }
+        else if ((data === null || data === void 0 ? void 0 : data.type) == "UPDATESTATE") {
+            game.decks.get(data.deckID);
+        }
+        else if ((data === null || data === void 0 ? void 0 : data.type) == "SETDECKS") {
+            game.decks.decks = JSON.parse(game.settings.get("cardsupport", "decks"));
+        }
+        else if ((data === null || data === void 0 ? void 0 : data.type) == "DISCARD") {
+            game.decks.getByCard(data.cardID).discardCard(data.cardID);
         }
     }));
 });

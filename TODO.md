@@ -53,8 +53,8 @@ v2
 
 #######################
 - Deal to Players / Draw For Players
-- Give to Player
-- Folder Context Menu
+- Give to Player 
+- Create a Button To Browse Decks and do things to them so you don't need to interact with a tile 
 - Discard to bottom of Deck
 
 ######## Sockets

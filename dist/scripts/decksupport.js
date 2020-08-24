@@ -13,6 +13,12 @@ export const log = (...args) => {
     return console.log(`Deck Importer | ${args}`);
 };
 Hooks.on("ready", () => __awaiter(void 0, void 0, void 0, function* () {
+    game.settings.register("cardsupport", "decks", {
+        scope: "world",
+        config: false,
+        type: String,
+        default: "{}"
+    });
     //Creates A "Decks" folder where to unzip SDF Files
     let src = "data";
     //@ts-ignore

@@ -43,13 +43,12 @@ export class cardHotbarPopulator {
                     let imgTex = await loadTexture(img);
                     let imgHeight = imgTex.height;
                     let imgWidth = imgTex.width;
-
                     let macro = await Macro.create({
                         name: `Card`,
                         type: 'script',
                         flags: {
                             "world": {
-                                "cardID": cards[i].id,
+                                "cardID": cards[i]._id,
                                 "img": cards[i].img, 
                                 "cardBack": cards[i].flags.world.cardBack
                             }
