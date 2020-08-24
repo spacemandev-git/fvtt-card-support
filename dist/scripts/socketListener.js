@@ -13,7 +13,6 @@ Hooks.on("ready", () => {
         if (data.playerID != game.user.id) {
             return;
         }
-        console.log("CARD SUPPORT | Socket MSG Recieved: ", data);
         if ((data === null || data === void 0 ? void 0 : data.type) == "DEAL") {
             ui['cardHotbar'].populator.addToPlayerHand(data.cards);
         }

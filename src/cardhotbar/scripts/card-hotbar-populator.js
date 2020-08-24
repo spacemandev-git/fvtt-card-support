@@ -7,13 +7,25 @@ export class cardHotbarPopulator {
         console.debug(this.macroMap);
     }
 
-    
+    // Backwards compatibilty
+    async addToHand(cardIDs){
+        console.log("Add to Hand CardIDs", cardIDs);
+        let journalEntries = []
+        for(let id of cardIDs){
+            journalEntries.push(game.journal.get(id))
+        }
+        console.log("JEs", journalEntries)
+        await this.addToPlayerHand(journalEntries);
+    }
+
+
     /**
      * 
      * @param card type: JournalEntry[]
      * 
      */
     async addToPlayerHand(cards){
+        console.log("Player Hand Add Cards", cards)
         return new Promise(async (resolve, reject) => {
             let sideUp = "front";
             if(game.user.getFlag('cardsupport', 'chbDrawFaceUp')){
@@ -38,8 +50,8 @@ export class cardHotbarPopulator {
     
             for(let i=0; i<cards.length; i++){
                 if(maxSlot >= i+firstEmpty){
-                    console.log("Side: ", sideUp)
-                    let img = sideUp == "front" ? cards[i].img : cards[i].flags.world.cardBack
+                    console.log("Card In Hand: ", cards[i])
+                    let img = sideUp == "front" ? cards[i].data.img : cards[i].data.flags.world.cardBack
                     let imgTex = await loadTexture(img);
                     let imgHeight = imgTex.height;
                     let imgWidth = imgTex.width;
@@ -49,8 +61,8 @@ export class cardHotbarPopulator {
                         flags: {
                             "world": {
                                 "cardID": cards[i]._id,
-                                "img": cards[i].img, 
-                                "cardBack": cards[i].flags.world.cardBack
+                                "img": cards[i].data.img, 
+                                "cardBack": cards[i].data.flags.world.cardBack
                             }
                         }, 
                         scope: "global",
@@ -79,7 +91,7 @@ export class cardHotbarPopulator {
         })
     }
 
-   async addToHand(cardId, sideUp) {
+   async addToHand_OLD(cardId, sideUp) {
         //console.debug("Card Hotbar | Adding card to hand...");
         //generate macro for card
         //TODO: better consolidate with code in index.js in hotbarDrop hook (call hook? make function at least?)

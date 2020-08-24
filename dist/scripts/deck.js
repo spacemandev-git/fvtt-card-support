@@ -254,7 +254,7 @@ export class Deck {
                     }
                 }
                 if (game.user.id == playerID) {
-                    ui['cardHotbar'].populator.addToPlayerHand(cards);
+                    ui['cardHotbar'].populator.addToHand(cards);
                 }
                 else {
                     let msg = {

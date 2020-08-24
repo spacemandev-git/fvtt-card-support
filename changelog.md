@@ -1,3 +1,6 @@
+1.3.0
+
+
 1.2.1
 - Added the ability to pick a card back when importing a deck by images
 

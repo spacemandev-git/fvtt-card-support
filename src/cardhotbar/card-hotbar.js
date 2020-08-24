@@ -330,14 +330,17 @@ export class cardHotbar extends Hotbar {
           try{
             //const mCardId = macro.data.flags.world.cardID
             //game.decks.getByCard(mCardId).discardCard(mCardId);
-            let socketMsg = {
-              type: "DISCARD",
-              playerID: game.users.find(el => el.isGM && el.data.active).id,
-              cardID: macro.data.flags.world.cardID
+            if(!game.user.isGM){
+              let socketMsg = {
+                type: "DISCARD",
+                playerID: game.users.find(el => el.isGM && el.data.active).id,
+                cardID: macro.data.flags.world.cardID
+              }
+              await game.socket.emit('module.cardsupport', socketMsg);
+            } else {
+              game.decks.getByCard(macro.data.flags.world.cardID).discardCard(macro.data.flags.world.cardID)
             }
-            console.log("Sending MSG: ", socketMsg);
 
-            await game.socket.emit('module.cardsupport', socketMsg);
             
             await ui.cardHotbar.populator.chbUnsetMacro(index);
             macro.delete();

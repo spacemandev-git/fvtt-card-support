@@ -340,7 +340,7 @@ class DiscardPile extends FormApplication {
                         ui.notifications.error("No more room in your hand");
                         return;
                     }
-                    ui['cardHotbar'].populator.addToHand([card]);
+                    ui['cardHotbar'].populator.addToHand([card._id]);
                     this.close();
                 });
                 //BURN

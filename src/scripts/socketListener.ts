@@ -1,10 +1,7 @@
-import { Deck } from "./deck.js";
-
 Hooks.on("ready", () => {
   //@ts-ignore
   game.socket.on('module.cardsupport', async (data:any) => {
     if(data.playerID != game.user.id){return;}
-    console.log("CARD SUPPORT | Socket MSG Recieved: ", data);
     if(data?.type == "DEAL"){
       ui['cardHotbar'].populator.addToPlayerHand(data.cards);
     } else if (data?.type == "UPDATESTATE") {
