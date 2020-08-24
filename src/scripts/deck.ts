@@ -361,14 +361,13 @@ export class Decks{
       if(typeof ForgeVtt != "undefined" && ForgeVTT.usingTheForge){
         src = "forgevtt"
       }
-      let target = `Decks/${deckfolderId}/`
+      let target = `worlds/${game.world.name}/{Decks/${deckfolderId}/`
       let result = await FilePicker.browse(src, target)
       if(result.target != target){
         await FilePicker.createDirectory(src, target, {});
       }
       
       //Create a new deck object
-      console.log(deckZip);
       //Read deck.yaml
       const deckyaml = jsyaml.safeLoadAll(await deckZip.file('deck.yaml').async('string'))
       //For Each Card in Deck.yaml List, Read the Card
@@ -382,19 +381,19 @@ export class Decks{
           ui.notifications.error(`${card.name} is broken.`)
           continue;
         }
-        await uploadFile(target, new File([img], card.img))
-        await uploadFile(target, new File([card_back], card.back))
+        let imgPath = await uploadFile(target, new File([img], card.img))
+        let backPath = await uploadFile(target, new File([card_back], card.back))
         
         if(!card.qty){card.qty = 1}
         for(let i=0; i< card.qty; i++){
           await JournalEntry.create({
             name: card.name,
             folder: deckfolderId,
-            img: target+card.img,
+            img: imgPath,
             flags:{
               [mod_scope]: {
                 cardData: card.data,
-                cardBack: target+card.back,
+                cardBack: backPath,
                 cardMacros: {}
               }
             } 
@@ -425,26 +424,26 @@ export class Decks{
       if(typeof ForgeVtt != "undefined" && ForgeVTT.usingTheForge){
         src = "forgevtt"
       }
-      let target = `Decks/${deckfolderId}/`
+      let target = `worlds/${game.world.name}/Decks/${deckfolderId}/`
       let result = await FilePicker.browse(src, target)
       if(result.target != target){
         await FilePicker.createDirectory(src, target, {});
       }
 
       //uplaod CardBack
-      await uploadFile(target, cardBack)
+      let cardBackPath = await uploadFile(target, cardBack)
 
       //Make Cards
       for(let cardFile of files){
-        await uploadFile(target, cardFile);
+        let imgPath = await uploadFile(target, cardFile);
         await JournalEntry.create({
           name: cardFile.name.split(".")[0],
           folder: deckfolderId,
-          img: target+cardFile.name,
+          img: imgPath,
           flags: {
             [mod_scope]: {
               cardData: {},
-              cardBack: target+cardBack.name,
+              cardBack: cardBackPath,
               cardMacros: {}
             }
           }
@@ -513,12 +512,18 @@ export class Decks{
  */
 async function uploadFile(path:string, file:File){
   let src = "data";
+  
+  
   //@ts-ignore
   if(typeof ForgeVtt != "undefined" && ForgeVTT.usingTheForge){
     src = "forgevtt"
   }
+  
+
   let filesInFolder = (await FilePicker.browse(src, path)).files 
   let targetPath = path+file.name
-  if(filesInFolder.includes(targetPath)){return;} //don't upload same file multiple times
-  await FilePicker.upload(src, path, file, {})
+  if(filesInFolder.includes(targetPath)){return targetPath;} //don't upload same file multiple times
+  
+  //@ts-ignore
+  return (await FilePicker.upload(src, path, file, {})).path
 }

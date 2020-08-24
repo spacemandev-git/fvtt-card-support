@@ -24,18 +24,7 @@ v1
 6. Infinite Draw
 7. Take as Copy
 
-v2
-1. Burnt/Removed from Play Pile for decks 
-2. Import single card to deck // Append to Deck
-3. Register and call hooks on deck initalization
-4. Deal to Players (requires Sockets)
-5. Card Add GUI
-4. Draw to Table (Flipped)
-5. Append Cards to Deck
-
-
-
-######################
+###################### 1.1
 - Infinite Draw (DONE)
 - Take as Copy from View Deck (DONE)
 - Draw to Table (DONE)
@@ -46,14 +35,23 @@ v2
 - Deal to Players (Requires Sockets)
 - Card Add GUI
 
-######################
+###################### 1.2
 - Change Decks &  Tiles to Actors instead of Tiles (DONE)
 - Add a way to import cards from folder of images (DONE)
 - Add a GUI to append to a Deck (DONE)
 
-#######################
+####################### 1.3
 - Deal to Players / Draw For Players (DONE)
 - Give to Player (DONE)
 - Reset Deck should delete all copies of cards in players hands (DONE)
+
+
+###################### 1.3.1
+- Upload to worlds/worldname/decks instead of Data/Decks/ to better package images with worlds
+- Forge Asset Directory compatibility
+
+######################
+- Alt draw bug for players from 1.3 release
+- save decks as _decks instead of Decks/
 - Create a Button To Browse Decks and do things to them so you don't need to interact with a tile 
 - Discard to bottom of Deck

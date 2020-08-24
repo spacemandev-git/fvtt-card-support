@@ -1,3 +1,7 @@
+1.3.1 
+- Changed the default upload directory for card images from Decks/ to worlds/{worldname}/Decks/ all previously uploaded decks will world fine but new decks will be pushed here. this is so the world can be packaged up easier
+- pushed a fix for forge compatibility
+
 1.3.0
 - Decks are tiles again
 - Deal to Players (new icon on tile) and Give to Players (right click card in hand)

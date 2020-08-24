@@ -357,13 +357,12 @@ export class Decks {
             if (typeof ForgeVtt != "undefined" && ForgeVTT.usingTheForge) {
                 src = "forgevtt";
             }
-            let target = `Decks/${deckfolderId}/`;
+            let target = `worlds/${game.world.name}/{Decks/${deckfolderId}/`;
             let result = yield FilePicker.browse(src, target);
             if (result.target != target) {
                 yield FilePicker.createDirectory(src, target, {});
             }
             //Create a new deck object
-            console.log(deckZip);
             //Read deck.yaml
             const deckyaml = jsyaml.safeLoadAll(yield deckZip.file('deck.yaml').async('string'));
             //For Each Card in Deck.yaml List, Read the Card
@@ -377,8 +376,8 @@ export class Decks {
                     ui.notifications.error(`${card.name} is broken.`);
                     continue;
                 }
-                yield uploadFile(target, new File([img], card.img));
-                yield uploadFile(target, new File([card_back], card.back));
+                let imgPath = yield uploadFile(target, new File([img], card.img));
+                let backPath = yield uploadFile(target, new File([card_back], card.back));
                 if (!card.qty) {
                     card.qty = 1;
                 }
@@ -386,11 +385,11 @@ export class Decks {
                     yield JournalEntry.create({
                         name: card.name,
                         folder: deckfolderId,
-                        img: target + card.img,
+                        img: imgPath,
                         flags: {
                             [mod_scope]: {
                                 cardData: card.data,
-                                cardBack: target + card.back,
+                                cardBack: backPath,
                                 cardMacros: {}
                             }
                         }
@@ -419,24 +418,24 @@ export class Decks {
             if (typeof ForgeVtt != "undefined" && ForgeVTT.usingTheForge) {
                 src = "forgevtt";
             }
-            let target = `Decks/${deckfolderId}/`;
+            let target = `worlds/${game.world.name}/Decks/${deckfolderId}/`;
             let result = yield FilePicker.browse(src, target);
             if (result.target != target) {
                 yield FilePicker.createDirectory(src, target, {});
             }
             //uplaod CardBack
-            yield uploadFile(target, cardBack);
+            let cardBackPath = yield uploadFile(target, cardBack);
             //Make Cards
             for (let cardFile of files) {
-                yield uploadFile(target, cardFile);
+                let imgPath = yield uploadFile(target, cardFile);
                 yield JournalEntry.create({
                     name: cardFile.name.split(".")[0],
                     folder: deckfolderId,
-                    img: target + cardFile.name,
+                    img: imgPath,
                     flags: {
                         [mod_scope]: {
                             cardData: {},
-                            cardBack: target + cardBack.name,
+                            cardBack: cardBackPath,
                             cardMacros: {}
                         }
                     }
@@ -507,8 +506,9 @@ function uploadFile(path, file) {
         let filesInFolder = (yield FilePicker.browse(src, path)).files;
         let targetPath = path + file.name;
         if (filesInFolder.includes(targetPath)) {
-            return;
+            return targetPath;
         } //don't upload same file multiple times
-        yield FilePicker.upload(src, path, file, {});
+        //@ts-ignore
+        return (yield FilePicker.upload(src, path, file, {})).path;
     });
 }

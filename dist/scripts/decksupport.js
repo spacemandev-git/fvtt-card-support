@@ -25,7 +25,7 @@ Hooks.on("ready", () => __awaiter(void 0, void 0, void 0, function* () {
     if (typeof ForgeVtt != "undefined" && ForgeVTT.usingTheForge) {
         src = "forgevtt";
     }
-    let target = 'Decks';
+    let target = `worlds/${game.world.name}/Decks`;
     let result = yield FilePicker.browse(src, target);
     if (result.target != target) {
         yield FilePicker.createDirectory(src, target, {});

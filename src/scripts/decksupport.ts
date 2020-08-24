@@ -19,7 +19,7 @@ Hooks.on("ready", async () => {
   if(typeof ForgeVtt != "undefined" && ForgeVTT.usingTheForge){
     src = "forgevtt"
   }
-  let target = 'Decks'
+  let target = `worlds/${game.world.name}/Decks`
   let result = await FilePicker.browse(src, target)
   if(result.target != target){
     await FilePicker.createDirectory(src, target, {});
