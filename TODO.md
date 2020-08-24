@@ -57,3 +57,9 @@ v2
 - Give to Player
 - Folder Context Menu
 - Discard to bottom of Deck
+
+######## Sockets
+1. Deal To Players
+2. Discard Cards
+3. Reveal Cards
+4. Reset Deck
