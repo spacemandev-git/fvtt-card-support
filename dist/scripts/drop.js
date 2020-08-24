@@ -41,13 +41,13 @@ function handleDroppedFolder(folderId, x, y) {
             let t = canvas.tiles.worldTransform;
             const _x = (x - t.tx) / canvas.stage.scale.x;
             const _y = (y - t.ty) / canvas.stage.scale.y;
-            Tile.create({
+            Token.create({
                 name: game.folders.get(folderId).name,
                 img: `modules/cardsupport/assets/${Math.floor(Math.random() * 10) + 1}.png`,
                 x: _x,
                 y: _y,
-                width: 350,
-                height: 400,
+                width: 2,
+                height: 3,
                 flags: {
                     [mod_scope]: {
                         'deckID': folderId

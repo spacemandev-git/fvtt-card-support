@@ -77,24 +77,33 @@ export class cardHotbar extends Hotbar {
     for ( let [i, m] of macros.entries() ) {
       m.key = i<53 ? i+1 : 0;
       m.cssClass = m.macro ? "active" : "inactive";
-      //additional logic to mark the last active slot as "last"
-      if (m.cssClass == "inactive" && lastCard == false) {
-        if(macros[i-1] && macros[i-1].macro) {
-          macros[i-1].cssClass = "last";
-          lastCard = true;
-        }
-      }
-      if (lastCard == false && i == 53 && m.macro) {
-        m.cssClass = "last";
-        lastCard = true;
-      }
+
     
       m.icon = m.macro ? m.macro.data.img : null;
       //additional logic to store card facing
       //TO DO: improve to replace hard-coded value with the default draw-mode?
-      let defaultSide = "front"
+      let defaultSide = "front";
       let curSide = m.macro ? m.macro.getFlag("world","sideUp") || defaultSide : defaultSide;
       m.sideUp = curSide ? curSide : defaultSide;
+      let defaultMark = 0;
+      let curMark = m.macro ? m.macro.getFlag("world","marked") || defaultMark : defaultMark;
+      m.marked = curMark ? curMark : defaultMark;
+      //additional logic to apply "last" and "marked"
+      if (m.cssClass == "inactive" && lastCard == false) {
+        if(macros[i-1] && macros[i-1].macro) {
+          macros[i-1].cssClass == "active marked" ? macros[i-1].cssClass = "last marked" : macros[i-1].cssClass = "last";
+          lastCard = true;
+        }
+      }
+      //manually catch last card when full
+      if (lastCard == false && i == 53 && m.macro) {
+        m.cssClass = "last";
+        lastCard = true;
+      }
+      if (m.marked) {
+        console.debug("Card Hotbar | Applying mark...");
+        m.cssClass = m.cssClass + " marked";
+      }
     }
     return macros;
   }
@@ -239,9 +248,39 @@ export class cardHotbar extends Hotbar {
   _contextMenu(html) {
     new ContextMenu(html, ".macro", [
 
-      //TODO: Add JQuery to visually deprecte edit card. Add dialogs
+      //TODO: Add JQuery to visually deprecate edit card. Add dialogs
+
+      //universal options
+      {
+        name: "Mark Card",
+        icon: '<i class="fas fa-highlighter"></i>',
+        condition: li => {
+          const macro = game.macros.get(li.data("macro-id"));
+          return macro ? macro.owner : false;
+        },
+        callback: async li => {
+          const macro = game.macros.get(li.data("macro-id"));
+          let curMark = macro.setFlag("world","marked",1);  
+          curMark ? macro.setFlag("world","marked",0) : macro.setFlag("world","marked",1);
+        }
+      },
 
       //active options
+      {
+        name: "Reveal Card",
+        icon: '<i class="fas fa-sun"></i>',
+        condition: li => {
+          const macro = game.macros.get(li.data("macro-id"));
+          return macro ? macro.owner : false;
+        },
+        callback: li => {
+          const journal = game.journal.get ( game.macros.get( li.data("macro-id") ).getFlag("world","cardID") );
+          console.debug("Card Hotbar | Revealing card to all players...");
+          //console.debug( game.macros.get( li.data("macro-id") ) );
+          journal.show("image", true);
+          ui.notifications.notify("Card now revealed to all players...");          
+        }
+      },
       {
         name: "Edit Card Macro",
         icon: '<i class="fas fa-edit"></i>',
@@ -303,25 +342,6 @@ export class cardHotbar extends Hotbar {
           }
         }
       },
-
-      /* disabled for now at least until it's more useful? Same thing can be done once JE is shown.
-      {
-        name: "Reveal Card",
-        icon: '<i class="fas fa-sun"></i>',
-        condition: li => {
-          const macro = game.macros.get(li.data("macro-id"));
-          return macro ? macro.owner : false;
-        },
-        callback: li => {
-          const journal = game.journal.get ( game.macros.get( li.data("macro-id") ).getFlag("world","cardID") );
-          console.debug("Card Hotbar | Revealing card to all players...");
-          //console.debug( game.macros.get( li.data("macro-id") ) );
-          journal.show("image", true);
-          ui.notifications.notify("Card now revealed to all players...");          
-        }
-      },
-      */
-
       //inactive slot options
       {
         name: "Switch Deck",

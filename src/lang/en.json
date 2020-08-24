@@ -21,16 +21,16 @@
     "nameHint": "Adjust the size of card tiles in play. Values less than 1 make the cards smaller."
   },
   "CARD.chbPrimaryColor": {
-          "name": "Player Hand Color:",
-          "nameHint": "Background color for the player's hand."
+          "name": "Player Hand UI Color:",
+          "nameHint": "Background color for the hand's vertical bar control bar."
       },
   "CARD.chbBorderColor": {
-          "name": "Player Hand Border Color:",
-          "nameHint": "Border color of each card in hand."
+          "name": "Player Hand UI Border Color:",
+          "nameHint": "Background color for the hand's vertical bar control bar."
       },
-  "CARD.chbBorderColorActive": {
-          "name": "Player Hand Highlight Color:",
-          "nameHint": "Border color of card in hand when hovered."
+  "CARD.chbMarkedColor": {
+          "name": "Color Applied to Marked Cards:",
+          "nameHint": "Color of tint applied to card(s) in hand designated as 'Marked'."
       },
   "CARD.chbXPos":{
           "name": "Player Hand Horizontal Position",
