@@ -121,12 +121,12 @@
 
 #card-hotbar li.macro:hover {
     top: -10px;
-    flex: 0 0 138px;
+    flex: 0 0 var(--width);
     box-shadow: 0px 5px 10px 2px #000000;
     z-index: 1;
 }
 #card-macro-list li.last {
-	flex: 0 0 138px;
+	flex: 0 0 var(--width);
 }
 
 /* Next functionality disabled
