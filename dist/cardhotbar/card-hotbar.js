@@ -76,9 +76,7 @@ export class cardHotbar extends Hotbar {
     const macros = this.getcardHotbarMacros(page);
     for ( let [i, m] of macros.entries() ) {
       m.key = i<53 ? i+1 : 0;
-      m.cssClass = m.macro ? "active" : "inactive";
-
-    
+      m.cssClass = m.macro ? "active" : "inactive";    
       m.icon = m.macro ? m.macro.data.img : null;
       //additional logic to store card facing
       //TO DO: improve to replace hard-coded value with the default draw-mode?

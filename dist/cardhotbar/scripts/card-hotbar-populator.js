@@ -3,8 +3,10 @@
 export class cardHotbarPopulator {
     constructor() { 
         this.macroMap = this.chbGetMacros();
+        this.imgScale = getComputedStyle(document.documentElement).getPropertyValue('--width');    
         console.debug("Card Hotbar | Initial state:");
         console.debug(this.macroMap);
+        console.debug(this.imgScale);
     }
 
     // Backwards compatibilty
@@ -416,6 +418,19 @@ export class cardHotbarPopulator {
 
     async _updateFlags() {
         await game.user.unsetFlag('cardsupport', 'chbMacroMap');
-        return game.user.setFlag('cardsupport', 'chbMacroMap', this.macroMap);
+        const result = await game.user.setFlag('cardsupport', 'chbMacroMap', this.macroMap);
+        //quick solution to set css width for all slots based on first slot image
+        //TODO: improve to set individual slot width eventually?
+        console.debug("updating flags");
+        console.debug(this.macroMap[1]);
+        if (this.macroMap[1]) {
+            console.debug("in")
+            const imgPath = ( game.macros.get( this.macroMap[1] ).data.img );
+            const img = await loadTexture(imgPath);
+            const imgScale = ( 200 / img.height );
+            console.debug(imgScale * img.width);
+            document.documentElement.style.setProperty('--width', (imgScale * img.width) + 'px');
+        }
+        return result;
     }
 }

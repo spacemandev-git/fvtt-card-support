@@ -1,5 +1,9 @@
 /*Global styles*/
 
+:root {
+    --width: 138px;
+}
+
 /* TO DO: figure out why so wide, even after hiding cards */
 #card-hotbar {
     z-index: 69;
@@ -112,6 +116,7 @@
     cursor: pointer;
     margin-top: auto;
     margin-bottom: auto;
+    /*width: var(--width);*/
     height: 100%;
     top: 0px;
     box-shadow: 0px 0 4px black;
