@@ -89,6 +89,10 @@ export class cardHotbar extends Hotbar {
       let curMark = m.macro ? m.macro.getFlag("world","marked") || defaultMark : defaultMark;
       m.marked = curMark ? curMark : defaultMark;
       //additional logic to apply "last" and "marked"
+      if (curMark) {
+        console.debug("Card Hotbar | Applying mark...");
+        m.cssClass = m.cssClass + " marked";
+      }
       if (m.cssClass == "inactive" && lastCard == false) {
         if(macros[i-1] && macros[i-1].macro) {
           macros[i-1].cssClass == "active marked" ? macros[i-1].cssClass = "last marked" : macros[i-1].cssClass = "last";
@@ -97,12 +101,8 @@ export class cardHotbar extends Hotbar {
       }
       //manually catch last card when full
       if (lastCard == false && i == 53 && m.macro) {
-        m.cssClass = "last";
+        m.cssClass == "active marked" ? m.cssClass = "last marked" : m.cssClass = "last";
         lastCard = true;
-      }
-      if (m.marked) {
-        console.debug("Card Hotbar | Applying mark...");
-        m.cssClass = m.cssClass + " marked";
       }
     }
     return macros;
@@ -260,8 +260,8 @@ export class cardHotbar extends Hotbar {
         },
         callback: async li => {
           const macro = game.macros.get(li.data("macro-id"));
-          let curMark = macro.setFlag("world","marked",1);  
-          curMark ? macro.setFlag("world","marked",0) : macro.setFlag("world","marked",1);
+          let curMark = macro.getFlag("world","marked",1);  
+          curMark ? await macro.setFlag("world","marked",0) : await macro.setFlag("world","marked",1);
         }
       },
 
