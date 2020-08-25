@@ -248,15 +248,19 @@ function deckHUD(td, html) {
             //@ts-ignore
             for (let user of game.users.entries) {
                 if (user.isSelf == false && user.active) {
-                    players += `<option value=${user.id}>${user.name}</option>`;
+                    //players += `<option value=${user.id}>${user.name}</option>`
+                    players += `
+        <div style="display:flex">
+          <span style="flex:2">${user.data.name}</span><input style="flex:1" type="checkbox" id="${user.id}"/>
+        </div>
+        `;
                 }
             }
             let dealCardsDialog = `
     <h2> Deal Cards To Player </h2>
     <div style="display:flex; flex-direction:column">
-      <p style="display:flex"> 
-       <span style="flex:2"> Player: </span> 
-       <select id="player" style="flex:1">${players}</select> 
+      <p style="display:flex; flex-direction:column"> 
+        ${players}
       <p>
       <p  style="display:flex"> 
         <span style="flex:2"> Cards: </span>
@@ -275,8 +279,15 @@ function deckHUD(td, html) {
                     deal: {
                         label: "Deal",
                         callback: (html) => __awaiter(this, void 0, void 0, function* () {
+                            var _b;
                             let inf = html.find("#infinite")[0].checked ? true : false;
-                            deck.dealToPlayer(html.find("#player")[0].value, html.find("#numCards")[0].value, inf);
+                            let numCards = html.find("#numCards")[0].value;
+                            //@ts-ignore
+                            for (let user of game.users.entries) {
+                                if ((_b = html.find(`#${user.id}`)[0]) === null || _b === void 0 ? void 0 : _b.checked) {
+                                    deck.dealToPlayer(user.id, numCards, inf);
+                                }
+                            }
                         })
                     }
                 }

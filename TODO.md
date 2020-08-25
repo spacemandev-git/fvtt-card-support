@@ -46,12 +46,17 @@ v1
 - Reset Deck should delete all copies of cards in players hands (DONE)
 
 
-###################### 1.3.1
+###################### 1.3.1 - 1.3.3
 - Upload to worlds/worldname/decks instead of Data/Decks/ to better package images with worlds
 - Forge Asset Directory compatibility
 
 ######################
-- Alt draw bug for players from 1.3 release
-- save decks as _decks instead of Decks/
+- Alt draw bug for players from 1.3 release (Fixed in 1.3.4 by Norc)
+- save decks as _decks instead of Decks/ (maybe do a migration?)
 - Create a Button To Browse Decks and do things to them so you don't need to interact with a tile 
 - Discard to bottom of Deck
+- Use checkboxes on deal dialog (DONE)
+- Take Card From Player
+- Player drop card as Token with HUD
+- Turn to Tile + Token HUD for Card
+- Give Card to Player Tile HUD
