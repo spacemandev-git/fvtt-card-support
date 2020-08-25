@@ -45,5 +45,44 @@ Hooks.on("ready", () => {
             handleDroppedCard(data.cardID, data.x, data.y, data.alt);
             //handleTokenCard(data.cardID, data.x, data.y, data.alt)
         }
+        else if ((data === null || data === void 0 ? void 0 : data.type) == "TAKECARD") {
+            let img = ui['cardHotbar'].macros[data.cardNum - 1].icon;
+            let macro = ui['cardHotbar'].macros[data.cardNum - 1].macro;
+            let tex = yield loadTexture(img);
+            new Dialog({
+                title: `${game.users.get(data.playerID).data.name} is requesting a card`,
+                content: `
+          <img src="${img}"></img>        
+        `,
+                buttons: {
+                    accept: {
+                        label: "Accept",
+                        callback: () => __awaiter(void 0, void 0, void 0, function* () {
+                            if (game.user.isGM) {
+                                game.decks.giveToPlayer(data.cardRequester, macro.getFlag("world", "cardID"));
+                            }
+                            else {
+                                let msg = {
+                                    type: "GIVE",
+                                    playerID: game.users.find(el => el.isGM && el.active).id,
+                                    to: data.cardRequester,
+                                    cardID: macro.getFlag("world", "cardID")
+                                };
+                                //@ts-ignore
+                                game.socket.emit('module.cardsupport', msg);
+                            }
+                            //delete the macro in hand
+                            yield ui['cardHotbar'].populator.chbUnsetMacro(data.cardNum);
+                        })
+                    },
+                    decline: {
+                        label: "Decline"
+                    }
+                }
+            }, {
+                height: tex.height,
+                width: tex.width
+            }).render(true);
+        }
     }));
 });

@@ -26,10 +26,54 @@ Hooks.on("ready", () => {
     } else if (data?.type == "DROP"){
       handleDroppedCard(data.cardID, data.x, data.y, data.alt)
       //handleTokenCard(data.cardID, data.x, data.y, data.alt)
+    } else if (data?.type == "TAKECARD") {
+      let img = ui['cardHotbar'].macros[data.cardNum-1].icon
+      let macro = ui['cardHotbar'].macros[data.cardNum-1].macro
+
+      let tex = await loadTexture(img)
+      new Dialog({
+        title: `${game.users.get(data.playerID).data.name} is requesting a card`,
+        content: `
+          <img src="${img}"></img>        
+        `,
+        buttons: {
+          accept: {
+            label: "Accept",
+            callback: async () => {
+              if(game.user.isGM){
+                game.decks.giveToPlayer(data.cardRequester, macro.getFlag("world", "cardID"));
+              } else {
+                let msg = {
+                  type: "GIVE",
+                  playerID: game.users.find(el => el.isGM && el.active).id, //Send to GM for processing
+                  to: data.cardRequester,
+                  cardID: macro.getFlag("world", "cardID")
+                }
+                //@ts-ignore
+                game.socket.emit('module.cardsupport', msg);  
+              }
+              //delete the macro in hand
+              await ui['cardHotbar'].populator.chbUnsetMacro(data.cardNum)
+            }
+          },
+          decline: {
+            label: "Decline"
+          }
+        }
+      }, {
+        height: tex.height,
+        width: tex.width
+      }).render(true)
     }
   })  
 })
 
+export interface MSG_TAKECARD {
+  type: "TAKECARD",
+  playerID: string,
+  cardRequester: string,
+  cardNum: number
+}
 
 export interface MSG_DEAL {
   type: "DEAL", 
@@ -81,3 +125,4 @@ export interface MSG_DROPTILE {
   y: number,
   alt: boolean
 }
+

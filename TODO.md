@@ -63,4 +63,4 @@ v1
 - Discard to bottom of Deck
 - Default card back for decks
 - save decks as _decks instead of Decks/ (maybe do a migration?)
-
+- Settings for what decks a player can interact with
