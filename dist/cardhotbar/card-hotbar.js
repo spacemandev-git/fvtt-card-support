@@ -80,6 +80,11 @@ export class cardHotbar extends Hotbar {
       m.icon = m.macro ? m.macro.data.img : null;
       //additional logic to store card facing
       //TO DO: improve to replace hard-coded value with the default draw-mode?
+      //getComputedStyle(document.documentElement).getPropertyValue('--width');
+      //element.style.setProperty("--my-var", jsVar + 4);
+      let defaultWidth = 138;
+      let sw = m.macro ? m.macro.getFlag("world","scaledWidth") || defaultWidth : defaultWidth;
+      m.scaledWidth = sw ? sw : defaultWidth;
       let defaultSide = "front";
       let curSide = m.macro ? m.macro.getFlag("world","sideUp") || defaultSide : defaultSide;
       m.sideUp = curSide ? curSide : defaultSide;
