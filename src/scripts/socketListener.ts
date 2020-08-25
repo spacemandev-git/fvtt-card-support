@@ -25,6 +25,7 @@ Hooks.on("ready", () => {
       game.journal.get(data.cardID).show("image", true);
     } else if (data?.type == "DROP"){
       handleDroppedCard(data.cardID, data.x, data.y, data.alt)
+      //handleTokenCard(data.cardID, data.x, data.y, data.alt)
     }
   })  
 })

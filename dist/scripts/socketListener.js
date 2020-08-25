@@ -43,6 +43,7 @@ Hooks.on("ready", () => {
         }
         else if ((data === null || data === void 0 ? void 0 : data.type) == "DROP") {
             handleDroppedCard(data.cardID, data.x, data.y, data.alt);
+            //handleTokenCard(data.cardID, data.x, data.y, data.alt)
         }
     }));
 });

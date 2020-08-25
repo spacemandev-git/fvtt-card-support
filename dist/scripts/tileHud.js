@@ -25,9 +25,11 @@ function cardHUD(tileHUD, html) {
         const handDiv = $('<i class="control-icon fa fa-hand-paper" aria-hidden="true" title="Take"></i>');
         const flipDiv = $('<i class="control-icon fa fa-undo" aria-hidden="true" title="Flip"></i>');
         const discardDiv = $('<i class="control-icon fa fa-trash" aria-hidden="true" title="Discard"></i>');
+        const giveCardDiv = $('<i class="control-icon icon-deal" title="Deal to players"></i>');
         html.find('.left').append(handDiv);
         html.find('.left').append(flipDiv);
         html.find('.left').append(discardDiv);
+        html.find('.left').append(giveCardDiv);
         handDiv.click((ev) => {
             takeCard(tileHUD.object.data);
         });
@@ -36,6 +38,9 @@ function cardHUD(tileHUD, html) {
         });
         discardDiv.click((ev) => {
             discardCard(tileHUD.object.data);
+        });
+        giveCardDiv.click(ev => {
+            giveCard(tileHUD.object.data);
         });
         //Embdded Functions
         const flipCard = (td) => __awaiter(this, void 0, void 0, function* () {
@@ -78,6 +83,45 @@ function cardHUD(tileHUD, html) {
             game.decks.get(deckId).discardCard(td.flags[mod_scope].cardID);
             // Delete Tile
             canvas.tiles.get(td._id).delete();
+        });
+        const giveCard = (td) => __awaiter(this, void 0, void 0, function* () {
+            let players = "";
+            //@ts-ignore
+            for (let user of game.users.entries) {
+                if (user.isSelf == false && user.active) {
+                    players += `<option value=${user.id}>${user.name}</option>`;
+                }
+            }
+            let dialogHTML = `
+    <p> Player <select id="player">${players}</select> </p>
+    `;
+            new Dialog({
+                title: "Give Card to Player",
+                content: dialogHTML,
+                buttons: {
+                    give: {
+                        label: "Give",
+                        callback: (html) => __awaiter(this, void 0, void 0, function* () {
+                            let _to = html.find("#player")[0].value;
+                            if (game.user.isGM) {
+                                game.decks.giveToPlayer(_to, td.flags[mod_scope].cardID);
+                            }
+                            else {
+                                let msg = {
+                                    type: "GIVE",
+                                    playerID: game.users.find(el => el.isGM && el.active).id,
+                                    to: _to,
+                                    cardID: td.flags[mod_scope].cardID
+                                };
+                                //@ts-ignore
+                                game.socket.emit('module.cardsupport', msg);
+                            }
+                            //delete tile
+                            yield canvas.scene.deleteEmbeddedEntity("Tile", td._id);
+                        })
+                    }
+                }
+            }).render(true);
         });
     });
 }

@@ -50,13 +50,17 @@ v1
 - Upload to worlds/worldname/decks instead of Data/Decks/ to better package images with worlds
 - Forge Asset Directory compatibility
 
-######################
+###################### 1.3.4
+- Use checkboxes on deal dialog (DONE)
 - Alt draw bug for players from 1.3 release (Fixed in 1.3.4 by Norc)
-- save decks as _decks instead of Decks/ (maybe do a migration?)
+- Player drop card as Token with HUD (No way to configure orphan token permissions, leaving as Tiles)
+- Give Card to Player Tile HUD (DONE)
+
+- Take Card From Player 
+
+
 - Create a Button To Browse Decks and do things to them so you don't need to interact with a tile 
 - Discard to bottom of Deck
-- Use checkboxes on deal dialog (DONE)
-- Take Card From Player
-- Player drop card as Token with HUD
-- Turn to Tile + Token HUD for Card
-- Give Card to Player Tile HUD
+- Default card back for decks
+- save decks as _decks instead of Decks/ (maybe do a migration?)
+

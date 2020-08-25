@@ -17,10 +17,12 @@ async function cardHUD(tileHUD, html) {
   const handDiv = $('<i class="control-icon fa fa-hand-paper" aria-hidden="true" title="Take"></i>')
   const flipDiv = $('<i class="control-icon fa fa-undo" aria-hidden="true" title="Flip"></i>')
   const discardDiv = $('<i class="control-icon fa fa-trash" aria-hidden="true" title="Discard"></i>')
+  const giveCardDiv = $('<i class="control-icon icon-deal" title="Deal to players"></i>')
 
   html.find('.left').append(handDiv);
   html.find('.left').append(flipDiv);
   html.find('.left').append(discardDiv);
+  html.find('.left').append(giveCardDiv);
 
   handDiv.click((ev) => {
     takeCard(tileHUD.object.data)
@@ -32,6 +34,10 @@ async function cardHUD(tileHUD, html) {
 
   discardDiv.click((ev) => {
     discardCard(tileHUD.object.data)
+  })
+
+  giveCardDiv.click(ev => {
+    giveCard(tileHUD.object.data);
   })
 
   //Embdded Functions
@@ -69,7 +75,7 @@ async function cardHUD(tileHUD, html) {
     canvas.tiles.get(td._id).delete();    
 
   }
-  const discardCard = async(td:TileData) => {
+  const discardCard = async (td:TileData) => {
     // Add Card to Discard for the Deck
     let deckId = game.journal.get(td.flags[mod_scope].cardID).data['folder'];
     console.log("Deck ID: ", deckId);
@@ -77,6 +83,46 @@ async function cardHUD(tileHUD, html) {
     // Delete Tile
     canvas.tiles.get(td._id).delete()
   }
+
+  const giveCard = async (td:TileData) => {
+    let players = "";
+    //@ts-ignore
+    for(let user of game.users.entries){
+      if(user.isSelf == false && user.active){
+        players += `<option value=${user.id}>${user.name}</option>`
+      }
+    }
+    let dialogHTML = `
+    <p> Player <select id="player">${players}</select> </p>
+    `
+    new Dialog({
+      title: "Give Card to Player",
+      content: dialogHTML,
+      buttons: {
+        give: {
+          label: "Give",
+          callback: async (html:any) => {
+            let _to = html.find("#player")[0].value
+            if(game.user.isGM){
+              game.decks.giveToPlayer(_to,  td.flags[mod_scope].cardID);
+            } else {
+              let msg = {
+                type: "GIVE",
+                playerID: game.users.find(el => el.isGM && el.active).id, //Send to GM for processing
+                to: _to,
+                cardID: td.flags[mod_scope].cardID
+              }
+              //@ts-ignore
+              game.socket.emit('module.cardsupport', msg);
+            }
+            //delete tile
+            await canvas.scene.deleteEmbeddedEntity("Tile", td._id)
+          }
+        }
+      }
+    }).render(true);    
+  }
+
 }
 
 interface TileData {
