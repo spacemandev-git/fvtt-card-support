@@ -314,7 +314,7 @@ export class cardHotbar extends Hotbar {
             buttons: {
               give: {
                 label: "Give",
-                callback: (html) => {
+                callback: async (html) => {
                   let _to = html.find("#player")[0].value
                   if(game.user.isGM){
                     game.decks.giveToPlayer(_to,  macro.getFlag("world", "cardID"));
@@ -327,7 +327,8 @@ export class cardHotbar extends Hotbar {
                     }
                     game.socket.emit('module.cardsupport', msg);
                   }
-                  macro.delete();
+                  let slot = this.populator.macroMap.indexOf(macro.id)
+                  await this.populator.chbUnsetMacro(slot);
                 }
               }
             }

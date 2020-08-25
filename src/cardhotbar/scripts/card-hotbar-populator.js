@@ -228,12 +228,13 @@ export class cardHotbarPopulator {
         }).render(true);
     }
 
-    resetDeck(deckID){
+    async resetDeck(deckID){
         for(let mId of ui.cardHotbar.populator.macroMap){
             const macro = game.macros.get(mId);
             const cardID = macro?.getFlag("world", "cardID");
             if(game.decks.decks[deckID]._cards.includes(cardID)){
-                macro.delete();
+                let slot = this.macroMap.indexOf(macro.id)
+                await this.chbUnsetMacro(slot);
             }
         }
     }
