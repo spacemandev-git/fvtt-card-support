@@ -1,3 +1,4 @@
+## TO DO
 CARDHOTBAR:
 v1
 1. Playing card from hand should remove it from the hand (DONE)
@@ -7,7 +8,7 @@ v1
 5. Flipping cards in hand (DONE)
 6. Compact Hand function and rework addToHand() accordingly (DONE)
 7. Get Player Hand 
-8. Mark Cards as done
+8. Mark Cards as done (DONE)
 
 v2
 1. Paging/longer hotbar/support for more cards (DONE except styling)
@@ -55,3 +56,14 @@ v1
 - save decks as _decks instead of Decks/
 - Create a Button To Browse Decks and do things to them so you don't need to interact with a tile 
 - Discard to bottom of Deck
+
+
+## Norc Notes
+
+View cards in other players' hands
+-Add a number of cards in hand after the player name in the Players Online window in bottom left 
+-Click that number to do extra stuff (view backs of cards to request one of the cards, for instance)
+
+Some sort of multi-card trade/card collaboration interface?
+
+Mark cards on table?
