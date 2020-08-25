@@ -1,4 +1,5 @@
 //import { Deck } from "../scripts/deck.js";
+import {DeckForm} from '../scripts/DeckForm.js';
 
 export class cardHotbar extends Hotbar {
     /**
@@ -461,6 +462,7 @@ export class cardHotbar extends Hotbar {
     html.find('#card-bar-toggle').click(this._onToggleBar.bind(this));
     html.find('#chbDiscardAll').click(this.populator.discardHand.bind(this));
     html.find("#chbTakeFromPlayer").click(this.populator.takeFromPlayer.bind(this));
+    html.find("#chbInteractDecks").click((ev) => {new DeckForm().render(true)})
     //    Disable pages for now, will just work with first page.
     //    html.find(".page-control").click(this._onClickPageControl.bind(this));
   }

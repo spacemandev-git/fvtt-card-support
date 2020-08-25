@@ -64,9 +64,24 @@ Hooks.on("ready", () => {
         height: tex.height,
         width: tex.width
       }).render(true)
+    } else if (data?.type == "DRAWCARDS") {
+      game.decks.get(data.deckID).dealToPlayer(
+        data.receiverID,
+        data.numCards,
+        data.replacement
+      )
     }
   })  
 })
+
+export interface MSG_DRAWCARDS {
+  type: "DRAWCARDS",
+  playerID: string,
+  receiverID: string,
+  deckID: string,
+  numCards: number,
+  replacement: boolean
+}
 
 export interface MSG_TAKECARD {
   type: "TAKECARD",

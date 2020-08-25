@@ -55,12 +55,14 @@ v1
 - Alt draw bug for players from 1.3 release (Fixed in 1.3.4 by Norc)
 - Player drop card as Token with HUD (No way to configure orphan token permissions, leaving as Tiles)
 - Give Card to Player Tile HUD (DONE)
-
-- Take Card From Player 
-
+- Take Card From Player (DONE)
 
 - Create a Button To Browse Decks and do things to them so you don't need to interact with a tile 
+
+#####################
 - Discard to bottom of Deck
 - Default card back for decks
 - save decks as _decks instead of Decks/ (maybe do a migration?)
 - Settings for what decks a player can interact with
+- Cards Placeables Layer
+- Updated Video

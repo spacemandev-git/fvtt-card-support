@@ -84,5 +84,8 @@ Hooks.on("ready", () => {
                 width: tex.width
             }).render(true);
         }
+        else if ((data === null || data === void 0 ? void 0 : data.type) == "DRAWCARDS") {
+            game.decks.get(data.deckID).dealToPlayer(data.receiverID, data.numCards, data.replacement);
+        }
     }));
 });
