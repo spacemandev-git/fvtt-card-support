@@ -56,8 +56,13 @@ export class cardHotbarPopulator {
                     let img = ""
                     if (cards[i]?.data != undefined) {
                         img = defaultSideUp == "front" ? cards[i].data.img : cards[i].getFlag("world","cardBack");
-                        img = defaultSideUp == "back" ? cards[i].getFlag("world","cardBack") : cards[i].data.img;
+                        //img = defaultSideUp == "back" ? cards[i].getFlag("world","cardBack") : cards[i].data.img;
                         //console.debug("Card Hotbar | Invalid default card facing provided.");
+                    } else {
+                        // THIS ELSE IS VERY IMPORTANT DO NOT DELETE IT!! @ Norc
+                        //(For Players, when reciving JE, they won't have the full JE, only the data prop, which means no .data object)
+                        img = defaultSideUp == "front" ? cards[i].img : cards[i].flags.world.cardBack;
+                        //img = defaultSideUp == "back" ? cards[i].getFlag("world","cardBack") : cards[i].data.img; 
                     }
                     let imgTex = await loadTexture(img);
                     let imgHeight = imgTex.height;
