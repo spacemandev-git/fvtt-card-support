@@ -1,4 +1,6 @@
 import {handleDroppedCard} from './drop.js';
+import { Deck } from './deck.js';
+import {ViewJournalPile} from './DeckForm.js';
 
 Hooks.on("ready", () => {
   //@ts-ignore
@@ -70,9 +72,46 @@ Hooks.on("ready", () => {
         data.numCards,
         data.replacement
       )
+    } else if (data?.type == "REQUESTVIEWCARDS") {
+      let cards:JournalEntry[] = [];
+      let deck =(<Deck>game.decks.get(data.deckID))
+      let cardIDs = deck._state.slice(deck._state.length - data.viewNum)
+      cards = cardIDs.map(el => {
+        return game.journal.get(el)
+      }).reverse()
+      
+      let reply:MSG_VIEWCARDS = {
+        type: "VIEWCARDS",
+        playerID: data.requesterID,
+        deckID: data.deckID,
+        cards: cards
+      }
+      console.log(reply)
+      //@ts-ignore
+      game.socket.emit('module.cardsupport', reply)
+    } else if (data?.type == "VIEWCARDS") {
+      new ViewJournalPile({
+        deckID: data.deckID,
+        cards: data.cards
+      }).render(true)
     }
   })  
 })
+
+export interface MSG_VIEWCARDS {
+  type: "VIEWCARDS",
+  playerID: string,
+  deckID: string
+  cards: JournalEntry[],
+}
+
+export interface MSG_REQUESTVIEWCARDS {
+  type: "REQUESTVIEWCARDS",
+  playerID: string,
+  requesterID: string,
+  deckID: string,
+  viewNum: string
+}
 
 export interface MSG_DRAWCARDS {
   type: "DRAWCARDS",

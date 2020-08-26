@@ -58,8 +58,9 @@ v1
 - Take Card From Player (DONE)
 
 - Create a Button To Browse Decks and do things to them so you don't need to interact with a tile 
-
+- Chat messages when using the Deck Form
 #####################
+- Deck based settings (deckSettings flag)
 - Discard to bottom of Deck
 - Default card back for decks
 - save decks as _decks instead of Decks/ (maybe do a migration?)

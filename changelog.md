@@ -1,3 +1,7 @@
+1.3.4
+- Fixed Deal to Players bug
+- Norc fixed default side up bug
+
 1.3.3
 - Forge compatibility update
 

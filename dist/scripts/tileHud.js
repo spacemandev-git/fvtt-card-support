@@ -267,6 +267,7 @@ function deckHUD(td, html) {
     <div>
       <p> 
         <h3> How many cards do you want to view? </h3> 
+        <h3> Deck has ${deck._state.length} cards </h3> 
         <input id="cardNum" value=${deck._state.length} type="number" style='width:50px;'/> 
       </p>
     </div>
@@ -339,7 +340,7 @@ function deckHUD(td, html) {
         });
     });
 }
-class DiscardPile extends FormApplication {
+export class DiscardPile extends FormApplication {
     constructor(object, options = {}) {
         super(object, options);
         this.pile = object['pile'];
@@ -416,7 +417,7 @@ class DiscardPile extends FormApplication {
         });
     }
 }
-class ViewPile extends FormApplication {
+export class ViewPile extends FormApplication {
     constructor(obj, opts = {}) {
         super(obj, opts);
         this.deckID = "";

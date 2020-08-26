@@ -8,6 +8,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import { handleDroppedCard } from './drop.js';
+import { ViewJournalPile } from './DeckForm.js';
 Hooks.on("ready", () => {
     //@ts-ignore
     game.socket.on('module.cardsupport', (data) => __awaiter(void 0, void 0, void 0, function* () {
@@ -86,6 +87,29 @@ Hooks.on("ready", () => {
         }
         else if ((data === null || data === void 0 ? void 0 : data.type) == "DRAWCARDS") {
             game.decks.get(data.deckID).dealToPlayer(data.receiverID, data.numCards, data.replacement);
+        }
+        else if ((data === null || data === void 0 ? void 0 : data.type) == "REQUESTVIEWCARDS") {
+            let cards = [];
+            let deck = game.decks.get(data.deckID);
+            let cardIDs = deck._state.slice(deck._state.length - data.viewNum);
+            cards = cardIDs.map(el => {
+                return game.journal.get(el);
+            }).reverse();
+            let reply = {
+                type: "VIEWCARDS",
+                playerID: data.requesterID,
+                deckID: data.deckID,
+                cards: cards
+            };
+            console.log(reply);
+            //@ts-ignore
+            game.socket.emit('module.cardsupport', reply);
+        }
+        else if ((data === null || data === void 0 ? void 0 : data.type) == "VIEWCARDS") {
+            new ViewJournalPile({
+                deckID: data.deckID,
+                cards: data.cards
+            }).render(true);
         }
     }));
 });

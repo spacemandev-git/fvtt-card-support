@@ -290,6 +290,7 @@ async function deckHUD(td:TileData, html) {
     <div>
       <p> 
         <h3> How many cards do you want to view? </h3> 
+        <h3> Deck has ${deck._state.length} cards </h3> 
         <input id="cardNum" value=${deck._state.length} type="number" style='width:50px;'/> 
       </p>
     </div>
@@ -368,7 +369,7 @@ async function deckHUD(td:TileData, html) {
 }
 
 
-class DiscardPile extends FormApplication {
+export class DiscardPile extends FormApplication {
   pile: JournalEntry[];
   deck: Deck; 
 
@@ -455,7 +456,7 @@ class DiscardPile extends FormApplication {
   }
 }
 
-class ViewPile extends FormApplication {
+export class ViewPile extends FormApplication {
   deckID: string = "";
   viewNum: number = 0;
 
