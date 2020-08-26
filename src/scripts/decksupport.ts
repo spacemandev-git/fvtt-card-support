@@ -13,6 +13,15 @@ Hooks.on("ready", async () => {
     default: "{}"
   })
 
+  game.settings.register('cardsupport', 'chatMessageOnPlayerAction', {
+    name: "Chat Message on Player Action (SNITCH)",
+    hint: "Prints chat messages when the players use the Hotbar GUI to interact with Decks to prevent cheating.",
+    scope: "world",
+    config: true,
+    type: Boolean,
+    default: false
+  })
+
   //Creates A "Decks" folder where to unzip SDF Files
   let src = "data";
   //@ts-ignore

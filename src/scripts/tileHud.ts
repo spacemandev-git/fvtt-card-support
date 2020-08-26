@@ -405,7 +405,6 @@ export class DiscardPile extends FormApplication {
 
     html.find("#shuffleBack").click(() => {
       let cardIds = this.pile.map(el => el._id);
-      console.log(cardIds);
       (<Deck>game.decks.get(this.deck.deckID)).addToDeckState(cardIds);
       (<Deck>game.decks.get(this.deck.deckID)).removeFromDiscard(cardIds);
       (<Deck>game.decks.get(this.deck.deckID)).shuffle();

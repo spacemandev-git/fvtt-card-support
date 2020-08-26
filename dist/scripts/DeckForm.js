@@ -30,6 +30,7 @@ export class DeckForm extends FormApplication {
         return __awaiter(this, void 0, void 0, function* () {
             for (let d of Object.values(game.decks.decks)) {
                 let deck = d;
+                console.log(deck);
                 //Draw Card Listener
                 html.find(`#${deck.deckID}-draw`).click(() => {
                     let takeDialogTemplate = `
@@ -135,6 +136,16 @@ export class ViewJournalPile extends FormApplication {
         this.cards = [];
         this.deckID = obj['deckID'];
         this.cards = obj['cards'];
+        if (game.settings.get("cardsupport", "chatMessageOnPlayerAction")) {
+            ChatMessage.create({
+                speaker: {
+                    alias: game.user.name
+                },
+                content: `
+        <p>${game.user.name} is looking at ${this.cards.length} cards from ${game.decks.get(this.deckID).deckName}!</p>
+        `
+            });
+        }
     }
     static get defaultOptions() {
         return mergeObject(super.defaultOptions, {
@@ -179,7 +190,20 @@ export class ViewJournalPile extends FormApplication {
                     };
                     //@ts-ignore
                     game.socket.emit('module.cardsupport', msg);
-                    this.close();
+                    this.cards = this.cards.filter(el => {
+                        return el._id != cardID;
+                    });
+                    if (game.settings.get("cardsupport", "chatMessageOnPlayerAction")) {
+                        ChatMessage.create({
+                            speaker: {
+                                alias: game.user.name
+                            },
+                            content: `
+            <p>${game.user.name} took a card from ${game.decks.get(this.deckID).deckName}!</p>
+            `
+                        });
+                    }
+                    this.render(true);
                 });
                 html.find(`#${cardID}-takecopy`).click(() => {
                     if (ui['cardHotbar'].populator.getNextSlot() == -1) {
@@ -187,7 +211,20 @@ export class ViewJournalPile extends FormApplication {
                         return;
                     }
                     ui['cardHotbar'].populator.addToPlayerHand([this.cards.find(el => el['_id'] == cardID)]);
-                    this.close();
+                    this.cards = this.cards.filter(el => {
+                        return el._id != cardID;
+                    });
+                    if (game.settings.get("cardsupport", "chatMessageOnPlayerAction")) {
+                        ChatMessage.create({
+                            speaker: {
+                                alias: game.user.name
+                            },
+                            content: `
+            <p>${game.user.name} took a card as copy from ${game.decks.get(this.deckID).deckName}!</p>
+            `
+                        });
+                    }
+                    this.render(true);
                 });
             }
         });
@@ -200,6 +237,16 @@ export class DiscardJournalPile extends FormApplication {
         this.cards = [];
         this.deckID = obj['deckID'];
         this.cards = obj['cards'];
+        if (game.settings.get("cardsupport", "chatMessageOnPlayerAction")) {
+            ChatMessage.create({
+                speaker: {
+                    alias: game.user.name
+                },
+                content: `
+        <p>${game.user.name} is viewing ${this.cards.length} from the discard of ${game.decks.get(this.deckID).deckName}!</p>
+        `
+            });
+        }
     }
     static get defaultOptions() {
         return mergeObject(super.defaultOptions, {
@@ -247,6 +294,16 @@ export class DiscardJournalPile extends FormApplication {
                     this.cards = this.cards.filter(el => {
                         return el._id != cardID;
                     });
+                    if (game.settings.get("cardsupport", "chatMessageOnPlayerAction")) {
+                        ChatMessage.create({
+                            speaker: {
+                                alias: game.user.name
+                            },
+                            content: `
+            <p>${game.user.name} took a card ${game.decks.get(this.deckID).deckName} discard pile!</p>
+            `
+                        });
+                    }
                     this.render(true);
                 });
                 html.find(`#${cardID}-takecopy`).click(() => {
@@ -258,6 +315,16 @@ export class DiscardJournalPile extends FormApplication {
                     this.cards = this.cards.filter(el => {
                         return el._id != cardID;
                     });
+                    if (game.settings.get("cardsupport", "chatMessageOnPlayerAction")) {
+                        ChatMessage.create({
+                            speaker: {
+                                alias: game.user.name
+                            },
+                            content: `
+            <p>${game.user.name} took a card as copy from ${game.decks.get(this.deckID).deckName} discard!</p>
+            `
+                        });
+                    }
                     this.render(true);
                 });
                 html.find(`#${cardID}-burn`).click(() => {
@@ -272,6 +339,16 @@ export class DiscardJournalPile extends FormApplication {
                     this.cards = this.cards.filter(el => {
                         return el._id != cardID;
                     });
+                    if (game.settings.get("cardsupport", "chatMessageOnPlayerAction")) {
+                        ChatMessage.create({
+                            speaker: {
+                                alias: game.user.name
+                            },
+                            content: `
+            <p>${game.user.name} burnt a card from ${game.decks.get(this.deckID).deckName}!</p>
+            `
+                        });
+                    }
                     this.render(true);
                 });
                 html.find(`#${cardID}-topdeck`).click(() => {
@@ -286,6 +363,16 @@ export class DiscardJournalPile extends FormApplication {
                     this.cards = this.cards.filter(el => {
                         return el._id != cardID;
                     });
+                    if (game.settings.get("cardsupport", "chatMessageOnPlayerAction")) {
+                        ChatMessage.create({
+                            speaker: {
+                                alias: game.user.name
+                            },
+                            content: `
+            <p>${game.user.name} returned a card to the top of the deck from ${game.decks.get(this.deckID).deckName}'s discard!</p>
+            `
+                        });
+                    }
                     this.render(true);
                 });
             }
@@ -298,6 +385,16 @@ export class DiscardJournalPile extends FormApplication {
                 //@ts-ignore
                 game.socket.emit('module.cardsupport', msg);
                 this.cards = [];
+                if (game.settings.get("cardsupport", "chatMessageOnPlayerAction")) {
+                    ChatMessage.create({
+                        speaker: {
+                            alias: game.user.name
+                        },
+                        content: `
+          <p>${game.user.name} shuffled the discard of ${game.decks.get(this.deckID).deckName} back into the deck!</p>
+          `
+                    });
+                }
                 this.render(true);
             });
             html.find(`#close`).click(() => { this.close(); });

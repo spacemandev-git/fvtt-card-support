@@ -370,7 +370,6 @@ export class DiscardPile extends FormApplication {
             });
             html.find("#shuffleBack").click(() => {
                 let cardIds = this.pile.map(el => el._id);
-                console.log(cardIds);
                 game.decks.get(this.deck.deckID).addToDeckState(cardIds);
                 game.decks.get(this.deck.deckID).removeFromDiscard(cardIds);
                 game.decks.get(this.deck.deckID).shuffle();

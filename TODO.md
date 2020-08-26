@@ -51,13 +51,15 @@ v1
 - Forge Asset Directory compatibility
 
 ###################### 1.3.4
-- Use checkboxes on deal dialog (DONE)
 - Alt draw bug for players from 1.3 release (Fixed in 1.3.4 by Norc)
+
+###################### 1.4
+- Use checkboxes on deal dialog (DONE)
 - Player drop card as Token with HUD (No way to configure orphan token permissions, leaving as Tiles)
 - Give Card to Player Tile HUD (DONE)
 - Take Card From Player (DONE)
+- Create a Button To Browse Decks and do things to them so you don't need to interact with a tile (DONE)
 
-- Create a Button To Browse Decks and do things to them so you don't need to interact with a tile 
 - Chat messages when using the Deck Form
 - Delete Button in card Context Menu
 #####################
