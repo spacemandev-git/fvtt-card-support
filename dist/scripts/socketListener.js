@@ -101,7 +101,6 @@ Hooks.on("ready", () => {
                 deckID: data.deckID,
                 cards: cards
             };
-            console.log(reply);
             //@ts-ignore
             game.socket.emit('module.cardsupport', reply);
         }
@@ -110,6 +109,9 @@ Hooks.on("ready", () => {
                 deckID: data.deckID,
                 cards: data.cards
             }).render(true);
+        }
+        else if ((data === null || data === void 0 ? void 0 : data.type) == "REMOVECARDFROMSTATE") {
+            game.decks.get(data.deckID).removeFromState([data.cardID]);
         }
     }));
 });

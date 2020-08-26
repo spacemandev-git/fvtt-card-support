@@ -135,7 +135,13 @@ export class ViewJournalPile extends FormApplication {
     }
     getData() {
         //Journal Entries passed in get stripped down so they don't have data, which breaks cardgrid, so we're adding the nesting back in
-        let cards = this.cards.map(el => { return { data: el, id: el.id }; });
+        let cards = this.cards.map(el => {
+            console.log("EL: ", el);
+            return {
+                data: el,
+                _id: el['_id']
+            };
+        });
         let data = {
             cards: cards,
             discard: false
@@ -145,28 +151,34 @@ export class ViewJournalPile extends FormApplication {
     }
     activateListeners(html) {
         return __awaiter(this, void 0, void 0, function* () {
-            let cardIDs = this.cards.map(el => { return el.id; });
+            let cardIDs = this.cards.map(el => { return el['_id']; });
             // Take
-            for (let card of cardIDs) {
-                html.find(`#${card}-take`).click(() => {
+            for (let cardID of cardIDs) {
+                html.find(`#${cardID}-take`).click(() => {
                     if (ui['cardHotbar'].populator.getNextSlot() == -1) {
                         ui.notifications.error("No more room in your hand");
                         return;
                     }
-                    ui['cardHotbar'].populator.addToPlayerHand([this.cards.find(el => el.id == card)]);
+                    ui['cardHotbar'].populator.addToPlayerHand([this.cards.find(el => el['_id'] == cardID)]);
                     // GM SOCKET TO REMOVEFROMSTATE a Card
-                    //(<Deck>game.decks.get(this.deckID)).removeFromState([card]);
+                    let msg = {
+                        type: "REMOVECARDFROMSTATE",
+                        playerID: game.users.find(el => el.isGM && el.active).id,
+                        deckID: this.deckID,
+                        cardID: cardID
+                    };
+                    //@ts-ignore
+                    game.socket.emit('module.cardsupport', msg);
                     this.close();
                 });
-                /*
-                html.find(`#${card}-takecopy`).click(() => {
-                  if(ui['cardHotbar'].populator.getNextSlot() == -1){
-                    ui.notifications.error("No more room in your hand")
-                    return;
-                  }
-                  ui['cardHotbar'].populator.addToHand([card]);
-                  this.close();
-                }) */
+                html.find(`#${cardID}-takecopy`).click(() => {
+                    if (ui['cardHotbar'].populator.getNextSlot() == -1) {
+                        ui.notifications.error("No more room in your hand");
+                        return;
+                    }
+                    ui['cardHotbar'].populator.addToPlayerHand([this.cards.find(el => el['_id'] == cardID)]);
+                    this.close();
+                });
             }
         });
     }

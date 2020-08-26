@@ -59,6 +59,7 @@ v1
 
 - Create a Button To Browse Decks and do things to them so you don't need to interact with a tile 
 - Chat messages when using the Deck Form
+- Delete Button in card Context Menu
 #####################
 - Deck based settings (deckSettings flag)
 - Discard to bottom of Deck

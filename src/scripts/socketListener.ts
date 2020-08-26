@@ -79,14 +79,12 @@ Hooks.on("ready", () => {
       cards = cardIDs.map(el => {
         return game.journal.get(el)
       }).reverse()
-      
       let reply:MSG_VIEWCARDS = {
         type: "VIEWCARDS",
         playerID: data.requesterID,
         deckID: data.deckID,
         cards: cards
       }
-      console.log(reply)
       //@ts-ignore
       game.socket.emit('module.cardsupport', reply)
     } else if (data?.type == "VIEWCARDS") {
@@ -94,9 +92,18 @@ Hooks.on("ready", () => {
         deckID: data.deckID,
         cards: data.cards
       }).render(true)
+    } else if (data?.type == "REMOVECARDFROMSTATE") {
+      game.decks.get(data.deckID).removeFromState([data.cardID]);
     }
   })  
 })
+
+export interface MSG_REMOVECARDFROMSTATE {
+  type: "REMOVECARDFROMSTATE"
+  playerID: string,
+  deckID: string,
+  cardID: string
+}
 
 export interface MSG_VIEWCARDS {
   type: "VIEWCARDS",
