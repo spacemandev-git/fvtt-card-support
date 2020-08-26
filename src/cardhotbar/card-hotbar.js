@@ -398,7 +398,24 @@ export class cardHotbar extends Hotbar {
 
             
             await ui.cardHotbar.populator.chbUnsetMacro(index);
-            macro.delete();
+          } catch (e) {
+            console.error(e)
+            //console.debug ("Card Hotbar | Could not properly discard card from hand");
+          }
+        }
+      },
+      {
+        name: "Delete",
+        icon: '<i class="icon-burn"></i>',
+        condition: li => {
+          const macro = game.macros.get(li.data("macro-id"));
+          return macro ? macro.owner : false;
+        },
+        callback: async li => {
+          const macro = game.macros.get(li.data("macro-id"));
+          const index = li.data("slot");
+          try{          
+            await ui.cardHotbar.populator.chbUnsetMacro(index);
           } catch (e) {
             console.error(e)
             //console.debug ("Card Hotbar | Could not properly discard card from hand");

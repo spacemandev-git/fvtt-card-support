@@ -59,9 +59,9 @@ v1
 - Give Card to Player Tile HUD (DONE)
 - Take Card From Player (DONE)
 - Create a Button To Browse Decks and do things to them so you don't need to interact with a tile (DONE)
+- Chat messages when using the Deck Form (DONE)
+- Delete Button in card Context Menu (DONE)
 
-- Chat messages when using the Deck Form
-- Delete Button in card Context Menu
 #####################
 - Deck based settings (deckSettings flag)
 - Discard to bottom of Deck

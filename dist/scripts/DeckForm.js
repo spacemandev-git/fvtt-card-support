@@ -30,7 +30,6 @@ export class DeckForm extends FormApplication {
         return __awaiter(this, void 0, void 0, function* () {
             for (let d of Object.values(game.decks.decks)) {
                 let deck = d;
-                console.log(deck);
                 //Draw Card Listener
                 html.find(`#${deck.deckID}-draw`).click(() => {
                     let takeDialogTemplate = `
