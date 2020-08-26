@@ -1,3 +1,8 @@
+1.4.1
+- Added confirm dialog to Burn in Context Menu
+- Bugfixes for Deck Interaction Form not working for GM
+- Changed Discard Pile icon to Inbox to look more like a discard tray instead of a trash / delete button
+
 1.4.0
 - Use checkboxes in "Deal To Player" dialog to deal to multiple players at once
 - Added HUD element to Card Tile to Give To Player

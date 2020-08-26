@@ -64,6 +64,8 @@ v1
 - Delete Button in card Context Menu (DONE)
 
 #####################
+- Confirm Dialog before Burn, Discard Hand
+- Inbox Icon? for discard tray
 - Deck based settings (deckSettings flag)
 - Discard to bottom of Deck
 - Default card back for decks

@@ -115,14 +115,22 @@ export class DeckForm extends FormApplication {
 
       //Discard Listener
       html.find(`#${deck.deckID}-discard`).click(() => {
-        let msg:MSGTYPES.MSG_REQUESTDISCARD = {
-          type: "REQUESTDISCARD",
-          playerID: game.users.find(el=>el.isGM && el.active).id,
-          deckID: deck.deckID,
-          requesterID: game.user.id
+        if(game.user.isGM){
+          let discardPile:JournalEntry[] = []
+          for(let card of deck._discard){
+            discardPile.push(game.journal.get(card));
+          }
+          new DiscardPile({pile: discardPile, deck: deck}, {}).render(true)
+        } else {
+          let msg:MSGTYPES.MSG_REQUESTDISCARD = {
+            type: "REQUESTDISCARD",
+            playerID: game.users.find(el=>el.isGM && el.active).id,
+            deckID: deck.deckID,
+            requesterID: game.user.id
+          }
+          //@ts-ignore
+          game.socket.emit('module.cardsupport', msg)
         }
-        //@ts-ignore
-        game.socket.emit('module.cardsupport', msg)
       })
     }
   }

@@ -153,7 +153,7 @@ async function deckHUD(td:TileData, html) {
 
   // Show Discard
     // Add Discard Back to Deck
-  const discardDiv = $('<i class="control-icon fa fa-trash" aria-hidden="true" title="Discard Pile"></i>')
+  const discardDiv = $('<i class="control-icon fa fa-inbox" aria-hidden="true" title="Discard Pile"></i>')
   html.find(".left").append(discardDiv)
   discardDiv.click((ev) => showDiscard())
   // Reset Deck
