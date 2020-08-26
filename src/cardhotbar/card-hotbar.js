@@ -1,4 +1,5 @@
 //import { Deck } from "../scripts/deck.js";
+import {DeckForm} from '../scripts/DeckForm.js';
 
 export class cardHotbar extends Hotbar {
     /**
@@ -319,7 +320,7 @@ export class cardHotbar extends Hotbar {
             buttons: {
               give: {
                 label: "Give",
-                callback: (html) => {
+                callback: async (html) => {
                   let _to = html.find("#player")[0].value
                   if(game.user.isGM){
                     game.decks.giveToPlayer(_to,  macro.getFlag("world", "cardID"));
@@ -332,7 +333,8 @@ export class cardHotbar extends Hotbar {
                     }
                     game.socket.emit('module.cardsupport', msg);
                   }
-                  macro.delete();
+                  let slot = this.populator.macroMap.indexOf(macro.id)
+                  await this.populator.chbUnsetMacro(slot);
                 }
               }
             }
@@ -401,7 +403,24 @@ export class cardHotbar extends Hotbar {
 
             
             await ui.cardHotbar.populator.chbUnsetMacro(index);
-            macro.delete();
+          } catch (e) {
+            console.error(e)
+            //console.debug ("Card Hotbar | Could not properly discard card from hand");
+          }
+        }
+      },
+      {
+        name: "Delete",
+        icon: '<i class="icon-burn"></i>',
+        condition: li => {
+          const macro = game.macros.get(li.data("macro-id"));
+          return macro ? macro.owner : false;
+        },
+        callback: async li => {
+          const macro = game.macros.get(li.data("macro-id"));
+          const index = li.data("slot");
+          try{          
+            await ui.cardHotbar.populator.chbUnsetMacro(index);
           } catch (e) {
             console.error(e)
             //console.debug ("Card Hotbar | Could not properly discard card from hand");
@@ -464,6 +483,8 @@ export class cardHotbar extends Hotbar {
     super.activateListeners(html);
     html.find('#card-bar-toggle').click(this._onToggleBar.bind(this));
     html.find('#chbDiscardAll').click(this.populator.discardHand.bind(this));
+    html.find("#chbTakeFromPlayer").click(this.populator.takeFromPlayer.bind(this));
+    html.find("#chbInteractDecks").click((ev) => {new DeckForm().render(true)})
     //    Disable pages for now, will just work with first page.
     //    html.find(".page-control").click(this._onClickPageControl.bind(this));
   }

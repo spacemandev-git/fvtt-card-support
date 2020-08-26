@@ -121,3 +121,40 @@ export function handleDroppedCard(cardID, x, y, alt, sideUp = "front") {
         });
     });
 }
+/*
+export async function handleTokenCard(cardID:string, x:number, y:number, alt:boolean, sideUp="front"){
+  let imgPath = "";
+  if(alt || sideUp == "back"){
+    imgPath = game.journal.get(cardID).getFlag(mod_scope, "cardBack")
+  } else {
+    imgPath = game.journal.get(cardID).data['img']
+  }
+
+  // Determine the Tile Size:
+  const tex = await loadTexture(imgPath);
+  const _width = tex.width;
+  const _height = tex.height;
+
+  // Project the tile Position
+  let t = canvas.tiles.worldTransform;
+  const _x = (x - t.tx) / canvas.stage.scale.x
+  const _y = (y - t.ty) / canvas.stage.scale.y
+
+  const cardScale = cardHotbarSettings.getCHBCardScale();
+  console.debug(cardScale);
+  await Token.create({
+    name: "Card",
+    img: imgPath,
+    x: _x,
+    y: _y,
+    width: 2 * cardScale,//_width * cardScale,
+    height: 3 * cardScale, //_height * cardScale,
+    permissions: 3,
+    flags: {
+      [mod_scope]: {
+        "cardID": `${cardID}`,
+      }
+    }
+  })
+}
+*/ 

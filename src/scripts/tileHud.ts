@@ -17,10 +17,12 @@ async function cardHUD(tileHUD, html) {
   const handDiv = $('<i class="control-icon fa fa-hand-paper" aria-hidden="true" title="Take"></i>')
   const flipDiv = $('<i class="control-icon fa fa-undo" aria-hidden="true" title="Flip"></i>')
   const discardDiv = $('<i class="control-icon fa fa-trash" aria-hidden="true" title="Discard"></i>')
+  const giveCardDiv = $('<i class="control-icon icon-deal" title="Deal to players"></i>')
 
   html.find('.left').append(handDiv);
   html.find('.left').append(flipDiv);
   html.find('.left').append(discardDiv);
+  html.find('.left').append(giveCardDiv);
 
   handDiv.click((ev) => {
     takeCard(tileHUD.object.data)
@@ -32,6 +34,10 @@ async function cardHUD(tileHUD, html) {
 
   discardDiv.click((ev) => {
     discardCard(tileHUD.object.data)
+  })
+
+  giveCardDiv.click(ev => {
+    giveCard(tileHUD.object.data);
   })
 
   //Embdded Functions
@@ -69,7 +75,7 @@ async function cardHUD(tileHUD, html) {
     canvas.tiles.get(td._id).delete();    
 
   }
-  const discardCard = async(td:TileData) => {
+  const discardCard = async (td:TileData) => {
     // Add Card to Discard for the Deck
     let deckId = game.journal.get(td.flags[mod_scope].cardID).data['folder'];
     console.log("Deck ID: ", deckId);
@@ -77,6 +83,46 @@ async function cardHUD(tileHUD, html) {
     // Delete Tile
     canvas.tiles.get(td._id).delete()
   }
+
+  const giveCard = async (td:TileData) => {
+    let players = "";
+    //@ts-ignore
+    for(let user of game.users.entries){
+      if(user.isSelf == false && user.active){
+        players += `<option value=${user.id}>${user.name}</option>`
+      }
+    }
+    let dialogHTML = `
+    <p> Player <select id="player">${players}</select> </p>
+    `
+    new Dialog({
+      title: "Give Card to Player",
+      content: dialogHTML,
+      buttons: {
+        give: {
+          label: "Give",
+          callback: async (html:any) => {
+            let _to = html.find("#player")[0].value
+            if(game.user.isGM){
+              game.decks.giveToPlayer(_to,  td.flags[mod_scope].cardID);
+            } else {
+              let msg = {
+                type: "GIVE",
+                playerID: game.users.find(el => el.isGM && el.active).id, //Send to GM for processing
+                to: _to,
+                cardID: td.flags[mod_scope].cardID
+              }
+              //@ts-ignore
+              game.socket.emit('module.cardsupport', msg);
+            }
+            //delete tile
+            await canvas.scene.deleteEmbeddedEntity("Tile", td._id)
+          }
+        }
+      }
+    }).render(true);    
+  }
+
 }
 
 interface TileData {
@@ -244,6 +290,7 @@ async function deckHUD(td:TileData, html) {
     <div>
       <p> 
         <h3> How many cards do you want to view? </h3> 
+        <h3> Deck has ${deck._state.length} cards </h3> 
         <input id="cardNum" value=${deck._state.length} type="number" style='width:50px;'/> 
       </p>
     </div>
@@ -270,15 +317,19 @@ async function deckHUD(td:TileData, html) {
     //@ts-ignore
     for(let user of game.users.entries){
       if(user.isSelf == false && user.active){
-        players += `<option value=${user.id}>${user.name}</option>`
+        //players += `<option value=${user.id}>${user.name}</option>`
+        players += `
+        <div style="display:flex">
+          <span style="flex:2">${user.data.name}</span><input style="flex:1" type="checkbox" id="${user.id}"/>
+        </div>
+        `
       }
     }
     let dealCardsDialog = `
     <h2> Deal Cards To Player </h2>
     <div style="display:flex; flex-direction:column">
-      <p style="display:flex"> 
-       <span style="flex:2"> Player: </span> 
-       <select id="player" style="flex:1">${players}</select> 
+      <p style="display:flex; flex-direction:column"> 
+        ${players}
       <p>
       <p  style="display:flex"> 
         <span style="flex:2"> Cards: </span>
@@ -298,11 +349,18 @@ async function deckHUD(td:TileData, html) {
           label: "Deal",
           callback: async (html:any) => {
             let inf = html.find("#infinite")[0].checked ? true : false
-            deck.dealToPlayer(
-              html.find("#player")[0].value,
-              html.find("#numCards")[0].value,
-              inf
-            )
+            let numCards = html.find("#numCards")[0].value
+
+            //@ts-ignore
+            for(let user of game.users.entries){
+              if(html.find(`#${user.id}`)[0]?.checked){
+                deck.dealToPlayer(
+                  user.id,
+                  numCards,
+                  inf
+                )    
+              }
+            }
           }
         }
       }
@@ -311,7 +369,7 @@ async function deckHUD(td:TileData, html) {
 }
 
 
-class DiscardPile extends FormApplication {
+export class DiscardPile extends FormApplication {
   pile: JournalEntry[];
   deck: Deck; 
 
@@ -347,7 +405,6 @@ class DiscardPile extends FormApplication {
 
     html.find("#shuffleBack").click(() => {
       let cardIds = this.pile.map(el => el._id);
-      console.log(cardIds);
       (<Deck>game.decks.get(this.deck.deckID)).addToDeckState(cardIds);
       (<Deck>game.decks.get(this.deck.deckID)).removeFromDiscard(cardIds);
       (<Deck>game.decks.get(this.deck.deckID)).shuffle();
@@ -398,7 +455,7 @@ class DiscardPile extends FormApplication {
   }
 }
 
-class ViewPile extends FormApplication {
+export class ViewPile extends FormApplication {
   deckID: string = "";
   viewNum: number = 0;
 

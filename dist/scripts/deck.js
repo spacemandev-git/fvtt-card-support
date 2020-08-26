@@ -263,6 +263,7 @@ export class Deck {
                     //@ts-ignore
                     game.socket.emit('module.cardsupport', msg);
                 }
+                resolve();
             }));
         });
     }

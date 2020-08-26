@@ -201,12 +201,46 @@ export class cardHotbarPopulator {
     }
     
 
-    resetDeck(deckID){
+    takeFromPlayer(){
+        let players = ""
+        for(let user of game.users.entries){
+            if(!user.isSelf && user.active){
+                players += `<option value="${user.id}">${user.data.name}</option>`
+            }
+        }
+        let dialogHTML = 
+        `
+        <p><select id="playerID">${players}</select></p>
+        <p>Card Number: <input type="number" id="cardNum" style="width:50px"></input> </p>
+        `
+
+        new Dialog({
+            name: "Take Card From Player",
+            content: dialogHTML, 
+            buttons: {
+                take: {
+                    label: "Request",
+                    callback: (html) => {
+                        let socketMsg = {
+                            type: "TAKECARD",
+                            playerID: html.find("#playerID")[0].value,
+                            cardRequester: game.user.id,
+                            cardNum: html.find("#cardNum")[0].value
+                        }
+                        game.socket.emit("module.cardsupport", socketMsg)
+                    }
+                }
+            }
+        }).render(true);
+    }
+
+    async resetDeck(deckID){
         for(let mId of ui.cardHotbar.populator.macroMap){
             const macro = game.macros.get(mId);
             const cardID = macro?.getFlag("world", "cardID");
             if(game.decks.decks[deckID]._cards.includes(cardID)){
-                macro.delete();
+                let slot = this.macroMap.indexOf(macro.id)
+                await this.chbUnsetMacro(slot);
             }
         }
     }
@@ -405,10 +439,12 @@ export class cardHotbarPopulator {
      * @return {Promise<unknown>} Promise indicating whether the macro was removed.
      */
     async chbUnsetMacro(slot) {
+        const macro = game.macros.get(this.macroMap[slot])
         this.macroMap[slot] = null;
         this.macroMap = duplicate( await this.compact() );
         ui.cardHotbar.getcardHotbarMacros();
-        this._updateFlags().then(render => { 
+        this._updateFlags().then(render => {
+            if(macro){macro.delete()}
             return ui.cardHotbar.render();
         });
     }
