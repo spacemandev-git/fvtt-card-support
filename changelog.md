@@ -1,3 +1,11 @@
+1.4.0
+- Use checkboxes in "Deal To Player" dialog to deal to multiple players at once
+- Added HUD element to Card Tile to Give To Player
+- Added Hotbar Icon "Take" which allows you to request cards from another player
+- Added Hotbar Icon "Decks" which allows players to Draw, View, and View Discard of all Decks
+- New Module Setting "Snitch" which prints chat messages when players use the Decks Icon Hotbar to do anything to prevent cheating in games where it matters
+- Added a Burn button on Cards in the Hotbar to delete them (useful when the card is a copy and you don't want to discard it)
+
 1.3.4
 - Fixed Deal to Players bug
 - Norc fixed default side up bug
