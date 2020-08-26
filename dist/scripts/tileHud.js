@@ -135,7 +135,7 @@ function deckHUD(td, html) {
         handDiv.click((ev) => draw(td));
         // Show Discard
         // Add Discard Back to Deck
-        const discardDiv = $('<i class="control-icon fa fa-trash" aria-hidden="true" title="Discard Pile"></i>');
+        const discardDiv = $('<i class="control-icon fa fa-inbox" aria-hidden="true" title="Discard Pile"></i>');
         html.find(".left").append(discardDiv);
         discardDiv.click((ev) => showDiscard());
         // Reset Deck

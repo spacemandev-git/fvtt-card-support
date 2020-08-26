@@ -7,7 +7,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import { ViewPile } from './tileHud.js';
+import { ViewPile, DiscardPile } from './tileHud.js';
 export class DeckForm extends FormApplication {
     constructor(obj, opts = {}) {
         super(obj, opts);
@@ -115,14 +115,23 @@ export class DeckForm extends FormApplication {
                 });
                 //Discard Listener
                 html.find(`#${deck.deckID}-discard`).click(() => {
-                    let msg = {
-                        type: "REQUESTDISCARD",
-                        playerID: game.users.find(el => el.isGM && el.active).id,
-                        deckID: deck.deckID,
-                        requesterID: game.user.id
-                    };
-                    //@ts-ignore
-                    game.socket.emit('module.cardsupport', msg);
+                    if (game.user.isGM) {
+                        let discardPile = [];
+                        for (let card of deck._discard) {
+                            discardPile.push(game.journal.get(card));
+                        }
+                        new DiscardPile({ pile: discardPile, deck: deck }, {}).render(true);
+                    }
+                    else {
+                        let msg = {
+                            type: "REQUESTDISCARD",
+                            playerID: game.users.find(el => el.isGM && el.active).id,
+                            deckID: deck.deckID,
+                            requesterID: game.user.id
+                        };
+                        //@ts-ignore
+                        game.socket.emit('module.cardsupport', msg);
+                    }
                 });
             }
         });

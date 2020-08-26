@@ -414,8 +414,25 @@ export class cardHotbar extends Hotbar {
         callback: async li => {
           const macro = game.macros.get(li.data("macro-id"));
           const index = li.data("slot");
-          try{          
-            await ui.cardHotbar.populator.chbUnsetMacro(index);
+          try{
+            new Dialog({
+              title: "Confirm",
+              content: `
+              <h2> Are you sure you want to burn this card? </h2>
+              `,
+              buttons: {
+                ok: {
+                  icon: "<i class='icon-burn'></i>",
+                  label: "Burn",
+                  callback: async () => {
+                    await ui.cardHotbar.populator.chbUnsetMacro(index);
+                  }
+                },
+                close: {
+                  label: "Close"
+                }
+              }
+            }).render(true)          
           } catch (e) {
             console.error(e)
             //console.debug ("Card Hotbar | Could not properly discard card from hand");
