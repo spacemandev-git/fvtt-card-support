@@ -8,7 +8,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import { handleDroppedCard } from './drop.js';
-import { ViewJournalPile } from './DeckForm.js';
+import { ViewJournalPile, DiscardJournalPile } from './DeckForm.js';
 Hooks.on("ready", () => {
     //@ts-ignore
     game.socket.on('module.cardsupport', (data) => __awaiter(void 0, void 0, void 0, function* () {
@@ -112,6 +112,38 @@ Hooks.on("ready", () => {
         }
         else if ((data === null || data === void 0 ? void 0 : data.type) == "REMOVECARDFROMSTATE") {
             game.decks.get(data.deckID).removeFromState([data.cardID]);
+        }
+        else if ((data === null || data === void 0 ? void 0 : data.type) == "REMOVECARDFROMDISCARD") {
+            game.decks.get(data.deckID).removeFromDiscard([data.cardID]);
+        }
+        else if ((data === null || data === void 0 ? void 0 : data.type) == "REQUESTDISCARD") {
+            let cards = [];
+            cards = game.decks.get(data.deckID)._discard.map(el => {
+                return game.journal.get(el);
+            });
+            let reply = {
+                type: "VIEWDISCARD",
+                playerID: data.requesterID,
+                deckID: data.deckID,
+                cards: cards
+            };
+            //@ts-ignore
+            game.socket.emit('module.cardsupport', reply);
+        }
+        else if ((data === null || data === void 0 ? void 0 : data.type) == "VIEWDISCARD") {
+            new DiscardJournalPile({
+                deckID: data.deckID,
+                cards: data.cards
+            }).render(true);
+        }
+        else if ((data === null || data === void 0 ? void 0 : data.type) == "CARDTOPDECK") {
+            game.decks.get(data.deckID).addToDeckState([data.cardID]);
+            game.decks.get(data.deckID).removeFromDiscard([data.cardID]);
+        }
+        else if ((data === null || data === void 0 ? void 0 : data.type) == "SHUFFLEBACKDISCARD") {
+            game.decks.get(data.deckID).addToDeckState(game.decks.get(data.deckID)._discard);
+            game.decks.get(data.deckID).removeFromDiscard(game.decks.get(data.deckID)._discard);
+            game.decks.get(data.deckID).shuffle();
         }
     }));
 });

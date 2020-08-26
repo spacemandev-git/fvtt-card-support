@@ -112,6 +112,18 @@ export class DeckForm extends FormApplication {
           }
         }).render(true)
       })
+
+      //Discard Listener
+      html.find(`#${deck.deckID}-discard`).click(() => {
+        let msg:MSGTYPES.MSG_REQUESTDISCARD = {
+          type: "REQUESTDISCARD",
+          playerID: game.users.find(el=>el.isGM && el.active).id,
+          deckID: deck.deckID,
+          requesterID: game.user.id
+        }
+        //@ts-ignore
+        game.socket.emit('module.cardsupport', msg)
+      })
     }
   }
 }
@@ -137,7 +149,6 @@ export class ViewJournalPile extends FormApplication {
   getData() {
     //Journal Entries passed in get stripped down so they don't have data, which breaks cardgrid, so we're adding the nesting back in
     let cards = this.cards.map(el => {
-      console.log("EL: ", el)
       return {
         data: el,
         _id: el['_id']
@@ -183,5 +194,124 @@ export class ViewJournalPile extends FormApplication {
         this.close();
       })
     }
+  }
+}
+
+export class DiscardJournalPile extends FormApplication {
+  deckID: string = ""
+  cards: JournalEntry[] = []
+
+  constructor(obj, opts={}){
+    super(obj, opts)
+    this.deckID = obj['deckID']
+    this.cards = obj['cards']
+  }
+
+  static get defaultOptions(){
+    return mergeObject(super.defaultOptions, {
+      id: 'discardpile',
+      title: "Discard Pile",
+      template: "modules/cardsupport/templates/cardgrid.html",
+      classes: ['sheet'],
+    })
+  }
+
+  getData() {
+    //Journal Entries passed in get stripped down so they don't have data, which breaks cardgrid, so we're adding the nesting back in
+    let cards = this.cards.map(el => {
+      return {
+        data: el,
+        _id: el['_id']
+      }
+    })
+    let data = {
+      cards:cards,
+      discard: true
+    }
+    console.log(data);
+    return data;
+  }
+
+  async activateListeners(html){
+    let cardIDs = this.cards.map(el =>{ return el['_id'] })
+    // Take
+    for(let cardID of cardIDs){
+      html.find(`#${cardID}-take`).click(() => {
+        if(ui['cardHotbar'].populator.getNextSlot() == -1){
+          ui.notifications.error("No more room in your hand")
+          return;
+        }
+        ui['cardHotbar'].populator.addToPlayerHand([this.cards.find(el => el['_id'] == cardID)]);
+        
+        // GM SOCKET TO REMOVEFROMSTATE a Card
+        let msg:MSGTYPES.MSG_REMOVECARDFROMDISCARD = {
+          type: "REMOVECARDFROMDISCARD",
+          playerID: game.users.find(el=> el.isGM && el.active).id,
+          deckID: this.deckID,
+          cardID: cardID
+        }
+        //@ts-ignore
+        game.socket.emit('module.cardsupport', msg);
+        this.cards = this.cards.filter(el=> {
+          return el._id != cardID
+        })
+        this.render(true);
+      })
+
+      html.find(`#${cardID}-takecopy`).click(() => {
+        if(ui['cardHotbar'].populator.getNextSlot() == -1){
+          ui.notifications.error("No more room in your hand")
+          return;
+        }
+        ui['cardHotbar'].populator.addToPlayerHand([this.cards.find(el => el['_id'] == cardID)]);
+        this.cards = this.cards.filter(el=> {
+          return el._id != cardID
+        })
+        this.render(true);
+      })
+    
+      html.find(`#${cardID}-burn`).click(() => {
+        let msg:MSGTYPES.MSG_REMOVECARDFROMDISCARD = {
+          type: "REMOVECARDFROMDISCARD",
+          playerID: game.users.find(el => el.isGM && el.active).id,
+          deckID: this.deckID,
+          cardID: cardID
+        }
+        //@ts-ignore
+        game.socket.emit('module.cardsupport', msg)
+        this.cards = this.cards.filter(el=> {
+          return el._id != cardID
+        })
+        this.render(true);
+      })
+      
+      html.find(`#${cardID}-topdeck`).click(() => {
+        let msg:MSGTYPES.MSG_CARDTOPDECK = {
+          type: "CARDTOPDECK",
+          playerID: game.users.find(el => el.isGM && el.active).id,
+          deckID: this.deckID,
+          cardID: cardID
+        }
+        //@ts-ignore
+        game.socket.emit('module.cardsupport', msg);
+
+        this.cards = this.cards.filter(el=> {
+          return el._id != cardID
+        })
+        this.render(true);
+      })
+    }
+    html.find(`#shuffleBack`).click(() => {
+      let msg:MSGTYPES.MSG_SHUFFLEBACKDISCARD = {
+        type: "SHUFFLEBACKDISCARD",
+        playerID : game.users.find(el => el.isGM && el.active).id,
+        deckID: this.deckID
+      }
+      //@ts-ignore
+      game.socket.emit('module.cardsupport', msg)
+      this.cards = []
+      this.render(true);
+    })
+    html.find(`#close`).click(() => {this.close()})
   }
 }

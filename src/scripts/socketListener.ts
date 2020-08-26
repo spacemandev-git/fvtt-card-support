@@ -1,6 +1,6 @@
 import {handleDroppedCard} from './drop.js';
 import { Deck } from './deck.js';
-import {ViewJournalPile} from './DeckForm.js';
+import {ViewJournalPile, DiscardJournalPile} from './DeckForm.js';
 
 Hooks.on("ready", () => {
   //@ts-ignore
@@ -94,9 +94,76 @@ Hooks.on("ready", () => {
       }).render(true)
     } else if (data?.type == "REMOVECARDFROMSTATE") {
       game.decks.get(data.deckID).removeFromState([data.cardID]);
+    } else if (data?.type == "REMOVECARDFROMDISCARD") {
+      game.decks.get(data.deckID).removeFromDiscard([data.cardID]);
+    } else if (data?.type == "REQUESTDISCARD") {
+      let cards: JournalEntry[] = []
+      cards = (<Deck>game.decks.get(data.deckID))._discard.map(el => {
+        return game.journal.get(el)
+      })
+      let reply:MSG_VIEWDISCARD = {
+        type: "VIEWDISCARD",
+        playerID: data.requesterID,
+        deckID: data.deckID,
+        cards: cards
+      }
+      //@ts-ignore
+      game.socket.emit('module.cardsupport', reply);
+    } else if (data?.type == "VIEWDISCARD") {
+      new DiscardJournalPile({
+        deckID: data.deckID,
+        cards: data.cards
+      }).render(true)
+    } else if (data?.type == "CARDTOPDECK") {
+      (<Deck>game.decks.get(data.deckID)).addToDeckState([data.cardID]);
+      (<Deck>game.decks.get(data.deckID)).removeFromDiscard([data.cardID]);
+    } else if (data?.type == "SHUFFLEBACKDISCARD") {
+      (<Deck>game.decks.get(data.deckID)).addToDeckState(game.decks.get(data.deckID)._discard);
+      (<Deck>game.decks.get(data.deckID)).removeFromDiscard(game.decks.get(data.deckID)._discard);
+      (<Deck>game.decks.get(data.deckID)).shuffle();
     }
   })  
 })
+
+export interface MSG_SHUFFLEBACKDISCARD {
+  type: "SHUFFLEBACKDISCARD",
+  playerID: string,
+  deckID: string
+}
+
+export interface MSG_CARDTOPDECK {
+  type: "CARDTOPDECK",
+  playerID: string,
+  deckID: string,
+  cardID: string
+}
+
+export interface MSG_REMOVEFROMDISCARD {
+  type: "REMOVEFROMDISCARD",
+  playerID: string,
+  deckID: string,
+  cardID: string
+}
+
+export interface MSG_VIEWDISCARD {
+  type: "VIEWDISCARD", 
+  playerID:string, 
+  deckID: string,
+  cards: JournalEntry[]
+}
+
+export interface MSG_REQUESTDISCARD {
+  type: "REQUESTDISCARD",
+  playerID: string,
+  requesterID: string,
+  deckID: string
+}
+export interface MSG_REMOVECARDFROMDISCARD {
+  type: "REMOVECARDFROMDISCARD",
+  playerID: string,
+  deckID: string,
+  cardID: string
+}
 
 export interface MSG_REMOVECARDFROMSTATE {
   type: "REMOVECARDFROMSTATE"
