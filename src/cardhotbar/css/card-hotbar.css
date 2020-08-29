@@ -330,6 +330,15 @@ div#client-settings div#chbSetDiv {
   order: -1;
 }
 
+#client-settings form .form-group.submenu.chb-setting button label {
+    display: inline-block;
+    padding-top: 0px;
+    margin-top: -8px;
+    margin-left: 5px;
+    line-height: 22px;
+    vertical-align: middle;
+}
+
 .macro .tooltip span {
     z-index: 4;
 }
