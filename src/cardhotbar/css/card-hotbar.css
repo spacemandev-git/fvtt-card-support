@@ -32,6 +32,7 @@
 }
 
 #card-hotbar #card-hotbar-directory-controls.collapsed img.collapsed {
+    border: none;
     display: block;
 }
 
@@ -64,10 +65,21 @@
     margin-bottom: auto;
 }
 
+#card-hotbar #card-hotbar-directory-controls div.vertbar a img {
+    border: none;
+}
+
+
 #card-hotbar #card-hotbar-directory-controls div.expanded a {
     margin-top: auto;
     margin-bottom: auto;
 }
+
+#card-hotbar #card-hotbar-directory-controls div.expanded a {
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
 
 #card-hotbar #card-action-bar {
     pointer-events: all;
