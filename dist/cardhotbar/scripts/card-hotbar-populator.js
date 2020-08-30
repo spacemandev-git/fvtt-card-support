@@ -2,8 +2,7 @@
 
 export class cardHotbarPopulator {
     constructor() { 
-        this.macroMap = this.chbGetMacros();
-        getComputedStyle(document.documentElement).getPropertyValue('--width');    
+        this.macroMap = this.chbGetMacros();    
         console.debug("Card Hotbar | Initial state:");
         console.debug(this.macroMap);
     }

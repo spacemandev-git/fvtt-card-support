@@ -11,7 +11,7 @@ export class cardHotbarSettings {
         game.settings.registerMenu("cardsupport", 'chbSettingsMenu', {
             name: '(𝗚𝗠 𝗢𝗻𝗹𝘆) Default Player Hand Settings for All Users',
             label: 'Global Player Hand',
-            icon: 'fas fa-bars',
+            icon: 'icon-pokerhand fa-2x',
             type: cardHotbarSettingsForm,
             restricted: true
         });
@@ -20,7 +20,7 @@ export class cardHotbarSettings {
         game.settings.registerMenu("cardsupport", 'chbFlagsMenu', {
             name: 'Your Hand of Cards Settings',
             label: 'Your Hand of Cards',
-            icon: 'fas fa-bars',
+            icon: 'icon-pokerhand fa-2x',
             type: cardHotbarFlagsForm,
             restricted: false
         });

@@ -66,9 +66,11 @@ async function cardHotbarInit() {
   , style = document.createElement('style');
 
   head.appendChild(style);
-
   style.type = 'text/css';
   style.appendChild(document.createTextNode(css));
+
+  let root = document.documentElement;
+  root.style.setProperty("--xoffset", ( cardHotbarSettings.getCHBXPos() - 220 )+ "px");
 
 //  ui.hotbar.render();
 
@@ -115,7 +117,7 @@ Hooks.once("init", async () => {
   };
 });
 
-Hooks.once('ready', () => {
+Hooks.once('ready', async () => {
   //console.debug("Card Hotbar | Foundry setup...");
 
   //Check to make sure that a hotbar rendered before initilizing so that PopOut module windows do not have unwanted card hotbars.
@@ -124,9 +126,9 @@ Hooks.once('ready', () => {
   //console.debug(hotbarTest);
  
   if ( hotbarTest ) {
-    cardHotbarInit();
+    await cardHotbarInit();
   }
-
+  
 });
 
 Hooks.on("renderSettingsConfig", async () => {
