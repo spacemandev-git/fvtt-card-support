@@ -67,6 +67,8 @@ async function cardHotbarInit() {
 
   head.appendChild(style);
 
+  let root = document.documentElement;
+  root.style.setProperty("--xoffset", ( cardHotbarSettings.getCHBXPos() - 220 )+ "px");
   style.type = 'text/css';
   style.appendChild(document.createTextNode(css));
 
