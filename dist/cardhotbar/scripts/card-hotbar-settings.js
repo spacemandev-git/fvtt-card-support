@@ -118,7 +118,7 @@ export class cardHotbarSettings {
             hint: "cardHotbar.settings.chbYPos.nameHint",
             scope: "world",
             config: false,
-            default: "63",
+            default: game.user.getFlag("custom-hotbar","chbXPos") == 63 ? 116 : 63,
             type: Number,
             onChange: value => {
                 ui.cardHotbar.render();

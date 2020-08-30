@@ -138,7 +138,7 @@ export class cardHotbarSettings {
 
     static getCHBDrawFaceUpTable(){
         var flag = game.user.getFlag("cardsupport", "chbDrawFaceUpTable");
-        var sett = game.settings.get("cardsupport","chbDrawFaceUpTable");
+        var sett = game.settings.get("cardsupport","chbDrawFaceUpHand");
         return (flag != undefined ? flag : sett );
     }
 
