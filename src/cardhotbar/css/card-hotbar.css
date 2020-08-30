@@ -3,7 +3,9 @@
 :root {
     --width: 138px;
     --xoffset: 0px;
-    --totwidth: calc(100vw - 600px - var(--xoffset) );
+    --rawwidth: 100vw; 
+    --totwidth: min( var(--rawwidth), calc(100vw - 600px - var(--xoffset) ) );
+    /* --totwidth: calc( 100vw - 600px - var(--xoffset) ); */
 }
 
 /* TO DO: figure out why so wide, even after hiding cards */

@@ -1,5 +1,6 @@
 //import { Deck } from "../scripts/deck.js";
 import {DeckForm} from '../scripts/DeckForm.js';
+//import { updateIdentifier } from 'typescript';
 
 export class cardHotbar extends Hotbar {
     /**
@@ -39,6 +40,12 @@ export class cardHotbar extends Hotbar {
     /**
      * 
      */
+    this.totScaledWidth = 0;
+
+
+    /**
+     * 
+     */    
     this.populator = populator;
   }
   
@@ -75,6 +82,7 @@ export class cardHotbar extends Hotbar {
   _getcardMacrosByPage(page) { 
     let lastCard = false;
     const macros = this.getcardHotbarMacros(page);
+    this.totScaledWidth = 0;
     for ( let [i, m] of macros.entries() ) {
       m.key = i<53 ? i+1 : 0;
       m.cssClass = m.macro ? "active" : "inactive";    
@@ -83,9 +91,10 @@ export class cardHotbar extends Hotbar {
       //TO DO: improve to replace hard-coded value with the default draw-mode?
       //getComputedStyle(document.documentElement).getPropertyValue('--width');
       //element.style.setProperty("--my-var", jsVar + 4);
-      let defaultWidth = 138;
+      let defaultWidth = m.icon ? 138 : 0;
       let sw = m.macro ? m.macro.getFlag("world","scaledWidth") || defaultWidth : defaultWidth;
       m.scaledWidth = sw ? sw : defaultWidth;
+      this.totScaledWidth += m.scaledWidth; 
       let defaultSide = "front";
       let curSide = m.macro ? m.macro.getFlag("world","sideUp") || defaultSide : defaultSide;
       m.sideUp = curSide ? curSide : defaultSide;
@@ -109,6 +118,9 @@ export class cardHotbar extends Hotbar {
         lastCard = true;
       }
     }
+    let root = document.documentElement;
+    root.style.setProperty("--rawwidth", ( ui.cardHotbar.totScaledWidth + "px") );
+    console.debug(`Card Hotbar | Total image widths is: ${this.totScaledWidth}`);
     return macros;
   }
 
