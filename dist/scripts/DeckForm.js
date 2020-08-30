@@ -62,7 +62,7 @@ export class DeckForm extends FormApplication {
                                             receiverID: game.user.id,
                                             deckID: html.find("#deckID")[0].value,
                                             numCards: html.find("#numCards")[0].value,
-                                            replacement: html.find("#infiniteDraw")[0].value
+                                            replacement: html.find("#infiniteDraw")[0].checked
                                         };
                                         //@ts-ignore
                                         game.socket.emit('module.cardsupport', msg);
