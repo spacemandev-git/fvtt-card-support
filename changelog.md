@@ -1,10 +1,10 @@
 1.4.3
--Fixed issue the player's hand invisibly blocked more space than required by their cards.
--Fixed issue where the player hand could still overlap the sidebar if the player's hand was moved to the right using settings. 
--Minor cosmetic improvements to the vertical player hand control bar and user settings.
+- Fixed issue the player's hand invisibly blocked more space than required by their cards.
+- Fixed issue where the player hand could still overlap the sidebar if the player's hand was moved to the right using settings. 
+- Minor cosmetic improvements to the vertical player hand control bar and user settings.
 
 1.4.2
--Minor bugfix for issue where draw with replacement was always on when drawing using the vertical controls next to the player's hand.
+- Minor bugfix for issue where draw with replacement was always on when drawing using the vertical controls next to the player's hand.
 
 1.4.1
 - Added confirm dialog to Burn in Context Menu
