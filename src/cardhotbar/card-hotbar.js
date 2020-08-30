@@ -252,6 +252,8 @@ export class cardHotbar extends Hotbar {
         icon.classList.add(("fa-caret-down"));
         bar.removeClass("collapsed");
         this._collapsed = false;
+        let root = document.documentElement;
+        root.style.setProperty("--rawwidth", ( ui.cardHotbar.totScaledWidth + "px") );
         resolve(true);
       });
     });
