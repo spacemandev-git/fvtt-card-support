@@ -118,7 +118,7 @@ export class cardHotbarSettings {
             hint: "cardHotbar.settings.chbYPos.nameHint",
             scope: "world",
             config: false,
-            default: game.user.getFlag("custom-hotbar","chbXPos") == 63 ? 116 : 63,
+            default: "63",
             type: Number,
             onChange: value => {
                 ui.cardHotbar.render();
@@ -138,7 +138,7 @@ export class cardHotbarSettings {
 
     static getCHBDrawFaceUpTable(){
         var flag = game.user.getFlag("cardsupport", "chbDrawFaceUpTable");
-        var sett = game.settings.get("cardsupport","chbDrawFaceUpTable");
+        var sett = game.settings.get("cardsupport","chbDrawFaceUpHand");
         return (flag != undefined ? flag : sett );
     }
 
