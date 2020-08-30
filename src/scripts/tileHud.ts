@@ -1,6 +1,7 @@
 import {mod_scope} from './constants.js';
 import { Deck } from './deck.js';
 import {cardHotbarSettings} from '../cardhotbar/scripts/card-hotbar-settings.js'
+import { Texture } from 'pixi.js';
 
 Hooks.on('renderTileHUD', (tileHUD, html, options) => {
   //console.log(tileHUD);
@@ -219,9 +220,13 @@ async function deckHUD(td:TileData, html) {
                 console.log("I: ", i)
                 let card = deck.infinteDraw()
                 if(drawTable){
-                  let tex = await loadTexture(game.journal.get(card).data['img'])
+                  console.debug("Card Hotbar | Drawing to table. FaceUp is: ");
+                  let bool = cardHotbarSettings.getCHBDrawFaceUpTable();
+                  console.debug( bool );
+                  let imgPath = bool ? game.journal.get(card).data['img'] : game.journal.get(card).getFlag("world","cardBack");
+                  let tex = await loadTexture(imgPath);
                   await Tile.create({
-                    img: game.journal.get(card).data['img'],
+                  img: imgPath,
                     x: html.find("#deckX")[0].value,
                     y: html.find("#deckY")[0].value,
                     z: 100+i,
@@ -241,9 +246,13 @@ async function deckHUD(td:TileData, html) {
                 for (let i = 0; i < numCards; i++) {
                   let card = await deck.drawCard();
                   if(drawTable){
-                    let tex = await loadTexture(game.journal.get(card).data['img'])
+                    console.debug("Card Hotbar | Drawing to table. FaceUp is: ");
+                    let bool = cardHotbarSettings.getCHBDrawFaceUpTable();
+                    console.debug( bool );
+                    let imgPath = bool ? game.journal.get(card).data['img'] : game.journal.get(card).getFlag("world","cardBack");
+                    let tex = await loadTexture(imgPath);                    
                     await Tile.create({
-                      img: game.journal.get(card).data['img'],
+                      img: imgPath,
                       x: html.find("#deckX")[0].value,
                       y: html.find("#deckY")[0].value,
                       z: 100+i,
