@@ -12,10 +12,14 @@
   "CARD.modname": "Card Support (Unofficial)",
   "CARD.mod": "cardsupport",
   "CARD.chbTitle": "Player Hand Settings", 
-  "CARD.drawFaceUp": {
-    "name": "Draw Cards Face Up?",
-    "nameHint": "Set to false to 'draw blind' (cards appear face down)."
+  "CARD.drawFaceUpHand": {
+    "name": "Draw Cards to Hand Face Up?",
+    "nameHint": "Set to false to 'draw blind' (drawn cards appear in players' hands face down)."
   }, 
+  "CARD.drawFaceUpTable": {
+    "name": "Draw Cards to Table Face Up?",
+    "nameHint": "Set to false to 'draw blind' to the table (drawn cards appear on the table face down)."
+  },
   "CARD.scale": {
     "name": "Card Scale Ratio",
     "nameHint": "Adjust the size of card tiles in play. Values less than 1 make the cards smaller."

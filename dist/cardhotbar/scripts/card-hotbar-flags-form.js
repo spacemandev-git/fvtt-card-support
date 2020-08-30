@@ -22,7 +22,8 @@ export class cardHotbarFlagsForm extends FormApplication {
 
     getData() {
         let data = {        
-            chbDrawFaceUp: cardHotbarSettings.getCHBDrawFaceUp(),
+            chbDrawFaceUpHand: cardHotbarSettings.getCHBDrawFaceUpHand(),
+            chbDrawFaceUpTable: cardHotbarSettings.getCHBDrawFaceUpTable(),
             chbCardScale: cardHotbarSettings.getCHBCardScale(),
             chbPrimaryColor: cardHotbarSettings.getCHBPrimaryColor(), 
             chbBorderColor: cardHotbarSettings.getCHBBorderColor(),
@@ -33,7 +34,8 @@ export class cardHotbarFlagsForm extends FormApplication {
         };
         if (this.reset == true) {
             data = { 
-                chbDrawFaceUp: game.settings.get("cardsupport","chbDrawFaceUp"),
+                chbDrawFaceUpHand: game.settings.get("cardsupport","chbDrawFaceUpHand"),
+                chbDrawFaceUpTable: game.settings.get("cardsupport","chbDrawFaceUpTable"),
                 chbCardScale: game.settings.get("cardsupport","chbCardScale"),                   
                 chbPrimaryColor: game.settings.get("cardsupport","chbPrimaryColor"),
                 chbBorderColor: game.settings.get("cardsupport","chbBorderColor"),
@@ -59,8 +61,10 @@ export class cardHotbarFlagsForm extends FormApplication {
      */
     async _updateObject(e, d) {
         //console.debug("card Hotbar | Attempting to update flags with form values...");
-        //console.debug(d.chbDrawFaceUp);
-        await game.user.setFlag("cardsupport", "chbDrawFaceUp", d.chbDrawFaceUp);
+        //console.debug(d.chbDrawFaceUpHand);
+        //console.debug(d.chbDrawFaceUpTable);
+        await game.user.setFlag("cardsupport", "chbDrawFaceUpHand", d.chbDrawFaceUpHand);
+        await game.user.setFlag("cardsupport", "chbDrawFaceUpTable", d.chbDrawFaceUpTable);
         await game.user.setFlag("cardsupport", "chbCardScale", d.chbCardScale);
         await game.user.setFlag("cardsupport", "chbPrimaryColor", d.chbPrimaryColor);
         await game.user.setFlag("cardsupport", "chbBorderColor", d.chbBorderColor);
@@ -69,7 +73,7 @@ export class cardHotbarFlagsForm extends FormApplication {
         await game.user.setFlag("cardsupport","chbXPos", d.chbXPos);
         await game.user.setFlag("cardsupport","chbYPos", d.chbYPos);
         this.render();
-        ui.notifications.notify("Saving... Please refresh Foundry to apply changes.");                                                     
+        ui.notifications.notify("Saving... Please note that changes to colors require a Foundry refresh.");                                                     
     }
 
     onReset() {

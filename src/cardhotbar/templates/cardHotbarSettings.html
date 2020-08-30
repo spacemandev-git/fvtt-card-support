@@ -4,9 +4,14 @@
     <p>These settings apply hand of cards for ALL players. However, this will not override customizations a player chooses for themself.</p>
     <h2>Draw Mode</h2>
     <div class = "formgroup">
-        <label>{{localize "CARD.drawFaceUp.name"}}</label>
-            <input type="checkbox" value="drawFaceUp" name="chbDrawFaceUp" {{#if chbDrawFaceUp}} checked {{/if}}>
-            <p class="hint">{{localize "CARD.drawFaceUp.nameHint"}}</p>
+        <label>{{localize "CARD.drawFaceUpHand.name"}}</label>
+            <input type="checkbox" value="drawFaceUpHand" name="chbDrawFaceUpHand" {{#if chbDrawFaceUpHand}} checked {{/if}}>
+            <p class="hint">{{localize "CARD.drawFaceUpHand.nameHint"}}</p>
+    </div>
+    <div class = "formgroup">
+        <label>{{localize "CARD.drawFaceUpTable.name"}}</label>
+            <input type="checkbox" value="drawFaceUpTable" name="chbDrawFaceUpTable" {{#if chbDrawFaceUpTable}} checked {{/if}}>
+            <p class="hint">{{localize "CARD.drawFaceUpTable.nameHint"}}</p>
     </div>
     <h2>Card Scale</h2>
     <div class = "formgroup">
