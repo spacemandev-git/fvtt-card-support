@@ -20,6 +20,7 @@
 
 #card-hotbar.collapsed {
     height: 50px;
+    width: var(--totwidth);
 }
 
 #card-hotbar #card-hotbar-directory-controls {

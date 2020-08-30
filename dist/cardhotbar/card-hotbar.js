@@ -119,8 +119,9 @@ export class cardHotbar extends Hotbar {
       }
     }
     let root = document.documentElement;
+    //console.debug(`Card Hotbar | Is the card hotbar collapsed: ${this._collapsed}`);
     root.style.setProperty("--rawwidth", ( ui.cardHotbar.totScaledWidth + "px") );
-    console.debug(`Card Hotbar | Total image widths is: ${this.totScaledWidth}`);
+    //console.debug(`Card Hotbar | Total image widths is: ${this.totScaledWidth}`);
     return macros;
   }
 
@@ -224,6 +225,8 @@ export class cardHotbar extends Hotbar {
         bar.addClass("collapsed");
         ui.cardHotbar.element.addClass("collapsed");
         this._collapsed = true;
+        let root = document.documentElement;
+        root.style.setProperty("--rawwidth", "0px" );
         resolve(true);
       });
     });
