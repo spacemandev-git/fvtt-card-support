@@ -197,9 +197,13 @@ function deckHUD(td, html) {
                                     console.log("I: ", i);
                                     let card = deck.infinteDraw();
                                     if (drawTable) {
-                                        let tex = yield loadTexture(game.journal.get(card).data['img']);
+                                        console.debug("Card Hotbar | Drawing to table. FaceUp is: ");
+                                        let bool = cardHotbarSettings.getCHBDrawFaceUpTable();
+                                        console.debug(bool);
+                                        let imgPath = bool ? game.journal.get(card).data['img'] : game.journal.get(card).getFlag("world", "cardBack");
+                                        let tex = yield loadTexture(imgPath);
                                         yield Tile.create({
-                                            img: game.journal.get(card).data['img'],
+                                            img: imgPath,
                                             x: html.find("#deckX")[0].value,
                                             y: html.find("#deckY")[0].value,
                                             z: 100 + i,
@@ -221,9 +225,13 @@ function deckHUD(td, html) {
                                 for (let i = 0; i < numCards; i++) {
                                     let card = yield deck.drawCard();
                                     if (drawTable) {
-                                        let tex = yield loadTexture(game.journal.get(card).data['img']);
+                                        console.debug("Card Hotbar | Drawing to table. FaceUp is: ");
+                                        let bool = cardHotbarSettings.getCHBDrawFaceUpTable();
+                                        console.debug(bool);
+                                        let imgPath = bool ? game.journal.get(card).data['img'] : game.journal.get(card).getFlag("world", "cardBack");
+                                        let tex = yield loadTexture(imgPath);
                                         yield Tile.create({
-                                            img: game.journal.get(card).data['img'],
+                                            img: imgPath,
                                             x: html.find("#deckX")[0].value,
                                             y: html.find("#deckY")[0].value,
                                             z: 100 + i,

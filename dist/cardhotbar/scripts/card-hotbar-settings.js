@@ -29,9 +29,19 @@ export class cardHotbarSettings {
     
     //CARD HOTBAR SETTINGS    
 
-        game.settings.register("cardsupport", "chbDrawFaceUp", {
-            name: "cardHotbar.settings.chbDrawFaceUp.name",
-            hint: "cardHotbar.settings.chbDrawFaceUp.nameHint",
+        game.settings.register("cardsupport", "chbDrawFaceUpHand", {
+            name: "cardHotbar.settings.chbDrawFaceUpHand.name",
+            hint: "cardHotbar.settings.chbDrawFaceUpHand.nameHint",
+            scope: "world",
+            config: false,
+            default: true,
+            type: Boolean,
+            onChange: (value) => {ui.cardHotbar.render();}        // A callback function which triggers when the setting is changed
+        }); 
+
+        game.settings.register("cardsupport", "chbDrawFaceUpTable", {
+            name: "cardHotbar.settings.chbDrawFaceUpTable.name",
+            hint: "cardHotbar.settings.chbDrawFaceUpTable.nameHint",
             scope: "world",
             config: false,
             default: true,
@@ -108,7 +118,13 @@ export class cardHotbarSettings {
             hint: "cardHotbar.settings.chbYPos.nameHint",
             scope: "world",
             config: false,
-            default: "63",
+            //The default YPos for custom hotbar and card support are the same. If default custom hotbar YPos is present, gracefully move above it by default.
+            default:    (   game.modules.get("custom-hotbar").active && 
+                            (
+                                ( game.user.getFlag("custom-hotbar","chbYPos")=="63" )
+                                || ( !game.user.getFlag("custom-hotbar","chbYPos") &&  game.settings.get("custom-hotbar", "chbYPos") == "63" )
+                            )
+                        ) ? "116" : "63",
             type: Number,
             onChange: value => {
                 ui.cardHotbar.render();
@@ -120,9 +136,15 @@ export class cardHotbarSettings {
     //getters that determine whether to grab the user flag or the setting
     //Card Hotbar getters
     //refactor into one function with variable for what you are getting when get chance?
-    static getCHBDrawFaceUp(){
-        var flag = game.user.getFlag("cardsupport", "chbDrawFaceUp");
-        var sett = game.settings.get("cardsupport","chbDrawFaceUp");
+    static getCHBDrawFaceUpHand(){
+        var flag = game.user.getFlag("cardsupport", "chbDrawFaceUpHand");
+        var sett = game.settings.get("cardsupport","chbDrawFaceUpHand");
+        return (flag != undefined ? flag : sett );
+    }
+
+    static getCHBDrawFaceUpTable(){
+        var flag = game.user.getFlag("cardsupport", "chbDrawFaceUpTable");
+        var sett = game.settings.get("cardsupport","chbDrawFaceUpHand");
         return (flag != undefined ? flag : sett );
     }
 
