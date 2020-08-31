@@ -1,3 +1,6 @@
+1.4.5
+- Bugfix to defeat Norc's nefarious plan to require Custom Hotbar for the module to function properly.
+
 1.4.4
 - Added ability to draw face-down cards directly to the table.
 - Minor related settings improvements.
