@@ -2,6 +2,7 @@
 - Added ability to draw face-down cards directly to the table.
 - Minor related settings improvements.
 - Fixed issue introduced in previous release where cards in hand didn't display properly after expanding a collapsed card hotbar.
+- Improved compatibility of default settings with Custom Hotbar module.
 
 1.4.3
 - Fixed issue the player's hand invisibly blocked more space than required by their cards.

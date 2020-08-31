@@ -239,6 +239,8 @@ export class cardHotbar extends Hotbar {
    */
   expand() {
     if ( !this._collapsed ) return true;
+    let root = document.documentElement;
+    root.style.setProperty("--rawwidth", ( ui.cardHotbar.totScaledWidth + "px") );
     const controls = this.element.find("#card-hotbar-directory-controls");
     const bar = this.element.find("#card-action-bar");
     const icon = controls.find("#card-bar-toggle")[0].children[1];
@@ -252,8 +254,6 @@ export class cardHotbar extends Hotbar {
         icon.classList.add(("fa-caret-down"));
         bar.removeClass("collapsed");
         this._collapsed = false;
-        let root = document.documentElement;
-        root.style.setProperty("--rawwidth", ( ui.cardHotbar.totScaledWidth + "px") );
         resolve(true);
       });
     });
