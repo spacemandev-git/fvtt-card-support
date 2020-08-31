@@ -119,12 +119,12 @@ export class cardHotbarSettings {
             scope: "world",
             config: false,
             //The default YPos for custom hotbar and card support are the same. If default custom hotbar YPos is present, gracefully move above it by default.
-            default:    (   game.modules.get("custom-hotbar").active && 
-                            (
-                                ( game.user.getFlag("custom-hotbar","chbYPos")=="63" )
-                                || ( !game.user.getFlag("custom-hotbar","chbYPos") &&  game.settings.get("custom-hotbar", "chbYPos") == "63" )
-                            )
-                        ) ? "116" : "63",
+            default:    game.modules.get("custom-hotbar")  
+                            ?   ( 
+                                ( game.modules.get("custom-hotbar").active ) 
+                                &&  ( game.user.getFlag("custom-hotbar","chbYPos")=="63" ) || ( !game.user.getFlag("custom-hotbar","chbYPos") ) ? "116" : "63" 
+                                ) 
+                            : "63",
             type: Number,
             onChange: value => {
                 ui.cardHotbar.render();
