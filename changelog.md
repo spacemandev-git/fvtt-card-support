@@ -1,3 +1,6 @@
+14.6
+- Bugfix for chbDrawFaceUp to chbDrawFaceUpHand
+
 1.4.5
 - Bugfix to defeat Norc's nefarious plan to require Custom Hotbar for the module to function properly.
 

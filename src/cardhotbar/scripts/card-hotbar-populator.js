@@ -28,10 +28,10 @@ export class cardHotbarPopulator {
         //console.log("Player Hand Add Cards", cards)
         return new Promise(async (resolve, reject) => {
             let defaultSideUp = "front";
-            if( game.user.getFlag('cardsupport', 'chbDrawFaceUp')!==undefined ){
-                defaultSideUp = game.user.getFlag('cardsupport', 'chbDrawFaceUp') == true ? "front" : "back"
+            if( game.user.getFlag('cardsupport', 'chbDrawFaceUpHand')!==undefined ){
+                defaultSideUp = game.user.getFlag('cardsupport', 'chbDrawFaceUpHand') == true ? "front" : "back"
             } else {
-                defaultSideUp = game.settings.get("cardsupport", "chbDrawFaceUp") == true ? "front" : "back"
+                defaultSideUp = game.settings.get("cardsupport", "chbDrawFaceUpHand") == true ? "front" : "back"
             }
             console.debug(defaultSideUp);
             const maxSlot = 54;
