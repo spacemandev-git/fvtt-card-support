@@ -1,4 +1,4 @@
-14.6
+1.4.6
 - Bugfix for chbDrawFaceUp to chbDrawFaceUpHand
 
 1.4.5
