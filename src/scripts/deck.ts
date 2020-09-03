@@ -328,13 +328,14 @@ export class Decks{
     } else {
       this.decks = JSON.parse(game.settings.get("cardsupport", "decks"))
     }
+    Hooks.call("decks.ready")
   }
 
   /**
    * 
    * @param sdf A Zip Object from JSZip
    */
-  public create(deckfile:File):Promise<string>{
+  public create(deckfile:File, deckImg: File):Promise<string>{
     return new Promise(async (resolve,reject) => {
       //If DeckFolder doesn't exist create it
       let DecksFolderID = game.folders.find(el=>el.name == "Decks")?.id
@@ -367,6 +368,22 @@ export class Decks{
       if(result.target != target){
         await FilePicker.createDirectory(src, target, {});
       }
+      
+      //Deal with Deck Img
+      let deckImgPath = await uploadFile(target, deckImg);
+
+      //Register the setting for the new deck
+      game.settings.register("cardsupport", `${deckfolderId}-settings`, {
+        config: false,
+        scope: "world",
+        type: Object,
+        default: {
+          "deckImg": deckImgPath,
+          "drawCards": [],
+          "viewDeck": [],
+          "viewDiscard": []
+        }
+      })
       
       //Create a new deck object
       //Read deck.yaml
@@ -411,7 +428,7 @@ export class Decks{
   /**
    * #param files A list of img files
    */
-  public createByImages(deckName:string, files:File[], cardBack: File):Promise<string>{
+  public createByImages(deckName:string, files:File[], cardBack: File, deckImg:File):Promise<string>{
     return new Promise(async (resolve, reject) => {
       //If DeckFolder doesn't exist create it
       let DecksFolderID = game.folders.find(el=>el.name == "Decks")?.id
@@ -432,6 +449,22 @@ export class Decks{
         await FilePicker.createDirectory(src, target, {});
       }
 
+      //Deal with Deck Img
+      let deckImgPath = await uploadFile(target, deckImg);
+
+      //Register the setting for the new deck
+      game.settings.register("cardsupport", `${deckfolderId}-settings`, {
+        config: false,
+        scope: "world",
+        type: Object,
+        default: {
+          "deckImg": deckImgPath,
+          "drawCards": [],
+          "viewDeck": [],
+          "viewDiscard": []
+        }
+      })
+    
       //uplaod CardBack
       let cardBackPath = await uploadFile(target, cardBack)
 

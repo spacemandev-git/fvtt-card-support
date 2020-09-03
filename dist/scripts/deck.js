@@ -327,12 +327,13 @@ export class Decks {
         else {
             this.decks = JSON.parse(game.settings.get("cardsupport", "decks"));
         }
+        Hooks.call("decks.ready");
     }
     /**
      *
      * @param sdf A Zip Object from JSZip
      */
-    create(deckfile) {
+    create(deckfile, deckImg) {
         return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
             var _a, _b, _c;
             //If DeckFolder doesn't exist create it
@@ -363,6 +364,20 @@ export class Decks {
             if (result.target != target) {
                 yield FilePicker.createDirectory(src, target, {});
             }
+            //Deal with Deck Img
+            let deckImgPath = yield uploadFile(target, deckImg);
+            //Register the setting for the new deck
+            game.settings.register("cardsupport", `${deckfolderId}-settings`, {
+                config: false,
+                scope: "world",
+                type: Object,
+                default: {
+                    "deckImg": deckImgPath,
+                    "drawCards": [],
+                    "viewDeck": [],
+                    "viewDiscard": []
+                }
+            });
             //Create a new deck object
             //Read deck.yaml
             const deckyaml = jsyaml.safeLoadAll(yield deckZip.file('deck.yaml').async('string'));
@@ -405,7 +420,7 @@ export class Decks {
     /**
      * #param files A list of img files
      */
-    createByImages(deckName, files, cardBack) {
+    createByImages(deckName, files, cardBack, deckImg) {
         return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
             var _a;
             //If DeckFolder doesn't exist create it
@@ -425,6 +440,20 @@ export class Decks {
             if (result.target != target) {
                 yield FilePicker.createDirectory(src, target, {});
             }
+            //Deal with Deck Img
+            let deckImgPath = yield uploadFile(target, deckImg);
+            //Register the setting for the new deck
+            game.settings.register("cardsupport", `${deckfolderId}-settings`, {
+                config: false,
+                scope: "world",
+                type: Object,
+                default: {
+                    "deckImg": deckImgPath,
+                    "drawCards": [],
+                    "viewDeck": [],
+                    "viewDiscard": []
+                }
+            });
             //uplaod CardBack
             let cardBackPath = yield uploadFile(target, cardBack);
             //Make Cards
