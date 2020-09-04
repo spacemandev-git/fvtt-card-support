@@ -1,6 +1,4 @@
 Hooks.on("decks.ready", () => {
-  // Only setup settings as a gm, otherwise there might be some undefineds
-  if(!game.user.isGM){return;}
   //Go through game.decks and make and register a setting for each one
   for(let deckID of Object.keys(game.decks.decks)){
     game.settings.register("cardsupport", `${deckID}-settings`, {
@@ -17,7 +15,7 @@ Hooks.on("decks.ready", () => {
   }
 
   game.settings.registerMenu('cardsupport', 'decksettings', {
-    name: "decksettings",
+    name: "Deck Settings for Players",
     label: "Deck Settings",
     type: DeckSettingsForm,
     restricted: true
@@ -44,7 +42,164 @@ class DeckSettingsForm extends FormApplication{
   }
 
   async activateListeners(html){
+    for(let deckID of Object.keys(game.decks.decks)){
+      html.find(`#${deckID}-draw`).click((ev) => {
+        let playersettings = '';
+        for(let player of Array.from(game.users)){
+          if(player['isGM']){continue;}
+          let playerID = player['_id']
+          if(game.settings.get('cardsupport', `${deckID}-settings`)['drawCards'].includes(playerID)){
+            playersettings += `
+            <p style="display:flex">
+            <span  style="flex: 2">${game.users.get(playerID).name}</span> 
+            <input style="flex: 1" id=${playerID} type="checkbox" checked/>
+            </p>`  
+          } else {
+            playersettings += `
+            <p style="display:flex">
+            <span  style="flex: 2">${game.users.get(playerID).name}</span> 
+            <input style="flex: 1" id=${playerID} type="checkbox" />
+            </p>`   
+          }
+        }
 
+        let diaglogTemplate = `
+        ${playersettings}
+        `
+
+        new Dialog({
+          title: `${game.decks.get(deckID).deckName} Draw Settings`,
+          content: diaglogTemplate,
+          buttons: {
+            save: {
+              label: "Save",
+              callback: async (html:any) => {
+                let oldSettings = game.settings.get('cardsupport', `${deckID}-settings`)
+                let drawCardsSettings = []
+
+                for(let player of Array.from(game.users)){
+                  if(player['isGM']){continue;}
+                  if(html.find(`#${player['_id']}`)[0].checked){
+                    drawCardsSettings.push(player['_id']);
+                  }
+                }
+
+                game.settings.set('cardsupport', `${deckID}-settings`, {
+                  drawCards : drawCardsSettings,
+                  deckImg: oldSettings.deckImg,
+                  viewDeck: oldSettings.viewDeck,
+                  viewDiscard: oldSettings.viewDiscard
+                })
+              }
+            }
+          }
+        }).render(true)
+      })
+      html.find(`#${deckID}-view`).click((ev) => {
+        let playersettings = '';
+        for(let player of Array.from(game.users)){
+          if(player['isGM']){continue;}
+          let playerID = player['_id']        
+          if(game.settings.get('cardsupport', `${deckID}-settings`)['viewDeck'].includes(playerID)){
+            playersettings += `
+            <p style="display:flex">
+            <span  style="flex: 2">${game.users.get(playerID).name}</span> 
+            <input style="flex: 1" id=${playerID} type="checkbox" checked/>
+            </p>`  
+          } else {
+            playersettings += `
+            <p style="display:flex">
+            <span  style="flex: 2">${game.users.get(playerID).name}</span> 
+            <input style="flex: 1" id=${playerID} type="checkbox" />
+            </p>`   
+          }
+        }
+
+        let diaglogTemplate = `
+        ${playersettings}
+        `
+
+        new Dialog({
+          title: `${game.decks.get(deckID).deckName} View Settings`,
+          content: diaglogTemplate,
+          buttons: {
+            save: {
+              label: "Save",
+              callback: async (html:any) => {
+                let oldSettings = game.settings.get('cardsupport', `${deckID}-settings`)
+                let viewCardsSettings = []
+
+                for(let player of Array.from(game.users)){
+                  if(player['isGM']){continue;}
+                  if(html.find(`#${player['_id']}`)[0].checked){
+                    viewCardsSettings.push(player['_id']);
+                  }
+                }
+
+                game.settings.set('cardsupport', `${deckID}-settings`, {
+                  drawCards : oldSettings.drawCards,
+                  deckImg: oldSettings.deckImg,
+                  viewDeck: viewCardsSettings,
+                  viewDiscard: oldSettings.viewDiscard
+                })
+              }
+            }
+          }
+        }).render(true)
+      })
+      html.find(`#${deckID}-discard`).click((ev) => {
+        let playersettings = '';
+        for(let player of Array.from(game.users)){
+          let playerID = player['_id']
+          if(player['isGM']){continue;}
+          if(game.settings.get('cardsupport', `${deckID}-settings`)['viewDiscard'].includes(playerID)){
+            playersettings += `
+            <p style="display:flex">
+            <span  style="flex: 2">${game.users.get(playerID).name}</span> 
+            <input style="flex: 1" id=${playerID} type="checkbox" checked/>
+            </p>`  
+          } else {
+            playersettings += `
+            <p style="display:flex">
+            <span  style="flex: 2">${game.users.get(playerID).name}</span> 
+            <input style="flex: 1" id=${playerID} type="checkbox" />
+            </p>`   
+          }
+        }
+
+        let diaglogTemplate = `
+        ${playersettings}
+        `
+
+        new Dialog({
+          title: `${game.decks.get(deckID).deckName} Discard Settings`,
+          content: diaglogTemplate,
+          buttons: {
+            save: {
+              label: "Save",
+              callback: async (html:any) => {
+                let oldSettings = game.settings.get('cardsupport', `${deckID}-settings`)
+                let discardCardsSettings = []
+
+                for(let player of Array.from(game.users)){
+                  if(player['isGM']){continue;}
+                  if(html.find(`#${player['_id']}`)[0].checked){
+                    discardCardsSettings.push(player['_id']);
+                  }
+                }
+
+                game.settings.set('cardsupport', `${deckID}-settings`, {
+                  drawCards : oldSettings.drawCards,
+                  deckImg: oldSettings.deckImg,
+                  viewDeck: oldSettings.viewDeck,
+                  viewDiscard: discardCardsSettings
+                })
+              }
+            }
+          }
+        }).render(true)
+      })
+    }
   }
 }
 // Default Image

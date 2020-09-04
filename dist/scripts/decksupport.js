@@ -43,11 +43,13 @@ Hooks.on("ready", () => __awaiter(void 0, void 0, void 0, function* () {
     game.decks.init();
     // If 54CardDeck isn't already created, go ahead and create it
     const sampledeckFolderID = game.folders.find(el => el.name == "54CardDeck");
-    if (!sampledeckFolderID) {
+    if (!sampledeckFolderID && game.user.isGM) {
         console.log("Create Sample Deck");
         let sampleDeckBlob = yield (yield fetch('modules/cardsupport/sample/54CardDeck/54CardDeck.zip')).blob();
         let sampleDeckFile = new File([sampleDeckBlob], '54CardDeck.zip');
-        game.decks.create(sampleDeckFile);
+        let deckImgBlob = yield (yield fetch(`modules/cardsupport/assets/5.png`)).blob();
+        let deckImgFile = new File([deckImgBlob], "deckimg.png");
+        game.decks.create(sampleDeckFile, deckImgFile);
     }
 }));
 Hooks.on("renderMacroDirectory", (macroDir, html, _options) => {

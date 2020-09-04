@@ -40,11 +40,13 @@ Hooks.on("ready", async () => {
 
   // If 54CardDeck isn't already created, go ahead and create it
   const sampledeckFolderID = game.folders.find(el => el.name == "54CardDeck")
-  if(!sampledeckFolderID){
+  if(!sampledeckFolderID && game.user.isGM){
     console.log("Create Sample Deck")
     let sampleDeckBlob = await (await fetch('modules/cardsupport/sample/54CardDeck/54CardDeck.zip')).blob()
     let sampleDeckFile = new File([sampleDeckBlob], '54CardDeck.zip');
-    game.decks.create(sampleDeckFile);
+    let deckImgBlob = await(await fetch(`modules/cardsupport/assets/5.png`)).blob()
+    let deckImgFile = new File([deckImgBlob], "deckimg.png");
+    game.decks.create(sampleDeckFile,deckImgFile);
   }
 })
 
