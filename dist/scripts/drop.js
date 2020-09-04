@@ -71,7 +71,7 @@ function handleDroppedFolder(folderId, x, y) {
             let t = canvas.tiles.worldTransform;
             const _x = (x - t.tx) / canvas.stage.scale.x;
             const _y = (y - t.ty) / canvas.stage.scale.y;
-            if (game.settings.get('cardsupport', `${folderId}-settings`)['deckImg'] && game.settings.get('cardsupport', `${folderId}-settings`)['deckImg'] != "") {
+            if (game.settings.get('cardsupport', `${folderId}-settings`) && game.settings.get('cardsupport', `${folderId}-settings`)['deckImg'] != "") {
                 let deckImgTex = yield loadTexture(game.settings.get('cardsupport', `${folderId}-settings`)['deckImg']);
                 Tile.create({
                     name: game.folders.get(folderId).name,
