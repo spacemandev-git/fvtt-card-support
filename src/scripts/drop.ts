@@ -66,21 +66,37 @@ async function handleDroppedFolder(folderId, x, y){
     const _x = (x - t.tx) / canvas.stage.scale.x
     const _y = (y - t.ty) / canvas.stage.scale.y
 
-    let deckImgTex = await loadTexture(game.settings.get('cardsupport', `${folderId}-settings`)['deckImg'])
-
-    Tile.create({
-      name: game.folders.get(folderId).name,
-      img: game.settings.get('cardsupport', `${folderId}-settings`)['deckImg'],//`modules/cardsupport/assets/${Math.floor(Math.random() * 10) + 1}.png`,
-      x: _x,
-      y: _y,
-      width: deckImgTex.width,//350, //2, //350 for tile
-      height: deckImgTex.height, //400, //400 for tile
-      flags: {
-        [mod_scope]: {
-          'deckID': folderId
+    if(game.settings.get('cardsupport', `${folderId}-settings`)['deckImg'] && game.settings.get('cardsupport', `${folderId}-settings`)['deckImg'] != ""){
+      let deckImgTex = await loadTexture(game.settings.get('cardsupport', `${folderId}-settings`)['deckImg'])
+      Tile.create({
+        name: game.folders.get(folderId).name,
+        img: game.settings.get('cardsupport', `${folderId}-settings`)['deckImg'],//`modules/cardsupport/assets/${Math.floor(Math.random() * 10) + 1}.png`,
+        x: _x,
+        y: _y,
+        width: deckImgTex.width,//350, //2, //350 for tile
+        height: deckImgTex.height, //400, //400 for tile
+        flags: {
+          [mod_scope]: {
+            'deckID': folderId
+          }
         }
-      }
-    })
+      })
+      resolve()
+    } else {
+      Tile.create({
+        name: game.folders.get(folderId).name,
+        img: `modules/cardsupport/assets/${Math.floor(Math.random() * 10) + 1}.png`,
+        x: _x,
+        y: _y,
+        width: 350, //2, //350 for tile
+        height: 400, //400 for tile
+        flags: {
+          [mod_scope]: {
+            'deckID': folderId
+          }
+        }
+      })  
+    }
     resolve();
   })
 }
