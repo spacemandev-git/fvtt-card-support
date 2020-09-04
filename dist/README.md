@@ -14,6 +14,9 @@ At a high level, this module abuses the setFlag() and getFlag() operators on fol
 
 A FolderID refers to the DeckID, and the JournalEntry ID refers to the Card ID. 
 
+### Hooks
+Calls ```decks.ready``` hook when it's finished initalizing decks
+
 ### game.decks
 
 ```game.decks.get(deckId:string)```

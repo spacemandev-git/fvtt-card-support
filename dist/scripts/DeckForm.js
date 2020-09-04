@@ -32,6 +32,10 @@ export class DeckForm extends FormApplication {
                 let deck = d;
                 //Draw Card Listener
                 html.find(`#${deck.deckID}-draw`).click(() => {
+                    if (!game.user.isGM && !game.settings.get('cardsupport', `${deck.deckID}-settings`)['drawCards'].includes(game.user.id)) {
+                        ui.notifications.error("You don't have permission to do that.");
+                        return;
+                    }
                     let takeDialogTemplate = `
         <div style="display:flex; flex-direction:column">
           <div style="display:flex; flex-direction:row">
@@ -74,11 +78,15 @@ export class DeckForm extends FormApplication {
                 });
                 //View Cards Listener
                 html.find(`#${deck.deckID}-view`).click(() => {
+                    if (!game.user.isGM && !game.settings.get('cardsupport', `${deck.deckID}-settings`)['viewDeck'].includes(game.user.id)) {
+                        ui.notifications.error("You don't have permission to do that.");
+                        return;
+                    }
                     let template = `
         <div>
           <p> 
           <h3> How many cards do you want to view? </h3> 
-          <h3> Deck has ${deck._state.length} cards </h3> 
+          <h3> Deck has ${game.decks.get(deck.deckID)._state.length} cards </h3> 
           <input id="numCards" value=1 type="number" style='width:50px;'/>
           </p>
         </div>
@@ -115,6 +123,10 @@ export class DeckForm extends FormApplication {
                 });
                 //Discard Listener
                 html.find(`#${deck.deckID}-discard`).click(() => {
+                    if (!game.user.isGM && !game.settings.get('cardsupport', `${deck.deckID}-settings`)['viewDiscard'].includes(game.user.id)) {
+                        ui.notifications.error("You don't have permission to do that.");
+                        return;
+                    }
                     if (game.user.isGM) {
                         let discardPile = [];
                         for (let card of deck._discard) {

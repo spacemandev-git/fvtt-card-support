@@ -1,3 +1,7 @@
+1.5.0
+- Added Deck Img field when importing via SDF and Images to specify what the deck image should be
+- Added per player setting configuration to allow them to view/draw/discard cards from any given deck
+
 1.4.6
 - Bugfix for chbDrawFaceUp to chbDrawFaceUpHand
 

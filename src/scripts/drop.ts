@@ -61,18 +61,20 @@ Hooks.once("canvasReady", () => {
 });
 
 async function handleDroppedFolder(folderId, x, y){
-  return new Promise((resolve, reject) => {
+  return new Promise(async (resolve, reject) => {
     let t = canvas.tiles.worldTransform;
     const _x = (x - t.tx) / canvas.stage.scale.x
     const _y = (y - t.ty) / canvas.stage.scale.y
 
+    let deckImgTex = await loadTexture(game.settings.get('cardsupport', `${folderId}-settings`)['deckImg'])
+
     Tile.create({
       name: game.folders.get(folderId).name,
-      img: `modules/cardsupport/assets/${Math.floor(Math.random() * 10) + 1}.png`,
+      img: game.settings.get('cardsupport', `${folderId}-settings`)['deckImg'],//`modules/cardsupport/assets/${Math.floor(Math.random() * 10) + 1}.png`,
       x: _x,
       y: _y,
-      width: 350, //2, //350 for tile
-      height: 400, //400 for tile
+      width: deckImgTex.width,//350, //2, //350 for tile
+      height: deckImgTex.height, //400, //400 for tile
       flags: {
         [mod_scope]: {
           'deckID': folderId

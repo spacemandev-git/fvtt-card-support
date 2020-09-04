@@ -40,11 +40,13 @@ Hooks.on("ready", async () => {
 
   // If 54CardDeck isn't already created, go ahead and create it
   const sampledeckFolderID = game.folders.find(el => el.name == "54CardDeck")
-  if(!sampledeckFolderID){
+  if(!sampledeckFolderID && game.user.isGM){
     console.log("Create Sample Deck")
     let sampleDeckBlob = await (await fetch('modules/cardsupport/sample/54CardDeck/54CardDeck.zip')).blob()
     let sampleDeckFile = new File([sampleDeckBlob], '54CardDeck.zip');
-    game.decks.create(sampleDeckFile);
+    let deckImgBlob = await(await fetch(`modules/cardsupport/assets/5.png`)).blob()
+    let deckImgFile = new File([deckImgBlob], "deckimg.png");
+    game.decks.create(sampleDeckFile,deckImgFile);
   }
 })
 
@@ -72,8 +74,9 @@ Hooks.on('renderJournalDirectory', (_app, html, _data) => {
           callback: async () => {
             const sdfImportDialog = `
             <div class="form-group" style="display:flex; flex-direction:column">
-              <h1 style="flex:2">${game.i18n.localize("DECK.IMPORT_SDF")}</1>
-              <input id="file" type="file" />  
+              <h1 style="flex:2">${game.i18n.localize("DECK.IMPORT_SDF")}</h1>
+              <input id="file" type="file" />
+              <p> Deck Img:    <input id="deckImg" type="file" /> </p>  
             </div>
             `
             new Dialog({
@@ -83,7 +86,9 @@ Hooks.on('renderJournalDirectory', (_app, html, _data) => {
                 ok: {
                   label: game.i18n.localize("DECK.Import_Button"),
                   callback: async (form) => {
-                    game.decks.create($(form).find('#file')[0]['files'][0])
+                    game.decks.create(
+                    $(form).find('#file')[0]['files'][0],
+                    $(form).find('#deckImg')[0]['files'][0])
                   }
                 }, 
                 cancel: {
@@ -101,6 +106,7 @@ Hooks.on('renderJournalDirectory', (_app, html, _data) => {
               <p> Deck Name:   <input id="deckName" type="text" value="Deck Name"/></p>
               <p> Card Images: <input id="cardFiles" type="file" multiple="multiple" /> </p>
               <p> Card Back:   <input id="cardBack" type="file" /> </p>
+              <p> Deck Img:    <input id="deckImg" type="file" /> </p>
             `
             new Dialog({
               title: game.i18n.localize("DECK.IMPORT_IMAGES"),
@@ -109,7 +115,11 @@ Hooks.on('renderJournalDirectory', (_app, html, _data) => {
                 import: {
                   label: game.i18n.localize("DECK.IMPORT_IMAGES"),
                   callback: async (html:any) => {
-                    game.decks.createByImages(html.find("#deckName")[0].value, html.find("#cardFiles")[0].files, html.find("#cardBack")[0].files[0])
+                    game.decks.createByImages(html.find("#deckName")[0].value,
+                    html.find("#cardFiles")[0].files,
+                    html.find("#cardBack")[0].files[0],
+                    html.find("#deckImg")[0].files[0]
+                    )
                   }
                 }
               }
