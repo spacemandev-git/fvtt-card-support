@@ -145,5 +145,14 @@ Hooks.on("ready", () => {
             game.decks.get(data.deckID).removeFromDiscard(game.decks.get(data.deckID)._discard);
             game.decks.get(data.deckID).shuffle();
         }
+        else if ((data === null || data === void 0 ? void 0 : data.type) == "GETALLCARDSBYDECK") {
+            let cards = [];
+            let deck = game.decks.get(data.deckID);
+            let cardIDs = deck._state.slice(deck._state.length - data.viewNum);
+            cards = cardIDs.map(el => {
+                return game.journal.get(el);
+            }).reverse();
+            Hooks.call(`${data.deckID}-info`, (data.deckID, cards));
+        }
     }));
 });

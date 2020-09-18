@@ -1,3 +1,7 @@
+1.5.2
+- Added socket "GETCARDSBYDECK" that returns JournalEntries of all cards in a given deck. It does this by calling the hool
+`deckID-info` with (deckID, cards) where cards is a list of journal entries in the deck
+
 1.5.1
 - Fixed the deck not coming onto the scene (needed to add legacy support for deck images not being on older decks)
 
