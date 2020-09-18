@@ -137,7 +137,6 @@ export interface MSG_GETALLCARDSBYDECK {
   type: "GETALLCARDSBYDECK",
   playerID: string,
   deckID: string
-  to:string
 }
 
 export interface MSG_SHUFFLEBACKDISCARD {
