@@ -152,7 +152,13 @@ Hooks.on("ready", () => {
             cards = cardIDs.map(el => {
                 return game.journal.get(el);
             }).reverse();
-            Hooks.call(`${data.deckID}-info`, (data.deckID, cards));
+            let msg = {
+                type: "RECEIVECARDSBYDECK",
+                playerID: data.to,
+                cards: cards,
+                deckID: data.deckID
+            };
+            game.socket.emit('module.cardsupport', msg);
         }
     }));
 });

@@ -128,14 +128,30 @@ Hooks.on("ready", () => {
       cards = cardIDs.map(el => {
         return game.journal.get(el)
       }).reverse()
-      Hooks.call(`${data.deckID}-info`, (data.deckID, cards))
+      
+      let msg:MSG_RECEIVECARDSBYDECK = {
+        type: "RECEIVECARDSBYDECK",
+        playerID: data.to,
+        cards: cards,
+        deckID: data.deckID
+      }
+      
+      game.socket.emit('module.cardsupport', msg)
     }
   })  
 })
 
+export interface MSG_RECEIVECARDSBYDECK {
+  type: "RECEIVECARDSBYDECK",
+  playerID: string,
+  cards: JournalEntry[],
+  deckID: string
+}
+
 export interface MSG_GETALLCARDSBYDECK {
   type: "GETALLCARDSBYDECK",
   playerID: string,
+  to: string,
   deckID: string
 }
 
