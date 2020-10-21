@@ -1,6 +1,6 @@
 # Card Support for Foundry VTT
 
-**IMPORTANT NOTE:** There is a known issue with Card Support failing to draw to players hands (and possibly other failures as well that *seems* to only occur new worlds created in 0.7.x. Your existing worlds may be unaffected by this issue, but please exercise caution until an official 0.7.5 release is issued, hopefully within a week of 0.7.5 stable.
+**IMPORTANT NOTE:** There is a known issue with Card Support that *seems* to only occur in new worlds created in 0.7.x. In newly created worlds, Card Support fails to draw to players' hands (and probably other severe issues as well). Your existing worlds *may* be unaffected by this issue, but please exercise caution until an official 0.7.5 release is available, hopefully within a week of 0.7.5 stable.
 
 Thanks for your patience and our apologies for any issues this may cause.
 
