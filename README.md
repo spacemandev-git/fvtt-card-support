@@ -1,5 +1,9 @@
 # Card Support for Foundry VTT
 
+**IMPORTANT NOTE:** There is a known issue with Card Support failing to draw to players hands (and possibly other failures as well that *seems* to only occur new worlds created in 0.7.x. Your existing worlds may be unaffected by this issue, but please exercise caution until an official 0.7.5 release is issued, hopefully within a week of 0.7.5 stable.
+
+Thanks for your patience and our apologies for any issues this may cause.
+
 ## Usage Instructions
 1. Click the "SDF Import" Button in the Journal tab of the Sidebar (see gif).
 2. Select a valid SDF zip file. Samples are located in "data/modules/cardsupport/samples" (more on SDF below)
