@@ -1,8 +1,6 @@
 # Card Support for Foundry VTT
 
-**IMPORTANT NOTE:** There is a known issue with Card Support that *seems* to only occur in new worlds created in 0.7.x. In newly created worlds, Card Support fails to draw to players' hands (and probably other severe issues as well). Your existing worlds *may* be unaffected by this issue, but please exercise caution until an official 0.7.5 release is available, hopefully within a week of 0.7.5 stable.
-
-Thanks for your patience and our apologies for any issues this may cause.
+**IMPORTANT NOTE:** In initial testing, Card Support seems more or less compatible with , though Norc has an issue that only seems to affect him. Thanks in an advance for reporting any issues that you may come across in 0.7.5. We'll iron out any new issues and release an official 0.7.5 version as soon as we can, thanks for your patience.
 
 ## Usage Instructions
 1. Click the "SDF Import" Button in the Journal tab of the Sidebar (see gif).
