@@ -2,6 +2,14 @@ import {handleDroppedCard} from './drop.js';
 import { Deck } from './deck.js';
 import {ViewJournalPile, DiscardJournalPile} from './DeckForm.js';
 
+export function getGmId() {
+    var gmPlayer = game.users.find(el => el.isGM && el.active);
+    if(!gmPlayer) {
+        throw new Error("A GM must be present for this action.");
+    }
+    return gmPlayer.id;
+}
+
 Hooks.on("ready", () => {
   //@ts-ignore
   game.socket.on('module.cardsupport', async (data:any) => {
@@ -47,7 +55,7 @@ Hooks.on("ready", () => {
               } else {
                 let msg = {
                   type: "GIVE",
-                  playerID: game.users.find(el => el.isGM && el.active).id, //Send to GM for processing
+                  playerID: getGmId(), //Send to GM for processing
                   to: data.cardRequester,
                   cardID: macro.getFlag("world", "cardID")
                 }

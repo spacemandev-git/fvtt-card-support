@@ -22,7 +22,8 @@ export class cardHotbarSettingsForm extends FormApplication {
         let data = {   
             chbDrawFaceUpHand: game.settings.get("cardsupport", "chbDrawFaceUpHand"),
             chbDrawFaceUpTable: game.settings.get("cardsupport", "chbDrawFaceUpTable"),
-            chbCardScale: game.settings.get("cardsupport", "chbCardScale"),        
+            chbCardScaleX: game.settings.get("cardsupport", "chbCardScaleX"),        
+            chbCardScaleY: game.settings.get("cardsupport", "chbCardScaleY"),        
             chbPrimaryColor: game.settings.get("cardsupport", "chbPrimaryColor"), 
             chbBorderColor: game.settings.get("cardsupport", "chbBorderColor"),
             chbMarkedColor: game.settings.get("cardsupport", "chbMarkedColor"),
@@ -34,7 +35,8 @@ export class cardHotbarSettingsForm extends FormApplication {
             data = {
                 chbDrawFaceUpHand: game.settings.settings.get("cardsupport.chbDrawFaceUpHand").default,
                 chbDrawFaceUpTable: game.settings.settings.get("cardsupport.chbDrawFaceUpTable").default,
-                chbCardScale: game.settings.settings.get("cardsupport.chbCardScale").default,    
+                chbCardScaleX: game.settings.settings.get("cardsupport.chbCardScaleX").default,    
+                chbCardScaleY: game.settings.settings.get("cardsupport.chbCardScaleY").default,    
                 chbPrimaryColor: game.settings.settings.get("cardsupport.chbPrimaryColor").default,
                 chbBorderColor: game.settings.settings.get("cardsupport.chbBorderColor").default,
                 chbMarkedColor: game.settings.settings.get("cardsupport.chbMarkedColor").default,
@@ -63,7 +65,8 @@ export class cardHotbarSettingsForm extends FormApplication {
         //console.debug(d.chbDrawFaceUpTable);
         game.settings.set("cardsupport", "chbDrawFaceUpHand", d.chbDrawFaceUpHand);
         game.settings.set("cardsupport", "chbDrawFaceUpTable", d.chbDrawFaceUpTable);
-        game.settings.set("cardsupport", "chbCardScale", d.chbCardScale);
+        game.settings.set("cardsupport", "chbCardScaleX", d.chbCardScaleX);
+        game.settings.set("cardsupport", "chbCardScaleY", d.chbCardScaleY);
         game.settings.set("cardsupport", "chbPrimaryColor", d.chbPrimaryColor);
         game.settings.set("cardsupport", "chbBorderColor", d.chbBorderColor);
         game.settings.set("cardsupport", "chbMarkedColor", d.chbMarkedColor);

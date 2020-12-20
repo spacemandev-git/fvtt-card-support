@@ -2,6 +2,7 @@ import {mod_scope} from './constants.js';
 import { Deck } from './deck.js';
 import {cardHotbarSettings} from '../cardhotbar/scripts/card-hotbar-settings.js'
 import { Texture } from 'pixi.js';
+import { getGmId } from './socketListener.js';
 
 Hooks.on('renderTileHUD', (tileHUD, html, options) => {
   //console.log(tileHUD);
@@ -109,7 +110,7 @@ async function cardHUD(tileHUD, html) {
             } else {
               let msg = {
                 type: "GIVE",
-                playerID: game.users.find(el => el.isGM && el.active).id, //Send to GM for processing
+                playerID: getGmId(), //Send to GM for processing
                 to: _to,
                 cardID: td.flags[mod_scope].cardID
               }
@@ -230,8 +231,8 @@ async function deckHUD(td:TileData, html) {
                     x: html.find("#deckX")[0].value,
                     y: html.find("#deckY")[0].value,
                     z: 100+i,
-                    width: tex.width * cardHotbarSettings.getCHBCardScale(),
-                    height: tex.height * cardHotbarSettings.getCHBCardScale(),
+                    width: tex.width * cardHotbarSettings.getCHBCardScaleX(),
+                    height: tex.height * cardHotbarSettings.getCHBCardScaleY(),
                     flags: {
                       [mod_scope]: {
                         "cardID": card
@@ -256,8 +257,8 @@ async function deckHUD(td:TileData, html) {
                       x: html.find("#deckX")[0].value,
                       y: html.find("#deckY")[0].value,
                       z: 100+i,
-                      width: tex.width * cardHotbarSettings.getCHBCardScale(),
-                      height: tex.height * cardHotbarSettings.getCHBCardScale(),
+                      width: tex.width * cardHotbarSettings.getCHBCardScaleX(),
+                      height: tex.height * cardHotbarSettings.getCHBCardScaleY(),
                       flags: {
                         [mod_scope]: {
                           "cardID": card
