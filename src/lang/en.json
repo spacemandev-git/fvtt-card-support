@@ -20,9 +20,13 @@
     "name": "Draw Cards to Table Face Up?",
     "nameHint": "Set to false to 'draw blind' to the table (drawn cards appear on the table face down)."
   },
-  "CARD.scale": {
-    "name": "Card Scale Ratio",
-    "nameHint": "Adjust the size of card tiles in play. Values less than 1 make the cards smaller."
+  "CARD.scaleX": {
+    "name": "Card Scale Ratio X",
+    "nameHint": "Adjust the horizontal size of card tiles in play. Values less than 1 make the cards smaller."
+  },
+  "CARD.scaleY": {
+    "name": "Card Scale Ratio Y",
+    "nameHint": "Adjust the vertical size of card tiles in play. Values less than 1 make the cards smaller."
   },
   "CARD.chbPrimaryColor": {
           "name": "Player Hand UI Color:",

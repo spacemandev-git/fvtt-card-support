@@ -230,8 +230,8 @@ async function deckHUD(td:TileData, html) {
                     x: html.find("#deckX")[0].value,
                     y: html.find("#deckY")[0].value,
                     z: 100+i,
-                    width: tex.width * cardHotbarSettings.getCHBCardScale(),
-                    height: tex.height * cardHotbarSettings.getCHBCardScale(),
+                    width: tex.width * cardHotbarSettings.getCHBCardScaleX(),
+                    height: tex.height * cardHotbarSettings.getCHBCardScaleY(),
                     flags: {
                       [mod_scope]: {
                         "cardID": card
@@ -256,8 +256,8 @@ async function deckHUD(td:TileData, html) {
                       x: html.find("#deckX")[0].value,
                       y: html.find("#deckY")[0].value,
                       z: 100+i,
-                      width: tex.width * cardHotbarSettings.getCHBCardScale(),
-                      height: tex.height * cardHotbarSettings.getCHBCardScale(),
+                      width: tex.width * cardHotbarSettings.getCHBCardScaleX(),
+                      height: tex.height * cardHotbarSettings.getCHBCardScaleY(),
                       flags: {
                         [mod_scope]: {
                           "cardID": card

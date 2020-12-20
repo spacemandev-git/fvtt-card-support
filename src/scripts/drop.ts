@@ -119,14 +119,15 @@ export async function handleDroppedCard(cardID:string, x:number, y:number, alt:b
   const _x = (x - t.tx) / canvas.stage.scale.x
   const _y = (y - t.ty) / canvas.stage.scale.y
 
-  const cardScale = cardHotbarSettings.getCHBCardScale();
-  console.debug(cardScale);
+  const cardScaleX = cardHotbarSettings.getCHBCardScaleX();
+  const cardScaleY = cardHotbarSettings.getCHBCardScaleY();
+  console.debug(cardScaleX + " " + cardScaleY);
   await Tile.create({
     img: imgPath,
     x: _x,
     y: _y,
-    width: _width * cardScale,
-    height: _height * cardScale,
+    width: _width * cardScaleX,
+    height: _height * cardScaleY,
     flags: {
       [mod_scope]: {
         "cardID": `${cardID}`,

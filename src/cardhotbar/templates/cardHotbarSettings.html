@@ -13,11 +13,17 @@
             <input type="checkbox" value="drawFaceUpTable" name="chbDrawFaceUpTable" {{#if chbDrawFaceUpTable}} checked {{/if}}>
             <p class="hint">{{localize "CARD.drawFaceUpTable.nameHint"}}</p>
     </div>
-    <h2>Card Scale</h2>
+    <h2>Card Scale X</h2>
     <div class = "formgroup">
-        <label>{{localize "CARD.scale.name"}}</label>
-            <input type="number" value="{{chbCardScale}}" name="chbCardScale" step="0.01">
-            <p class="hint">{{localize "CARD.scale.nameHint"}}</p>
+        <label>{{localize "CARD.scaleX.name"}}</label>
+            <input type="number" value="{{chbCardScaleX}}" name="chbCardScaleX" step="0.01">
+            <p class="hint">{{localize "CARD.scaleX.nameHint"}}</p>
+    </div>
+    <h2>Card Scale Y</h2>
+    <div class = "formgroup">
+        <label>{{localize "CARD.scaleY.name"}}</label>
+            <input type="number" value="{{chbCardScaleY}}" name="chbCardScaleY" step="0.01">
+            <p class="hint">{{localize "CARD.scaleY.nameHint"}}</p>
     </div>
     <h2>Color Settings</h2>
     <div class = "formgroup">

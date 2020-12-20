@@ -24,7 +24,8 @@ export class cardHotbarFlagsForm extends FormApplication {
         let data = {        
             chbDrawFaceUpHand: cardHotbarSettings.getCHBDrawFaceUpHand(),
             chbDrawFaceUpTable: cardHotbarSettings.getCHBDrawFaceUpTable(),
-            chbCardScale: cardHotbarSettings.getCHBCardScale(),
+            chbCardScaleX: cardHotbarSettings.getCHBCardScaleX(),
+            chbCardScaleY: cardHotbarSettings.getCHBCardScaleY(),
             chbPrimaryColor: cardHotbarSettings.getCHBPrimaryColor(), 
             chbBorderColor: cardHotbarSettings.getCHBBorderColor(),
             chbMarkedColor: cardHotbarSettings.getCHBMarkedColor(),
@@ -36,7 +37,8 @@ export class cardHotbarFlagsForm extends FormApplication {
             data = { 
                 chbDrawFaceUpHand: game.settings.get("cardsupport","chbDrawFaceUpHand"),
                 chbDrawFaceUpTable: game.settings.get("cardsupport","chbDrawFaceUpTable"),
-                chbCardScale: game.settings.get("cardsupport","chbCardScale"),                   
+                chbCardScaleX: game.settings.get("cardsupport","chbCardScaleX"),
+                chbCardScaleY: game.settings.get("cardsupport","chbCardScaleY"),
                 chbPrimaryColor: game.settings.get("cardsupport","chbPrimaryColor"),
                 chbBorderColor: game.settings.get("cardsupport","chbBorderColor"),
                 chbMarkedColor: game.settings.get("cardsupport","chbMarkedColor"),
@@ -65,7 +67,8 @@ export class cardHotbarFlagsForm extends FormApplication {
         //console.debug(d.chbDrawFaceUpTable);
         await game.user.setFlag("cardsupport", "chbDrawFaceUpHand", d.chbDrawFaceUpHand);
         await game.user.setFlag("cardsupport", "chbDrawFaceUpTable", d.chbDrawFaceUpTable);
-        await game.user.setFlag("cardsupport", "chbCardScale", d.chbCardScale);
+        await game.user.setFlag("cardsupport", "chbCardScaleX", d.chbCardScaleX);
+        await game.user.setFlag("cardsupport", "chbCardScaleY", d.chbCardScaleY);
         await game.user.setFlag("cardsupport", "chbPrimaryColor", d.chbPrimaryColor);
         await game.user.setFlag("cardsupport", "chbBorderColor", d.chbBorderColor);
         await game.user.setFlag("cardsupport", "chbMarkedColor", d.chbMarkedColor);

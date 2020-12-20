@@ -49,9 +49,21 @@ export class cardHotbarSettings {
             onChange: (value) => {ui.cardHotbar.render();}        // A callback function which triggers when the setting is changed
         }); 
 
-        game.settings.register("cardsupport", "chbCardScale", {
-            name: "cardHotbar.settings.chbCardScale.name",
-            hint: "cardHotbar.settings.chbCardScale.nameHint",
+        game.settings.register("cardsupport", "chbCardScaleX", {
+            name: "cardHotbar.settings.chbCardScaleX.name",
+            hint: "cardHotbar.settings.chbCardScaleX.nameHint",
+            scope: "world",
+            config: false,
+            default: "0.5",
+            type: Number,
+            onChange: value => {
+                ui.cardHotbar.render();
+            }
+        }); 
+
+        game.settings.register("cardsupport", "chbCardScaleY", {
+            name: "cardHotbar.settings.chbCardScaleY.name",
+            hint: "cardHotbar.settings.chbCardScaleY.nameHint",
             scope: "world",
             config: false,
             default: "0.5",
@@ -148,9 +160,15 @@ export class cardHotbarSettings {
         return (flag != undefined ? flag : sett );
     }
 
-    static getCHBCardScale(){
-        var flag = game.user.getFlag("cardsupport", "chbCardScale");
-        var sett = game.settings.get("cardsupport","chbCardScale");
+    static getCHBCardScaleX(){
+        var flag = game.user.getFlag("cardsupport", "chbCardScaleX");
+        var sett = game.settings.get("cardsupport","chbCardScaleX");
+        return (flag != undefined ? flag : sett );
+    }
+
+    static getCHBCardScaleY(){
+        var flag = game.user.getFlag("cardsupport", "chbCardScaleY");
+        var sett = game.settings.get("cardsupport","chbCardScaleY");
         return (flag != undefined ? flag : sett );
     }
 
