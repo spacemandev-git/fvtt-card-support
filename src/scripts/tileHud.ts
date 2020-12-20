@@ -2,6 +2,7 @@ import {mod_scope} from './constants.js';
 import { Deck } from './deck.js';
 import {cardHotbarSettings} from '../cardhotbar/scripts/card-hotbar-settings.js'
 import { Texture } from 'pixi.js';
+import { getGmId } from './socketListener.js';
 
 Hooks.on('renderTileHUD', (tileHUD, html, options) => {
   //console.log(tileHUD);
@@ -109,7 +110,7 @@ async function cardHUD(tileHUD, html) {
             } else {
               let msg = {
                 type: "GIVE",
-                playerID: game.users.find(el => el.isGM && el.active).id, //Send to GM for processing
+                playerID: getGmId(), //Send to GM for processing
                 to: _to,
                 cardID: td.flags[mod_scope].cardID
               }

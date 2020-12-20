@@ -1,5 +1,6 @@
 //import { Deck } from "../scripts/deck.js";
 import {DeckForm} from '../scripts/DeckForm.js';
+import { getGmId } from '../scripts/socketListener.js';
 //import { updateIdentifier } from 'typescript';
 
 export class cardHotbar extends Hotbar {
@@ -344,7 +345,7 @@ export class cardHotbar extends Hotbar {
                   } else {
                     let msg = {
                       type: "GIVE",
-                      playerID: game.users.find(el => el.isGM && el.active).id, //Send to GM for processing
+                      playerID: getGmId(), //Send to GM for processing
                       to: _to,
                       cardID: game.macros.get(li.data("macro-id")).getFlag("world", "cardID")
                     }
