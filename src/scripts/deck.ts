@@ -506,7 +506,7 @@ export class Decks{
         reject("Deck doesn't exist!")
       }
 
-      let target = `worlds/${game.world.name}/Decks/${deckID}/`;
+      let target = `Decks/${deckID}/`;
       await uploadFile(target, cardFront);
       await uploadFile(target, cardBack);
 
