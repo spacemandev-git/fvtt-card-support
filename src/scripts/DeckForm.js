@@ -1,35 +1,32 @@
-
-
-import {ViewPile, DiscardPile} from './tileHud.js'
-
+import { ViewPile, DiscardPile } from './tileHud.js';
 export class DeckForm extends FormApplication {
-  constructor(obj, opts = {}){
-    super(obj, opts)
+  constructor(obj, opts = {}) {
+    super(obj, opts);
   }
 
-  static get defaultOptions(){
+  static get defaultOptions() {
     return mergeObject(super.defaultOptions, {
       id: 'deckinteractionform',
       title: "Decks",
       template: "modules/cardsupport/templates/deckform.html",
       classes: ['sheet']
-    })
+    });
   }
 
   getData() {
     let data = {
       decks: game.decks.decks
-    }
+    };
     return data;
   }
 
-  async activateListeners(html){
-    for(let d of Object.values(game.decks.decks)){
-      let deck = d;
-      //Draw Card Listener
+  async activateListeners(html) {
+    for (let d of Object.values(game.decks.decks)) {
+      let deck = d; //Draw Card Listener
+
       html.find(`#${deck.deckID}-draw`).click(() => {
-        if(!game.user.isGM && !game.settings.get('cardsupport', `${deck.deckID}-settings`)['drawCards'].includes(game.user.id)){
-          ui.notifications.error("You don't have permission to do that.")
+        if (!game.user.isGM && !game.settings.get('cardsupport', `${deck.deckID}-settings`)['drawCards'].includes(game.user.id)) {
+          ui.notifications.error("You don't have permission to do that.");
           return;
         }
 
@@ -45,20 +42,16 @@ export class DeckForm extends FormApplication {
           </div>
           <input style="display:none" id="deckID" value=${deck.deckID} />
         </div>     
-        `
+        `;
         new Dialog({
           title: "Draw Cards",
           content: takeDialogTemplate,
           buttons: {
             draw: {
               label: "Draw",
-              callback: (html) => {
-                if(game.user.isGM){
-                  game.decks.get(html.find("#deckID")[0].value).dealToPlayer(
-                    game.user.id,
-                    html.find("#numCards")[0].value,
-                    html.find("#infiniteDraw")[0].checked
-                  )
+              callback: html => {
+                if (game.user.isGM) {
+                  game.decks.get(html.find("#deckID")[0].value).dealToPlayer(game.user.id, html.find("#numCards")[0].value, html.find("#infiniteDraw")[0].checked);
                 } else {
                   let msg = {
                     type: "DRAWCARDS",
@@ -67,22 +60,22 @@ export class DeckForm extends FormApplication {
                     deckID: html.find("#deckID")[0].value,
                     numCards: html.find("#numCards")[0].value,
                     replacement: html.find("#infiniteDraw")[0].checked
-                  }
-                  //@ts-ignore
+                  }; //@ts-ignore
+
                   game.socket.emit('module.cardsupport', msg);
                 }
               }
             }
           }
-        }).render(true)
-      })
+        }).render(true);
+      }); //View Cards Listener
 
-      //View Cards Listener
       html.find(`#${deck.deckID}-view`).click(() => {
-        if(!game.user.isGM && !game.settings.get('cardsupport', `${deck.deckID}-settings`)['viewDeck'].includes(game.user.id)){
-          ui.notifications.error("You don't have permission to do that.")
+        if (!game.user.isGM && !game.settings.get('cardsupport', `${deck.deckID}-settings`)['viewDeck'].includes(game.user.id)) {
+          ui.notifications.error("You don't have permission to do that.");
           return;
         }
+
         let template = `
         <div>
           <p> 
@@ -91,20 +84,20 @@ export class DeckForm extends FormApplication {
           <input id="numCards" value=1 type="number" style='width:50px;'/>
           </p>
         </div>
-        `
+        `;
         new Dialog({
           title: "View Pile",
           content: template,
           buttons: {
             view: {
               label: "View",
-              callback: (html) => {
-                if(game.user.isGM){
+              callback: html => {
+                if (game.user.isGM) {
                   new ViewPile({
                     deckID: deck.deckID,
                     viewNum: html.find("#numCards")[0].value
-                  }).render(true)
-                } else { 
+                  }).render(true);
+                } else {
                   // send a socket request to request journal entries
                   let msg = {
                     type: "REQUESTVIEWCARDS",
@@ -112,53 +105,58 @@ export class DeckForm extends FormApplication {
                     requesterID: game.user.id,
                     deckID: deck.deckID,
                     viewNum: html.find("#numCards")[0].value
-                  }
-                  //@ts-ignore
+                  }; //@ts-ignore
+
                   game.socket.emit('module.cardsupport', msg);
                 }
               }
             }
           }
-        }).render(true)
-      })
+        }).render(true);
+      }); //Discard Listener
 
-      //Discard Listener
       html.find(`#${deck.deckID}-discard`).click(() => {
-        if(!game.user.isGM && !game.settings.get('cardsupport', `${deck.deckID}-settings`)['viewDiscard'].includes(game.user.id)){
-          ui.notifications.error("You don't have permission to do that.")
+        if (!game.user.isGM && !game.settings.get('cardsupport', `${deck.deckID}-settings`)['viewDiscard'].includes(game.user.id)) {
+          ui.notifications.error("You don't have permission to do that.");
           return;
         }
-        if(game.user.isGM){
-          let discardPile = []
-          for(let card of deck._discard){
+
+        if (game.user.isGM) {
+          let discardPile = [];
+
+          for (let card of deck._discard) {
             discardPile.push(game.journal.get(card));
           }
-          new DiscardPile({pile: discardPile, deck: deck}, {}).render(true)
+
+          new DiscardPile({
+            pile: discardPile,
+            deck: deck
+          }, {}).render(true);
         } else {
           let msg = {
             type: "REQUESTDISCARD",
-            playerID: game.users.find(el=>el.isGM && el.active).id,
+            playerID: game.users.find(el => el.isGM && el.active).id,
             deckID: deck.deckID,
             requesterID: game.user.id
-          }
-          //@ts-ignore
-          game.socket.emit('module.cardsupport', msg)
+          }; //@ts-ignore
+
+          game.socket.emit('module.cardsupport', msg);
         }
-      })
+      });
     }
   }
+
 }
-
 export class ViewJournalPile extends FormApplication {
-  __init() {this.deckID = ""}
-  __init2() {this.cards = []}
+  deckID = "";
+  cards = [];
 
-  constructor(obj, opts = {}){
-    super(obj, opts);ViewJournalPile.prototype.__init.call(this);ViewJournalPile.prototype.__init2.call(this);
-    this.deckID = obj['deckID']
-    this.cards = obj['cards']
+  constructor(obj, opts = {}) {
+    super(obj, opts);
+    this.deckID = obj['deckID'];
+    this.cards = obj['cards'];
 
-    if(game.settings.get("cardsupport", "chatMessageOnPlayerAction")){
+    if (game.settings.get("cardsupport", "chatMessageOnPlayerAction")) {
       ChatMessage.create({
         speaker: {
           alias: game.user.name
@@ -166,59 +164,62 @@ export class ViewJournalPile extends FormApplication {
         content: `
         <p>${game.user.name} is looking at ${this.cards.length} cards from ${game.decks.get(this.deckID).deckName}!</p>
         `
-      })
+      });
     }
   }
 
-  static get defaultOptions(){
+  static get defaultOptions() {
     return mergeObject(super.defaultOptions, {
       id: "viewpile",
       title: "View Deck",
       template: "modules/cardsupport/templates/cardgrid.html",
-      classes: ['sheet'],
-    })
+      classes: ['sheet']
+    });
   }
+
   getData() {
     //Journal Entries passed in get stripped down so they don't have data, which breaks cardgrid, so we're adding the nesting back in
     let cards = this.cards.map(el => {
       return {
         data: el,
         _id: el['_id']
-      }
-    })
+      };
+    });
     let data = {
-      cards:cards,
+      cards: cards,
       discard: false
-    }
+    };
     console.log(data);
     return data;
   }
 
-  async activateListeners(html){
-    let cardIDs = this.cards.map(el =>{ return el['_id'] })
-    // Take
-    for(let cardID of cardIDs){
+  async activateListeners(html) {
+    let cardIDs = this.cards.map(el => {
+      return el['_id'];
+    }); // Take
+
+    for (let cardID of cardIDs) {
       html.find(`#${cardID}-take`).click(() => {
-        if(ui['cardHotbar'].populator.getNextSlot() == -1){
-          ui.notifications.error("No more room in your hand")
+        if (ui['cardHotbar'].populator.getNextSlot() == -1) {
+          ui.notifications.error("No more room in your hand");
           return;
         }
-        ui['cardHotbar'].populator.addToPlayerHand([this.cards.find(el => el['_id'] == cardID)]);
-        
-        // GM SOCKET TO REMOVEFROMSTATE a Card
+
+        ui['cardHotbar'].populator.addToPlayerHand([this.cards.find(el => el['_id'] == cardID)]); // GM SOCKET TO REMOVEFROMSTATE a Card
+
         let msg = {
           type: "REMOVECARDFROMSTATE",
-          playerID: game.users.find(el=> el.isGM && el.active).id,
+          playerID: game.users.find(el => el.isGM && el.active).id,
           deckID: this.deckID,
           cardID: cardID
-        }
-        //@ts-ignore
-        game.socket.emit('module.cardsupport', msg);
-        this.cards = this.cards.filter(el=> {
-          return el._id != cardID
-        })
+        }; //@ts-ignore
 
-        if(game.settings.get("cardsupport", "chatMessageOnPlayerAction")){
+        game.socket.emit('module.cardsupport', msg);
+        this.cards = this.cards.filter(el => {
+          return el._id != cardID;
+        });
+
+        if (game.settings.get("cardsupport", "chatMessageOnPlayerAction")) {
           ChatMessage.create({
             speaker: {
               alias: game.user.name
@@ -226,23 +227,23 @@ export class ViewJournalPile extends FormApplication {
             content: `
             <p>${game.user.name} took a card from ${game.decks.get(this.deckID).deckName}!</p>
             `
-          })
+          });
         }
 
-        this.render(true);      
-      })
-
+        this.render(true);
+      });
       html.find(`#${cardID}-takecopy`).click(() => {
-        if(ui['cardHotbar'].populator.getNextSlot() == -1){
-          ui.notifications.error("No more room in your hand")
+        if (ui['cardHotbar'].populator.getNextSlot() == -1) {
+          ui.notifications.error("No more room in your hand");
           return;
         }
+
         ui['cardHotbar'].populator.addToPlayerHand([this.cards.find(el => el['_id'] == cardID)]);
-        this.cards = this.cards.filter(el=> {
-          return el._id != cardID
-        })
-        
-        if(game.settings.get("cardsupport", "chatMessageOnPlayerAction")){
+        this.cards = this.cards.filter(el => {
+          return el._id != cardID;
+        });
+
+        if (game.settings.get("cardsupport", "chatMessageOnPlayerAction")) {
           ChatMessage.create({
             speaker: {
               alias: game.user.name
@@ -250,25 +251,25 @@ export class ViewJournalPile extends FormApplication {
             content: `
             <p>${game.user.name} took a card as copy from ${game.decks.get(this.deckID).deckName}!</p>
             `
-          })
+          });
         }
-      
-      
-        this.render(true);      
-      })
+
+        this.render(true);
+      });
     }
   }
+
 }
-
 export class DiscardJournalPile extends FormApplication {
-  __init3() {this.deckID = ""}
-  __init4() {this.cards = []}
+  deckID = "";
+  cards = [];
 
-  constructor(obj, opts={}){
-    super(obj, opts);DiscardJournalPile.prototype.__init3.call(this);DiscardJournalPile.prototype.__init4.call(this);
-    this.deckID = obj['deckID']
-    this.cards = obj['cards']
-    if(game.settings.get("cardsupport", "chatMessageOnPlayerAction")){
+  constructor(obj, opts = {}) {
+    super(obj, opts);
+    this.deckID = obj['deckID'];
+    this.cards = obj['cards'];
+
+    if (game.settings.get("cardsupport", "chatMessageOnPlayerAction")) {
       ChatMessage.create({
         speaker: {
           alias: game.user.name
@@ -276,18 +277,17 @@ export class DiscardJournalPile extends FormApplication {
         content: `
         <p>${game.user.name} is viewing ${this.cards.length} from the discard of ${game.decks.get(this.deckID).deckName}!</p>
         `
-      })
+      });
     }
-  
   }
 
-  static get defaultOptions(){
+  static get defaultOptions() {
     return mergeObject(super.defaultOptions, {
       id: 'discardpile',
       title: "Discard Pile",
       template: "modules/cardsupport/templates/cardgrid.html",
-      classes: ['sheet'],
-    })
+      classes: ['sheet']
+    });
   }
 
   getData() {
@@ -296,41 +296,43 @@ export class DiscardJournalPile extends FormApplication {
       return {
         data: el,
         _id: el['_id']
-      }
-    })
+      };
+    });
     let data = {
-      cards:cards,
+      cards: cards,
       discard: true
-    }
+    };
     console.log(data);
     return data;
   }
 
-  async activateListeners(html){
-    let cardIDs = this.cards.map(el =>{ return el['_id'] })
-    // Take
-    for(let cardID of cardIDs){
+  async activateListeners(html) {
+    let cardIDs = this.cards.map(el => {
+      return el['_id'];
+    }); // Take
+
+    for (let cardID of cardIDs) {
       html.find(`#${cardID}-take`).click(() => {
-        if(ui['cardHotbar'].populator.getNextSlot() == -1){
-          ui.notifications.error("No more room in your hand")
+        if (ui['cardHotbar'].populator.getNextSlot() == -1) {
+          ui.notifications.error("No more room in your hand");
           return;
         }
-        ui['cardHotbar'].populator.addToPlayerHand([this.cards.find(el => el['_id'] == cardID)]);
-        
-        // GM SOCKET TO REMOVEFROMSTATE a Card
+
+        ui['cardHotbar'].populator.addToPlayerHand([this.cards.find(el => el['_id'] == cardID)]); // GM SOCKET TO REMOVEFROMSTATE a Card
+
         let msg = {
           type: "REMOVECARDFROMDISCARD",
-          playerID: game.users.find(el=> el.isGM && el.active).id,
+          playerID: game.users.find(el => el.isGM && el.active).id,
           deckID: this.deckID,
           cardID: cardID
-        }
-        //@ts-ignore
-        game.socket.emit('module.cardsupport', msg);
-        this.cards = this.cards.filter(el=> {
-          return el._id != cardID
-        })
+        }; //@ts-ignore
 
-        if(game.settings.get("cardsupport", "chatMessageOnPlayerAction")){
+        game.socket.emit('module.cardsupport', msg);
+        this.cards = this.cards.filter(el => {
+          return el._id != cardID;
+        });
+
+        if (game.settings.get("cardsupport", "chatMessageOnPlayerAction")) {
           ChatMessage.create({
             speaker: {
               alias: game.user.name
@@ -338,23 +340,23 @@ export class DiscardJournalPile extends FormApplication {
             content: `
             <p>${game.user.name} took a card ${game.decks.get(this.deckID).deckName} discard pile!</p>
             `
-          })
+          });
         }
-      
 
         this.render(true);
-      })
-
+      });
       html.find(`#${cardID}-takecopy`).click(() => {
-        if(ui['cardHotbar'].populator.getNextSlot() == -1){
-          ui.notifications.error("No more room in your hand")
+        if (ui['cardHotbar'].populator.getNextSlot() == -1) {
+          ui.notifications.error("No more room in your hand");
           return;
         }
+
         ui['cardHotbar'].populator.addToPlayerHand([this.cards.find(el => el['_id'] == cardID)]);
-        this.cards = this.cards.filter(el=> {
-          return el._id != cardID
-        })
-        if(game.settings.get("cardsupport", "chatMessageOnPlayerAction")){
+        this.cards = this.cards.filter(el => {
+          return el._id != cardID;
+        });
+
+        if (game.settings.get("cardsupport", "chatMessageOnPlayerAction")) {
           ChatMessage.create({
             speaker: {
               alias: game.user.name
@@ -362,25 +364,25 @@ export class DiscardJournalPile extends FormApplication {
             content: `
             <p>${game.user.name} took a card as copy from ${game.decks.get(this.deckID).deckName} discard!</p>
             `
-          })
+          });
         }
+
         this.render(true);
-      })
-    
+      });
       html.find(`#${cardID}-burn`).click(() => {
         let msg = {
           type: "REMOVECARDFROMDISCARD",
           playerID: game.users.find(el => el.isGM && el.active).id,
           deckID: this.deckID,
           cardID: cardID
-        }
-        //@ts-ignore
-        game.socket.emit('module.cardsupport', msg)
-        this.cards = this.cards.filter(el=> {
-          return el._id != cardID
-        })
+        }; //@ts-ignore
 
-        if(game.settings.get("cardsupport", "chatMessageOnPlayerAction")){
+        game.socket.emit('module.cardsupport', msg);
+        this.cards = this.cards.filter(el => {
+          return el._id != cardID;
+        });
+
+        if (game.settings.get("cardsupport", "chatMessageOnPlayerAction")) {
           ChatMessage.create({
             speaker: {
               alias: game.user.name
@@ -388,27 +390,25 @@ export class DiscardJournalPile extends FormApplication {
             content: `
             <p>${game.user.name} burnt a card from ${game.decks.get(this.deckID).deckName}!</p>
             `
-          })
+          });
         }
-      
+
         this.render(true);
-      })
-      
+      });
       html.find(`#${cardID}-topdeck`).click(() => {
         let msg = {
           type: "CARDTOPDECK",
           playerID: game.users.find(el => el.isGM && el.active).id,
           deckID: this.deckID,
           cardID: cardID
-        }
-        //@ts-ignore
+        }; //@ts-ignore
+
         game.socket.emit('module.cardsupport', msg);
+        this.cards = this.cards.filter(el => {
+          return el._id != cardID;
+        });
 
-        this.cards = this.cards.filter(el=> {
-          return el._id != cardID
-        })
-
-        if(game.settings.get("cardsupport", "chatMessageOnPlayerAction")){
+        if (game.settings.get("cardsupport", "chatMessageOnPlayerAction")) {
           ChatMessage.create({
             speaker: {
               alias: game.user.name
@@ -416,22 +416,24 @@ export class DiscardJournalPile extends FormApplication {
             content: `
             <p>${game.user.name} returned a card to the top of the deck from ${game.decks.get(this.deckID).deckName}'s discard!</p>
             `
-          })
+          });
         }
-      
+
         this.render(true);
-      })
+      });
     }
+
     html.find(`#shuffleBack`).click(() => {
       let msg = {
         type: "SHUFFLEBACKDISCARD",
-        playerID : game.users.find(el => el.isGM && el.active).id,
+        playerID: game.users.find(el => el.isGM && el.active).id,
         deckID: this.deckID
-      }
-      //@ts-ignore
-      game.socket.emit('module.cardsupport', msg)
-      this.cards = []
-      if(game.settings.get("cardsupport", "chatMessageOnPlayerAction")){
+      }; //@ts-ignore
+
+      game.socket.emit('module.cardsupport', msg);
+      this.cards = [];
+
+      if (game.settings.get("cardsupport", "chatMessageOnPlayerAction")) {
         ChatMessage.create({
           speaker: {
             alias: game.user.name
@@ -439,10 +441,14 @@ export class DiscardJournalPile extends FormApplication {
           content: `
           <p>${game.user.name} shuffled the discard of ${game.decks.get(this.deckID).deckName} back into the deck!</p>
           `
-        })
+        });
       }
+
       this.render(true);
-    })
-    html.find(`#close`).click(() => {this.close()})
+    });
+    html.find(`#close`).click(() => {
+      this.close();
+    });
   }
+
 }
