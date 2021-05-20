@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "gulp build",
-    "foundry": "gulp build && cp.bat"
+    "build": "gulp copy",
+    "foundry": "gulp copy && cp.bat"
   },
   "author": "spacemandev",
   "license": "MIT",
