@@ -21,7 +21,7 @@
 }
 
 .card-container .item-controls {
-  display:flex;
+  display: flex;
   flex-direction: row;
   padding-top: 5px;
 }
@@ -38,10 +38,10 @@
   align-items: flex-end;
 }
 
-#discardfooter button{
+#discardfooter button {
   height: max(50px);
 }
 
-#importDialog .dialog-buttons{ 
+#importDialog .dialog-buttons {
   flex-direction: column;
 }

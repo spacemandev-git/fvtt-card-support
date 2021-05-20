@@ -418,7 +418,7 @@ name: red_joker
 sdfv: 0.6
 img: red_joker.png
 back: gray_back.png
-data: 
+data:
   value: JOKER
   suit: RED
 ---

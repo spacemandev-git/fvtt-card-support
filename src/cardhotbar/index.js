@@ -1,6 +1,6 @@
-import { cardHotbarPopulator }  from './scripts/card-hotbar-populator.js';
-import { cardHotbar }  from './card-hotbar.js';
-import { cardHotbarSettings } from './scripts/card-hotbar-settings.js';
+import { cardHotbarPopulator } from "./scripts/card-hotbar-populator.js";
+import { cardHotbar } from "./card-hotbar.js";
+import { cardHotbarSettings } from "./scripts/card-hotbar-settings.js";
 
 async function cardHotbarInit() {
   //console.debug("Card Hotbar | Initializing...");
@@ -8,73 +8,73 @@ async function cardHotbarInit() {
   ui.cardHotbar = new cardHotbar(window.cardHotbar);
   //ui.cardHotbar = ui.cardHotbar.getData(options);
   let obj = {
-      left: 100,
-      top: 100,
-      width: 502,
-      height: 52,
-      scale: 1.0,
-      log: true,
-      renderContext: "card-hotbar",
-      renderData: "init"
+    left: 100,
+    top: 100,
+    width: 502,
+    height: 52,
+    scale: 1.0,
+    log: true,
+    renderContext: "card-hotbar",
+    renderData: "init",
   };
-
 
   cardHotbarSettings.register();
 
   //apply settings styles, first for card hotbar, then for core hotbar
   //For each setting, use flag if present, otherwise use game setting.
 
-   var css =
-      '#card-hotbar' 
-    + ` { bottom: ${cardHotbarSettings.getCHBYPos()}px; ` 
-    + `   left: ${cardHotbarSettings.getCHBXPos()}px; `
-    + ' }'
-/*
+  var css =
+      "#card-hotbar" +
+      ` { bottom: ${cardHotbarSettings.getCHBYPos()}px; ` +
+      `   left: ${cardHotbarSettings.getCHBXPos()}px; ` +
+      " }" +
+      /*
     + '#card-hotbar #card-macro-list' 
     + ` {` 
     + `   border: 1px solid ${cardHotbarSettings.getCHBBorderColor()};`
     + ' }'
-*/    
-    + '#card-hotbar .bar-controls'
-/* Hard-coded for now */ 
-    + ` { background: #00000080;` 
-    + `   border: 1px solid ${cardHotbarSettings.getCHBBorderColor()};`
-    + ' }'
-
-    + '#card-hotbar .macro' 
-    + ` { background: ${cardHotbarSettings.getCHBPrimaryColor()};`
-    + ' }'
-
-    + '#card-macro-list li.macro.active.marked' 
-    + ' { '  	
-    + '   position: relative;'
-    + ' } '
-
-    + '#card-macro-list li.macro.marked:after' 
-    + ' { '  	
-    + '   position: absolute;'
-    + '   height: 100%;'
-    + '   width: 100%;'
-    + `   background-color: ${cardHotbarSettings.getCHBMarkedColor()};`
-    + '   top: 0;'
-    + '   left: 0;'
-    + '   display: block;'
-    + '   content: "";'
-    + ' } '
-
-  , head = document.head || document.getElementsByTagName('head')[0]
-  , style = document.createElement('style');
+*/
+      "#card-hotbar .bar-controls" +
+      /* Hard-coded for now */
+      ` { background: #00000080;` +
+      `   border: 1px solid ${cardHotbarSettings.getCHBBorderColor()};` +
+      " }" +
+      "#card-hotbar .macro" +
+      ` { background: ${cardHotbarSettings.getCHBPrimaryColor()};` +
+      " }" +
+      "#card-macro-list li.macro.active.marked" +
+      " { " +
+      "   position: relative;" +
+      " } " +
+      "#card-macro-list li.macro.marked:after" +
+      " { " +
+      "   position: absolute;" +
+      "   height: 100%;" +
+      "   width: 100%;" +
+      `   background-color: ${cardHotbarSettings.getCHBMarkedColor()};` +
+      "   top: 0;" +
+      "   left: 0;" +
+      "   display: block;" +
+      '   content: "";' +
+      " } ",
+    head = document.head || document.getElementsByTagName("head")[0],
+    style = document.createElement("style");
 
   head.appendChild(style);
-  style.type = 'text/css';
+  style.type = "text/css";
   style.appendChild(document.createTextNode(css));
 
   let root = document.documentElement;
-  root.style.setProperty("--xoffset", ( cardHotbarSettings.getCHBXPos() - 220 )+ "px");
+  root.style.setProperty(
+    "--xoffset",
+    cardHotbarSettings.getCHBXPos() - 220 + "px"
+  );
 
-//  ui.hotbar.render();
+  //  ui.hotbar.render();
 
-  Array.from(document.getElementsByClassName("macro")).forEach(function (element) {
+  Array.from(document.getElementsByClassName("macro")).forEach(function (
+    element
+  ) {
     element.ondragstart = ui.hotbar._onDragStart;
     element.ondragend = ui.hotbar._onDrop;
   });
@@ -107,7 +107,6 @@ async function cardHotbarInit() {
   await ui.cardHotbar.populator._updateFlags();
 }
 
-
 Hooks.once("init", async () => {
   CONFIG.ui.hotbar = class extends Hotbar {
     _onDragStart(...arg) {
@@ -117,34 +116,34 @@ Hooks.once("init", async () => {
   };
 });
 
-Hooks.once('ready', async () => {
+Hooks.once("ready", async () => {
   //console.debug("Card Hotbar | Foundry setup...");
 
   //Check to make sure that a hotbar rendered before initilizing so that PopOut module windows do not have unwanted card hotbars.
   let hotbarTest = ui.hotbar;
   //console.debug("Card Hotbar | Core Foundry Hotbar Present?");
   //console.debug(hotbarTest);
- 
-  if ( hotbarTest ) {
+
+  if (hotbarTest) {
     await cardHotbarInit();
   }
-  
 });
 
 Hooks.on("renderSettingsConfig", async () => {
   //add CSS ids and classes to cardHotbar settings section for styling
   let settingsDiv = document.getElementById("client-settings");
-  
-  let chbSetDiv = $( `#${settingsDiv.id} div h2.module-header:contains("Card Support (Unofficial)")` ).next();
-  $(chbSetDiv).addClass('chb-setting');
-  $(chbSetDiv).addClass('chb-global');
-  $(chbSetDiv).attr('id', 'chbSetDiv');
+
+  let chbSetDiv = $(
+    `#${settingsDiv.id} div h2.module-header:contains("Card Support (Unofficial)")`
+  ).next();
+  $(chbSetDiv).addClass("chb-setting");
+  $(chbSetDiv).addClass("chb-global");
+  $(chbSetDiv).attr("id", "chbSetDiv");
 
   let chbFlagDiv = $(chbSetDiv).next();
-  $(chbFlagDiv).addClass('chb-setting');
-  $(chbFlagDiv).addClass('chb-user');
-  $(chbFlagDiv).attr('id', 'chbFlagDiv');
-
+  $(chbFlagDiv).addClass("chb-setting");
+  $(chbFlagDiv).addClass("chb-user");
+  $(chbFlagDiv).attr("id", "chbFlagDiv");
 });
 
 Hooks.on("hotbarDrop", (hotbar, data, slot) => {
@@ -154,26 +153,26 @@ Hooks.on("hotbarDrop", (hotbar, data, slot) => {
   if (!journal) return true;
   // Make a new macro for the Journal
   Macro.create({
-      name: `Card: ${journal.name}`,
-      type: "script",
-      flags: {
-        "world": {
-          "cardID": `${journal.id}`,
-        }
+    name: `Card: ${journal.name}`,
+    type: "script",
+    flags: {
+      world: {
+        cardID: `${journal.id}`,
       },
-      scope: "global",
-      //Change first argument to "text" to show the journal entry as default.
-      //NOTE: In order for this macro to work (0.6.5 anyway) there MUST be text (content attribute must not be null).
-      command: `game.journal.get("${journal.id}").show("image", false);`,
+    },
+    scope: "global",
+    //Change first argument to "text" to show the journal entry as default.
+    //NOTE: In order for this macro to work (0.6.5 anyway) there MUST be text (content attribute must not be null).
+    command: `game.journal.get("${journal.id}").show("image", false);`,
 
-      img: `${game.journal.get(journal.id).data.img}`
-  }).then(macro => {
-      game.user.assignHotbarMacro(macro, slot);
+    img: `${game.journal.get(journal.id).data.img}`,
+  }).then((macro) => {
+    game.user.assignHotbarMacro(macro, slot);
   });
   return false;
 });
 
-Hooks.once('rendercardHotbar', () => {
+Hooks.once("rendercardHotbar", () => {
   //console.debug("Card Hotbar | Performing initial collapse");
   ui.cardHotbar.collapse();
 });
@@ -182,7 +181,7 @@ Hooks.on("renderHotbar", async () => {
   //console.debug("Card Hotbar | The core hotbar just rendered!");
 });
 
-Hooks.on('rendercardHotbar', async () => {
+Hooks.on("rendercardHotbar", async () => {
   //console.debug("Card Hotbar | The card hotbar just rendered!");
 });
 

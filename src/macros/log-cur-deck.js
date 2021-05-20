@@ -1,3 +1,1 @@
-console.log(
-    game.decks.get( game.user.getFlag("world","sdf-deck-cur") )
-   );
+console.log(game.decks.get(game.user.getFlag("world", "sdf-deck-cur")));

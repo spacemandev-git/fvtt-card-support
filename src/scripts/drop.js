@@ -1,6 +1,5 @@
 import { mod_scope } from "./constants.js";
-import {cardHotbarSettings} from '../cardhotbar/scripts/card-hotbar-settings.js'
-
+import { cardHotbarSettings } from "../cardhotbar/scripts/card-hotbar-settings.js";
 
 // Add the listener to the board html element
 Hooks.once("canvasReady", () => {
@@ -10,103 +9,129 @@ Hooks.once("canvasReady", () => {
     try {
       data = JSON.parse(event.dataTransfer.getData("text/plain"));
       console.log(data);
-      if(data.type == "Folder" && game.decks.get(data.id) != undefined && game.user.isGM){
+      if (
+        data.type == "Folder" &&
+        game.decks.get(data.id) != undefined &&
+        game.user.isGM
+      ) {
         handleDroppedFolder(data.id, event.x, event.y);
-      } else if (data.type == "JournalEntry" && game.decks.getByCard(data.id) != undefined){
-        if(game.user.isGM){
-          handleDroppedCard(data.id, event.clientX, event.clientY, event.altKey)
+      } else if (
+        data.type == "JournalEntry" &&
+        game.decks.getByCard(data.id) != undefined
+      ) {
+        if (game.user.isGM) {
+          handleDroppedCard(
+            data.id,
+            event.clientX,
+            event.clientY,
+            event.altKey
+          );
         } else {
           let msg = {
             type: "DROP",
-            playerID: game.users.find(el => el.isGM && el.active).id, 
+            playerID: game.users.find((el) => el.isGM && el.active).id,
             cardID: data.id,
-            x: event.clientX, 
-            y: event.clientY, 
-            alt: event.altKey
-          }
+            x: event.clientX,
+            y: event.clientY,
+            alt: event.altKey,
+          };
           //@ts-ignore
-          game.socket.emit('module.cardsupport', msg)
+          game.socket.emit("module.cardsupport", msg);
         }
-      } else if (data.type == "Macro" &&  game.decks.getByCard(game.macros.get(data.id).getFlag(mod_scope, "cardID")) != undefined){
-        if(game.user.isGM){
+      } else if (
+        data.type == "Macro" &&
+        game.decks.getByCard(
+          game.macros.get(data.id).getFlag(mod_scope, "cardID")
+        ) != undefined
+      ) {
+        if (game.user.isGM) {
           handleDroppedCard(
             game.macros.get(data.id).getFlag(mod_scope, "cardID"),
-            event.clientX, 
+            event.clientX,
             event.clientY,
             event.altKey,
             game.macros.get(data.id).getFlag(mod_scope, "sideUp")
-          )
-          await ui['cardHotbar'].populator.chbUnsetMacro(data.cardSlot);
-          game.macros.get(data.id).delete()  
+          );
+          await ui["cardHotbar"].populator.chbUnsetMacro(data.cardSlot);
+          game.macros.get(data.id).delete();
         } else {
           let msg = {
             type: "DROP",
-            playerID: game.users.find(el => el.isGM && el.active).id, 
+            playerID: game.users.find((el) => el.isGM && el.active).id,
             cardID: game.macros.get(data.id).getFlag(mod_scope, "cardID"),
-            x: event.clientX, 
-            y: event.clientY, 
-            alt: event.altKey
-          }
+            x: event.clientX,
+            y: event.clientY,
+            alt: event.altKey,
+          };
           //@ts-ignore
-          game.socket.emit('module.cardsupport', msg)
-          await ui['cardHotbar'].populator.chbUnsetMacro(data.cardSlot);
-          game.macros.get(data.id).delete()  
+          game.socket.emit("module.cardsupport", msg);
+          await ui["cardHotbar"].populator.chbUnsetMacro(data.cardSlot);
+          game.macros.get(data.id).delete();
         }
       }
     } catch (err) {
-      console.error(err)
+      console.error(err);
       return;
     }
   });
 });
 
-async function handleDroppedFolder(folderId, x, y){
+async function handleDroppedFolder(folderId, x, y) {
   return new Promise(async (resolve, reject) => {
     let t = canvas.tiles.worldTransform;
-    const _x = (x - t.tx) / canvas.stage.scale.x
-    const _y = (y - t.ty) / canvas.stage.scale.y
+    const _x = (x - t.tx) / canvas.stage.scale.x;
+    const _y = (y - t.ty) / canvas.stage.scale.y;
 
-    if(game.settings.get('cardsupport', `${folderId}-settings`) && game.settings.get('cardsupport', `${folderId}-settings`)['deckImg'] != ""){
-      let deckImgTex = await loadTexture(game.settings.get('cardsupport', `${folderId}-settings`)['deckImg'])
+    if (
+      game.settings.get("cardsupport", `${folderId}-settings`) &&
+      game.settings.get("cardsupport", `${folderId}-settings`)["deckImg"] != ""
+    ) {
+      let deckImgTex = await loadTexture(
+        game.settings.get("cardsupport", `${folderId}-settings`)["deckImg"]
+      );
       Tile.create({
         name: game.folders.get(folderId).name,
-        img: game.settings.get('cardsupport', `${folderId}-settings`)['deckImg'],//`modules/cardsupport/assets/${Math.floor(Math.random() * 10) + 1}.png`,
+        img: game.settings.get("cardsupport", `${folderId}-settings`)[
+          "deckImg"
+        ], //`modules/cardsupport/assets/${Math.floor(Math.random() * 10) + 1}.png`,
         x: _x,
         y: _y,
-        width: deckImgTex.width,//350, //2, //350 for tile
+        width: deckImgTex.width, //350, //2, //350 for tile
         height: deckImgTex.height, //400, //400 for tile
         flags: {
           [mod_scope]: {
-            'deckID': folderId
-          }
-        }
-      })
-      resolve()
+            deckID: folderId,
+          },
+        },
+      });
+      resolve();
     } else {
       Tile.create({
         name: game.folders.get(folderId).name,
-        img: `modules/cardsupport/assets/${Math.floor(Math.random() * 10) + 1}.png`,
+        img: `modules/cardsupport/assets/${
+          Math.floor(Math.random() * 10) + 1
+        }.png`,
         x: _x,
         y: _y,
         width: 350, //2, //350 for tile
         height: 400, //400 for tile
         flags: {
           [mod_scope]: {
-            'deckID': folderId
-          }
-        }
-      })  
+            deckID: folderId,
+          },
+        },
+      });
     }
     resolve();
-  })
+  });
 }
 
-export async function handleDroppedCard(cardID, x, y, alt, sideUp="front"){
+export async function handleDroppedCard(cardID, x, y, alt, sideUp = "front") {
   let imgPath = "";
-  if(alt || sideUp == "back"){
-    imgPath = game.journal.get(cardID).getFlag(mod_scope, "cardBack")
+  if (alt || sideUp == "back") {
+    imgPath = game.journal.get(cardID).getFlag(mod_scope, "cardBack");
   } else {
-    imgPath = game.journal.get(cardID).data['img']
+    imgPath = game.journal.get(cardID).data["img"];
   }
 
   // Determine the Tile Size:
@@ -116,8 +141,8 @@ export async function handleDroppedCard(cardID, x, y, alt, sideUp="front"){
 
   // Project the tile Position
   let t = canvas.tiles.worldTransform;
-  const _x = (x - t.tx) / canvas.stage.scale.x
-  const _y = (y - t.ty) / canvas.stage.scale.y
+  const _x = (x - t.tx) / canvas.stage.scale.x;
+  const _y = (y - t.ty) / canvas.stage.scale.y;
 
   const cardScale = cardHotbarSettings.getCHBCardScale();
   console.debug(cardScale);
@@ -129,10 +154,10 @@ export async function handleDroppedCard(cardID, x, y, alt, sideUp="front"){
     height: _height * cardScale,
     flags: {
       [mod_scope]: {
-        "cardID": `${cardID}`,
-      }
-    }
-  })
+        cardID: `${cardID}`,
+      },
+    },
+  });
 }
 
 /*
