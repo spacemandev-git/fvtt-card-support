@@ -1,0 +1,47 @@
+{
+  "DECK.Import_Button": "滙入卡組",
+  "DECK.Dialog_Title": "滙入卡組",
+  "DECK.Cancel": "取消",
+  "DECK.ERROR": "某些東西損壞! 按F12到Console得到更多資訊.",
+  "DECK.IMPORT_SDF": "滙入 SDF",
+  "DECK.IMPORT_IMAGES": "滙入圖片",
+  "DECK.APPEND_CARD": "附加卡片",
+  "DECK.EDIT_CARD": "修改卡片",
+  "DECK.CONVERT_ROLLTABLE": "把卡組轉換到隨機表",
+
+  "CARD.modname": "Card Support (非官方)",
+  "CARD.mod": "cardsupport",
+  "CARD.chbTitle": "玩家手牌欄設定", 
+  "CARD.drawFaceUpHand": {
+    "name": "牌面朝上 抽卡 到 手牌欄?",
+    "nameHint": "設置為false表示「盲注」抽到手（已抽出的牌面朝下出現在玩家的手中）."
+  }, 
+  "CARD.drawFaceUpTable": {
+    "name": "牌面朝上 抽卡 到 桌面?",
+    "nameHint": "設置為false表示「盲注」抽到 桌子（被抽出的牌面朝下出現在桌子上）。"
+  },
+  "CARD.scale": {
+    "name": "卡片大小比例",
+    "nameHint": "調整正在使用的卡牌的大小。 數值小於1會使卡牌變小。"
+  },
+  "CARD.chbPrimaryColor": {
+          "name": "玩家 手牌欄 UI的顏色:",
+          "nameHint": "玩家手的垂直欄位的背景顏色。"
+      },
+  "CARD.chbBorderColor": {
+          "name": "玩家 手牌欄 UI邊線的顏色:",
+          "nameHint": "玩家手的垂直欄位的背景顏色。"
+      },
+  "CARD.chbMarkedColor": {
+          "name": "已標記卡牌的顏色：",
+          "nameHint": "套用於手牌上「已標記」的卡片的顏色."
+      },
+  "CARD.chbXPos":{
+          "name": "玩家 手牌欄 水平位置",
+          "nameHint": "較高的值代表在水平方向上位於畫面的右側."
+      },
+  "CARD.chbYPos":{
+          "name": "玩家 手牌欄 垂直位置",
+          "nameHint": "較高的值代表在垂直方向上位於畫面的上方."
+      }
+}
