@@ -1,0 +1,10 @@
+<div style="display: flex; flex-direction: column">
+  {{#each data.decks}}
+  <div style="display: flex">
+    <span style="flex: 3"> {{this.deckName}} </span>
+    <a style="flex: 1" title="Draw Cars" id="{{this.deckID}}-draw"
+      ><i class="icon-hand"></i
+    ></a>
+  </div>
+  {{/each}}
+</div>

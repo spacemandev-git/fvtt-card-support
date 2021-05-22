@@ -1,5 +1,5 @@
 //You can make variants of this macro with X as different numbers
-let x = 3;
+let x = 1;
 let newCards = [];
 let mDeck = game.decks.get(game.user.getFlag("world", "sdf-deck-cur"));
 let errMsg = "";

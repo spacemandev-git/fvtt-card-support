@@ -10,15 +10,15 @@
   "manifest": "https://github.com/spacemandev-git/fvtt-card-support/releases/download/latest/module.json",
   "download": "https://github.com/spacemandev-git/fvtt-card-support/releases/download/latest/module.zip",
   "esmodules": [
-    "./scripts/decksupport.js", 
+    "./scripts/decksupport.js",
     "./scripts/tileHud.js",
     "./scripts/tokenHUD.js",
     "./scripts/drop.js",
     "./scripts/socketListener.js",
     "./scripts/decksettings.js",
-    "./lib/js-yaml.js", 
+    "./lib/js-yaml.js",
     "./lib/jszip.js",
-    "./cardhotbar/index.js" 
+    "./cardhotbar/index.js"
   ],
   "styles": [
     "./styles/sdf.css",

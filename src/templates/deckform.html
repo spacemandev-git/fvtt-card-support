@@ -1,10 +1,16 @@
-<div style="display:flex; flex-direction:column">
+<div style="display: flex; flex-direction: column">
   {{#each decks}}
-  <div style="display:flex">
-    <span style="flex:8"> {{this.deckName}} </span>
-    <a style="flex:1" title="Draw Cards" id="{{this.deckID}}-draw"><i class="icon-hand"></i></a>
-    <a style="flex:1" title="View Cards" id="{{this.deckID}}-view"><i class="fa fa-eye"></i></a> 
-    <a style="flex:1" title="Discard Pile" id="{{this.deckID}}-discard"><i class="fa fa-inbox"></i></a> 
+  <div style="display: flex">
+    <span style="flex: 8"> {{this.deckName}} </span>
+    <a style="flex: 1" title="Draw Cards" id="{{this.deckID}}-draw"
+      ><i class="icon-hand"></i
+    ></a>
+    <a style="flex: 1" title="View Cards" id="{{this.deckID}}-view"
+      ><i class="fa fa-eye"></i
+    ></a>
+    <a style="flex: 1" title="Discard Pile" id="{{this.deckID}}-discard"
+      ><i class="fa fa-inbox"></i
+    ></a>
   </div>
   {{/each}}
 </div>
