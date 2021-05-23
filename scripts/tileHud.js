@@ -62,13 +62,13 @@ async function cardHUD(tileHUD, html) {
       flags: td.flags,
     });
     //Delete this tile
-    canvas.tiles.get(td._id).delete();
+    canvas.background.get(td._id).delete();
   };
   const takeCard = async (td) => {
     // UI.cardhotbar.populator.addToHand(cardID)
     // Delete this tile
     ui["cardHotbar"].populator.addToHand([td.flags[mod_scope]["cardID"]]);
-    canvas.tiles.get(td._id).delete();
+    canvas.background.get(td._id).delete();
   };
   const discardCard = async (td) => {
     // Add Card to Discard for the Deck
@@ -76,7 +76,7 @@ async function cardHUD(tileHUD, html) {
     console.log("Deck ID: ", deckId);
     game.decks.get(deckId).discardCard(td.flags[mod_scope].cardID);
     // Delete Tile
-    canvas.tiles.get(td._id).delete();
+    canvas.background.get(td._id).delete();
   };
   const giveCard = async (td) => {
     let players = "";

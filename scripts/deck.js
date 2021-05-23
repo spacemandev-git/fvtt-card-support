@@ -111,7 +111,7 @@ export class Deck {
       this._state = duplicate(this._cards);
       this._discard = [];
       //delete placed cards
-      let tileCards = canvas.tiles.placeables
+      let tileCards = canvas.background.placeables
         .filter((tile) => {
           let cardId = tile.getFlag(mod_scope, "cardID");
           if (cardId) {

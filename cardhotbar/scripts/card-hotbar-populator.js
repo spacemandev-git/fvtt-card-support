@@ -463,16 +463,16 @@ export class cardHotbarPopulator {
    * @return {Promise<unknown>} Promise indicating whether the macro was removed.
    */
   async chbUnsetMacro(slot) {
-    const macro = game.macros.get(this.macroMap[slot]);
+    let macro = game.macros.get(this.macroMap[slot]);
     this.macroMap[slot] = null;
     this.macroMap = duplicate(await this.compact());
     ui.cardHotbar.getcardHotbarMacros();
-    this._updateFlags().then((render) => {
-      if (macro) {
-        macro.delete();
-      }
-      return ui.cardHotbar.render();
-    });
+    await this._updateFlags();
+    //await this.render();
+    if (macro !== undefined) macro.delete();
+    macro = game.macros.get(this.macroMap[slot]);
+    console.log(macro);
+    return ui.cardHotbar.render();
   }
 
   /**

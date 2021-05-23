@@ -78,7 +78,7 @@ Hooks.once("canvasReady", () => {
 
 async function handleDroppedFolder(folderId, x, y) {
   return new Promise(async (resolve, reject) => {
-    let t = canvas.tiles.worldTransform;
+    let t = canvas.background.worldTransform;
     const _x = (x - t.tx) / canvas.stage.scale.x;
     const _y = (y - t.ty) / canvas.stage.scale.y;
 
@@ -140,7 +140,7 @@ export async function handleDroppedCard(cardID, x, y, alt, sideUp = "front") {
   const _height = tex.height;
 
   // Project the tile Position
-  let t = canvas.tiles.worldTransform;
+  let t = canvas.background.worldTransform;
   const _x = (x - t.tx) / canvas.stage.scale.x;
   const _y = (y - t.ty) / canvas.stage.scale.y;
 
@@ -175,7 +175,7 @@ export async function handleTokenCard(cardID:string, x:number, y:number, alt:boo
   const _height = tex.height;
 
   // Project the tile Position
-  let t = canvas.tiles.worldTransform;
+  let t = canvas.background.worldTransform;
   const _x = (x - t.tx) / canvas.stage.scale.x
   const _y = (y - t.ty) / canvas.stage.scale.y
 
