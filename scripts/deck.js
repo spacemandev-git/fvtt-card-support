@@ -6,7 +6,7 @@ export class Deck {
    */
   constructor(folderID) {
     this.deckID = game.folders.get(folderID)._id;
-    this.deckName = game.folders.get(folderID).name;
+    this.deckName = game.folders.get(folderID).data.name;
     let state = game.folders.get(folderID).getFlag(mod_scope, "deckState");
     if (state == undefined) {
       let cardEntries = game.folders
@@ -45,7 +45,7 @@ export class Deck {
         JSON.stringify(game.decks.decks)
       );
       //@ts-ignore
-      for (let user of game.users.entries) {
+      for (let user of game.users.entities) {
         if (user.isSelf) {
           continue;
         }
@@ -302,7 +302,7 @@ export class Decks {
     this.decks = {};
     if (game.user.isGM) {
       let decksFolders = game.folders
-        .find((el) => el.name == "Decks")
+        .find((el) => el.data.name == "Decks")
         ?.children.map((el) => el.id);
       if (decksFolders != null) {
         for (let id of decksFolders) {
@@ -322,7 +322,7 @@ export class Decks {
   create(deckfile, deckImg) {
     return new Promise(async (resolve, reject) => {
       //If DeckFolder doesn't exist create it
-      let DecksFolderID = game.folders.find((el) => el.name == "Decks")?.id;
+      let DecksFolderID = game.folders.find((el) => el.data.name == "Decks")?.id;
       if (!DecksFolderID) {
         DecksFolderID = await Folder.create({
           name: "Decks",
@@ -354,11 +354,18 @@ export class Decks {
       if (typeof ForgeVTT != "undefined" && ForgeVTT.usingTheForge) {
         src = "forgevtt";
       }
-      let target = `worlds/${game.world.name}/Decks/${deckfolderId}/`;
-      let result = await FilePicker.browse(src, target);
-      if (result.target != target) {
+      let target = `worlds/${game.world.data.name}/Decks/${deckfolderId}/`;
+      
+      //check for directory and create it if not found
+      try {
+      let result = await FilePicker.browse(src, target)
+      }
+      catch(err) {
+        console.log("error caught, directory does not exist");
         await FilePicker.createDirectory(src, target, {});
       }
+
+
       //Deal with Deck Img
       let deckImgPath = await uploadFile(target, deckImg);
       //Register the setting for the new deck
@@ -425,7 +432,7 @@ export class Decks {
   createByImages(deckName, files, cardBack, deckImg) {
     return new Promise(async (resolve, reject) => {
       //If DeckFolder doesn't exist create it
-      let DecksFolderID = game.folders.find((el) => el.name == "Decks")?.id;
+      let DecksFolderID = game.folders.find((el) => el.data.name == "Decks")?.id;
       if (!DecksFolderID) {
         DecksFolderID = await Folder.create({
           name: "Decks",
@@ -446,7 +453,7 @@ export class Decks {
       if (typeof ForgeVTT != "undefined" && ForgeVTT.usingTheForge) {
         src = "forgevtt";
       }
-      let target = `worlds/${game.world.name}/Decks/${deckfolderId}/`;
+      let target = `worlds/${game.world.data.name}/Decks/${deckfolderId}/`;
       let result = await FilePicker.browse(src, target);
       if (result.target != target) {
         await FilePicker.createDirectory(src, target, {});
