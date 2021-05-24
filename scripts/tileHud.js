@@ -81,7 +81,7 @@ async function cardHUD(tileHUD, html) {
   const giveCard = async (td) => {
     let players = "";
     //@ts-ignore
-    for (let user of game.users.entries) {
+    for (let user of game.users.contents) {
       if (user.isSelf == false && user.active) {
         players += `<option value=${user.id}>${user.name}</option>`;
       }
@@ -307,7 +307,7 @@ async function deckHUD(td, html) {
   const dealCards = async () => {
     let players = "";
     //@ts-ignore
-    for (let user of game.users.entries) {
+    for (let user of game.users.contents) {
       if (user.isSelf == false && user.active) {
         //players += `<option value=${user.id}>${user.name}</option>`
         players += `
@@ -343,7 +343,7 @@ async function deckHUD(td, html) {
             let inf = html.find("#infinite")[0].checked ? true : false;
             let numCards = html.find("#numCards")[0].value;
             //@ts-ignore
-            for (let user of game.users.entries) {
+            for (let user of game.users.contents) {
               if (html.find(`#${user.id}`)[0]?.checked) {
                 deck.dealToPlayer(user.id, numCards, inf);
               }

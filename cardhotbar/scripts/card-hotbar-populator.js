@@ -222,7 +222,7 @@ export class cardHotbarPopulator {
 
   takeFromPlayer() {
     let players = "";
-    for (let user of game.users.entries) {
+    for (let user of game.users.contents) {
       if (!user.isSelf && user.active) {
         players += `<option value="${user.id}">${user.data.name}</option>`;
       }

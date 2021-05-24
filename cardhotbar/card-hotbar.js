@@ -334,7 +334,7 @@ export class cardHotbar extends Hotbar {
           const macro = game.macros.get(li.data("macro-id"));
           let players = "";
           //@ts-ignore
-          for (let user of game.users.entries) {
+          for (let user of game.users.contents) {
             if (user.isSelf == false && user.active) {
               players += `<option value=${user.id}>${user.name}</option>`;
             }

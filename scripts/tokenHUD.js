@@ -189,7 +189,7 @@ async function deckHUD(td, html) {
   const dealCards = async () => {
     let players = "";
     //@ts-ignore
-    for (let user of game.users.entries) {
+    for (let user of game.users.contents) {
       if (user.isSelf == false) {
         players += `<option value=${user.id}>${user.name}</option>`;
       }

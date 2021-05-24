@@ -123,7 +123,7 @@ export class Deck {
         .map((t) => t.data._id);
       await canvas.scene.deleteEmbeddedEntity("Tile", tileCards);
       //@ts-ignore
-      for (let user of game.users.entries) {
+      for (let user of game.users.contents) {
         if (user.isSelf) {
           ui["cardHotbar"].populator.resetDeck(this.deckID);
         } else {
