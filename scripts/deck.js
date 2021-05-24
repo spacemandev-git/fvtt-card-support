@@ -454,8 +454,12 @@ export class Decks {
         src = "forgevtt";
       }
       let target = `worlds/${game.world.data.name}/Decks/${deckfolderId}/`;
-      let result = await FilePicker.browse(src, target);
-      if (result.target != target) {
+      //check for directory and create it if not found
+      try {
+        let result = await FilePicker.browse(src, target)
+        }
+      catch(err) {
+        console.log("error caught, directory does not exist");
         await FilePicker.createDirectory(src, target, {});
       }
       //Deal with Deck Img
