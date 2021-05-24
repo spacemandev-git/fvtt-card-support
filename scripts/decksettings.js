@@ -22,7 +22,7 @@ Hooks.on("decks.ready", () => {
   });
 });
 
-class DeckSettingsForm extends Application {
+class DeckSettingsForm extends FormApplication {
   constructor(object, options = {}) {
     super(object, options);
   }
@@ -41,7 +41,7 @@ class DeckSettingsForm extends Application {
     });
   }
 
-  async activateListeners(html) {
+  activateListeners(html) {
     for (let deckID of Object.keys(game.decks.decks)) {
       html.find(`#${deckID}-draw`).click((ev) => {
         let playersettings = "";
