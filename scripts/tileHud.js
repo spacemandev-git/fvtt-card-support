@@ -354,7 +354,7 @@ async function deckHUD(td, html) {
     }).render(true);
   };
 }
-export class DiscardPile extends FormApplication {
+export class DiscardPile extends Application {
   constructor(object, options = {}) {
     super(object, options);
     this.pile = object["pile"];
@@ -434,7 +434,7 @@ export class DiscardPile extends FormApplication {
     }
   }
 }
-export class ViewPile extends FormApplication {
+export class ViewPile extends Application {
   constructor(obj, opts = {}) {
     super(obj, opts);
     this.deckID = "";

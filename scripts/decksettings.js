@@ -22,7 +22,7 @@ Hooks.on("decks.ready", () => {
   });
 });
 
-class DeckSettingsForm extends FormApplication {
+class DeckSettingsForm extends Application {
   constructor(object, options = {}) {
     super(object, options);
   }
