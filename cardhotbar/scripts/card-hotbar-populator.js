@@ -292,9 +292,7 @@ export class cardHotbarPopulator {
                     if (!game.user.isGM) {
                       let socketMsg = {
                         type: "DISCARD",
-                        playerID: game.users.find(
-                          (el) => el.isGM && el.data.active
-                        ).id,
+                        playerID: game.users.find((el) => el.isGM && el.active).id,
                         cardID: mCardId,
                       };
                       game.socket.emit("module.cardsupport", socketMsg);

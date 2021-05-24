@@ -427,7 +427,7 @@ export class cardHotbar extends Hotbar {
             if (!game.user.isGM) {
               let socketMsg = {
                 type: "DISCARD",
-                playerID: game.users.find((el) => el.isGM && el.data.active).id,
+                playerID: game.users.find((el) => el.isGM && el.active).id,
                 cardID: macro.data.flags.world.cardID,
               };
               game.socket.emit("module.cardsupport", socketMsg);
@@ -440,7 +440,7 @@ export class cardHotbar extends Hotbar {
             await ui.cardHotbar.populator.chbUnsetMacro(index);
           } catch (e) {
             console.error(e);
-            //console.debug ("Card Hotbar | Could not properly discard card from hand");
+            console.debug ("Card Hotbar | Could not properly discard card from hand");
           }
         },
       },

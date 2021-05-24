@@ -58,7 +58,7 @@ export class Deck {
     } else {
       let msg = {
         type: "UPDATESTATE",
-        playerID: game.users.find((el) => el.isGM && el.data.active).id,
+        playerID: game.users.find((el) => el.isGM && el.active).id,
         deckID: this.deckID,
       };
       //@ts-ignore
