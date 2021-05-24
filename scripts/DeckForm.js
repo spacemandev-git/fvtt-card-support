@@ -1,16 +1,13 @@
 import { ViewPile, DiscardPile } from "./tileHud.js";
-export class DeckForm extends FormApplication {
-  constructor(obj, opts = {}) {
-    super(obj, opts);
-  }
+export class DeckForm extends Application {
 
   static get defaultOptions() {
-    return mergeObject(super.defaultOptions, {
-      id: "deckinteractionform",
-      title: "Decks",
-      template: "modules/cardsupport/templates/deckform.html",
-      classes: ["sheet"],
-    });
+    const options = super.defaultOptions;
+    options.id = "deckinteractionform";
+    options.title = "Decks";
+    options.template = "modules/cardsupport/templates/deckform.html";
+    options.classes = ["sheet"];
+    return options;
   }
 
   getData() {
@@ -21,6 +18,7 @@ export class DeckForm extends FormApplication {
   }
 
   async activateListeners(html) {
+    console.log("activating listeners");
     for (let d of Object.values(game.decks.decks)) {
       let deck = d; //Draw Card Listener
 
@@ -34,7 +32,6 @@ export class DeckForm extends FormApplication {
           ui.notifications.error("You don't have permission to do that.");
           return;
         }
-
         let takeDialogTemplate = `
         <div style="display:flex; flex-direction:column">
           <div style="display:flex; flex-direction:row">
@@ -172,7 +169,9 @@ export class DeckForm extends FormApplication {
     }
   }
 }
-export class ViewJournalPile extends FormApplication {
+
+
+export class ViewJournalPile extends Application {
   deckID = "";
   cards = [];
 
@@ -294,7 +293,9 @@ export class ViewJournalPile extends FormApplication {
     }
   }
 }
-export class DiscardJournalPile extends FormApplication {
+
+
+export class DiscardJournalPile extends Application {
   deckID = "";
   cards = [];
 
