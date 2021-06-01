@@ -5,7 +5,7 @@
   "author": "Spacemandev, Norc",
   "version": "1.6.1-beta",
   "minimumCoreVersion": "0.8.5",
-  "compatibleCoreVersion": "0.8.5",
+  "compatibleCoreVersion": "0.8.6",
   "url": "https://github.com/spacemandev-git/fvtt-card-support",
   "manifest": "https://raw.githubusercontent.com/spacemandev-git/fvtt-card-support/1.6.1-beta/module.json",
   "download": "https://github.com/spacemandev-git/fvtt-card-support/archive/refs/tags/1.6.1-beta.zip",
