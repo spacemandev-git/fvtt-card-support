@@ -3,12 +3,13 @@
   "title": "Card Support (Unofficial)",
   "description": "Unofficial deck support for foundry that allows you to have cards and player hands and the like.",
   "author": "Spacemandev, Norc",
-  "version": "1.6.1-beta",
-  "minimumCoreVersion": "0.8.5",
-  "compatibleCoreVersion": "0.8.5",
+  "authors": [],
   "url": "https://github.com/spacemandev-git/fvtt-card-support",
-  "manifest": "https://raw.githubusercontent.com/spacemandev-git/fvtt-card-support/1.6.1-beta/module.json",
-  "download": "https://github.com/spacemandev-git/fvtt-card-support/archive/refs/tags/1.6.1-beta.zip",
+  "flags": {},
+  "version": "1.6.1-beta",
+  "minimumCoreVersion": "0.6.0",
+  "compatibleCoreVersion": "0.8.5",
+  "scripts": [],
   "esmodules": [
     "./scripts/decksupport.js",
     "./scripts/tileHud.js",
@@ -31,11 +32,18 @@
       "name": "English",
       "path": "lang/en.json"
     },
-     {
+    {
       "lang": "zh-tw",
       "name": "正體中文",
       "path": "lang/zh-tw.json"
     }
   ],
-  "socket": true
+  "packs": [],
+  "system": [],
+  "dependencies": [],
+  "socket": true,
+  "manifest": "https://raw.githubusercontent.com/spacemandev-git/fvtt-card-support/1.6.1-beta/module.json",
+  "download": "https://github.com/spacemandev-git/fvtt-card-support/archive/refs/tags/1.6.1-beta.zip",
+  "protected": false,
+  "coreTranslation": false
 }
