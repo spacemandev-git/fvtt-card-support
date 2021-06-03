@@ -41,7 +41,7 @@ class DeckSettingsForm extends FormApplication {
     });
   }
 
-  async activateListeners(html) {
+  activateListeners(html) {
     for (let deckID of Object.keys(game.decks.decks)) {
       html.find(`#${deckID}-draw`).click((ev) => {
         let playersettings = "";

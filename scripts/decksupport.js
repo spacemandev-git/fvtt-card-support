@@ -28,18 +28,22 @@ Hooks.on("ready", async () => {
   if (typeof ForgeVTT != "undefined" && ForgeVTT.usingTheForge) {
     src = "forgevtt";
   }
-  let target = `worlds/${game.world.name}/Decks`;
-  let result = await FilePicker.browse(src, target);
-  if (result.target != target) {
-    await FilePicker.createDirectory(src, target, {});
-  }
+  let target = `worlds/${game.world.data.name}/Decks`;
+  //check for directory and create it if not found
+  try {
+    let result = await FilePicker.browse(src, target)
+    }
+    catch(err) {
+      console.log("error caught, directory does not exist");
+      await FilePicker.createDirectory(src, target, {});
+    }
 
   //Registers the Decks Object
   game.decks = new Decks();
   game.decks.init();
 
   // If 54CardDeck isn't already created, go ahead and create it
-  const sampledeckFolderID = game.folders.find((el) => el.name == "54CardDeck");
+  const sampledeckFolderID = game.folders.find((el) => el.data.name == "54CardDeck");
   if (!sampledeckFolderID && game.user.isGM) {
     console.log("Create Sample Deck");
     let sampleDeckBlob = await (

@@ -16,5 +16,10 @@ export class DeckInteractionForm extends FormApplication {
     };
     return data;
   }
-  activateListeners(html) {}
+
+  activateListeners(html) {
+    return __awaiter(this, void 0, void 0, function* () {
+    });
+  }
+
 }
