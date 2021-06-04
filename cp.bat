@@ -1,1 +1,0 @@
-cpx ./dist/** ../../../modules/cardsupport
