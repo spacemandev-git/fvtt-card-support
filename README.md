@@ -1,4 +1,14 @@
-# Card Support for Foundry VTT
+# (0.8.x AND EARLIER ONLY) Card Support for Foundry VTT
+
+**PLEASE NOTE: THIS MODULE WILL NOT BE UPDATED FOR v9 OF FOUNDRY OR HIGHER. ITS WATCH HAS ENDED**
+This module was originally created as a stopgap measure for using cards in Foundry until official support arrived. That official support has arrived and it is awesome.
+
+While a new generation of modules will be born to improve the official card support's UI, with the sweeping architecture changes, it makes infinitely more sense to start from scratch than to try to update this one.
+
+The Monarch module is highly recommended. As additional card-related modules are created, they will be listed here. If you know of a module that should be listed here, please either create an issue here or (recommended) DM me on Discord at Norc#5108.
+
+
+_Description for posterity:_
 
 0.8.6 support should be fairly stable. Additional bugfixes and features are planned... the goal of this release is feature parity with 0.7.x version.
 
